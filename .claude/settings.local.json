@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(npx husky init)",
+      "Bash(git init:*)",
+      "Bash(cat:*)",
+      "Bash(echo \"npx --no -- commitlint --edit $1\")",
+      "Bash(.husky/commit-msg)",
+      "Bash(gh:*)",
+      "Bash(git remote add:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
