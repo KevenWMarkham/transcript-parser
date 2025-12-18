@@ -4,11 +4,16 @@
  */
 
 import { GoogleGenAI } from '@google/genai'
-import type { TranscriptData, TranscriptEntry, Speaker } from '@/types/transcript'
+import type {
+  TranscriptData,
+  TranscriptEntry,
+  Speaker,
+} from '@/types/transcript'
 
 export interface TranscriptionOptions {
   apiKey?: string
   model?: string
+  onEntryComplete?: (entry: TranscriptEntry) => void
 }
 
 export interface GeminiResponse {
@@ -22,7 +27,10 @@ export interface GeminiResponse {
 
 // Custom error classes
 export class GeminiError extends Error {
-  constructor(message: string, public readonly code: string) {
+  constructor(
+    message: string,
+    public readonly code: string
+  ) {
     super(message)
     this.name = 'GeminiError'
   }
@@ -80,7 +88,10 @@ export class GeminiClient {
 
     try {
       return await this.retryWithBackoff(async () => {
-        return await this.performTranscription(audioBlob)
+        return await this.performTranscription(
+          audioBlob,
+          options?.onEntryComplete
+        )
       })
     } finally {
       this.activeRequests--
@@ -90,7 +101,10 @@ export class GeminiClient {
   /**
    * Perform actual transcription with Gemini API
    */
-  private async performTranscription(audioBlob: Blob): Promise<TranscriptData> {
+  private async performTranscription(
+    audioBlob: Blob,
+    onEntryComplete?: (entry: TranscriptEntry) => void
+  ): Promise<TranscriptData> {
     try {
       console.log(`Starting transcription with model: ${this.model}`)
       console.log(`Blob size: ${(audioBlob.size / 1024 / 1024).toFixed(2)} MB`)
@@ -148,7 +162,10 @@ Return ONLY a JSON array with this exact structure (no markdown, no code blocks,
       const text = response.text
 
       if (!text) {
-        throw new GeminiError('Empty response from Gemini API', 'EMPTY_RESPONSE')
+        throw new GeminiError(
+          'Empty response from Gemini API',
+          'EMPTY_RESPONSE'
+        )
       }
 
       // Parse response
@@ -164,18 +181,31 @@ Return ONLY a JSON array with this exact structure (no markdown, no code blocks,
       // Extract unique speakers
       const speakers = this.extractSpeakers(entries)
 
-      // Generate transcript data
+      // Generate transcript data and emit entries if callback provided
+      const transcriptEntries: TranscriptEntry[] = entries.map(
+        (entry, index) => {
+          const transcriptEntry: TranscriptEntry = {
+            id: String(index + 1),
+            speaker: entry.speaker,
+            speakerNumber: entry.speakerNumber,
+            startTime: entry.startTime,
+            endTime: entry.endTime,
+            text: entry.text,
+            confidence: entry.confidence,
+          }
+
+          // Emit entry if callback is provided
+          if (onEntryComplete) {
+            onEntryComplete(transcriptEntry)
+          }
+
+          return transcriptEntry
+        }
+      )
+
       const transcriptData: TranscriptData = {
         id: this.generateId(),
-        entries: entries.map((entry, index) => ({
-          id: String(index + 1),
-          speaker: entry.speaker,
-          speakerNumber: entry.speakerNumber,
-          startTime: entry.startTime,
-          endTime: entry.endTime,
-          text: entry.text,
-          confidence: entry.confidence,
-        })),
+        entries: transcriptEntries,
         speakers,
         metadata: {
           fileName: 'audio.webm',
@@ -280,7 +310,7 @@ Return ONLY a JSON array with this exact structure (no markdown, no code blocks,
   private extractSpeakers(entries: GeminiResponse[]): Speaker[] {
     const speakerMap = new Map<number, string>()
 
-    entries.forEach((entry) => {
+    entries.forEach(entry => {
       if (!speakerMap.has(entry.speakerNumber)) {
         speakerMap.set(entry.speakerNumber, entry.speaker)
       }
@@ -346,7 +376,7 @@ Return ONLY a JSON array with this exact structure (no markdown, no code blocks,
    * Delay helper
    */
   private delay(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms))
+    return new Promise(resolve => setTimeout(resolve, ms))
   }
 
   /**

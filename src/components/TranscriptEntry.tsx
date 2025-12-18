@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Clock, Check } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { formatTimestamp } from '@/utils/fileUtils'
@@ -8,7 +9,10 @@ interface TranscriptEntryProps {
   speakerColor: string
 }
 
-export function TranscriptEntry({ entry, speakerColor }: TranscriptEntryProps) {
+export const TranscriptEntry = memo(function TranscriptEntry({
+  entry,
+  speakerColor,
+}: TranscriptEntryProps) {
   const getSpeakerColorClasses = (color: string) => {
     const colorMap: Record<string, string> = {
       blue: 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border-blue-200 dark:border-blue-800',
@@ -42,7 +46,8 @@ export function TranscriptEntry({ entry, speakerColor }: TranscriptEntryProps) {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Clock className="w-3.5 h-3.5" />
           <span>
-            {formatTimestamp(entry.startTime)} - {formatTimestamp(entry.endTime)}
+            {formatTimestamp(entry.startTime)} -{' '}
+            {formatTimestamp(entry.endTime)}
           </span>
         </div>
 
@@ -57,4 +62,4 @@ export function TranscriptEntry({ entry, speakerColor }: TranscriptEntryProps) {
       <p className="text-foreground leading-relaxed">{entry.text}</p>
     </div>
   )
-}
+})

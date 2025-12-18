@@ -15,10 +15,14 @@ import {
   type VideoMetadata,
 } from '@/utils/fileUtils'
 import { Button } from '@/components/ui/button'
+import { largeTranscriptDemo } from '@/data/largeTranscriptDemo'
+import type { TranscriptData } from '@/types/transcript'
 
 function App() {
   // Auth state
-  const [isAuthenticated, setIsAuthenticated] = useState(apiClient.isAuthenticated())
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    apiClient.isAuthenticated()
+  )
   const [showAuth, setShowAuth] = useState(false)
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
   const [showLibrary, setShowLibrary] = useState(false)
@@ -27,6 +31,11 @@ function App() {
   const [videoFile, setVideoFile] = useState<File | null>(null)
   const [videoMetadata, setVideoMetadata] = useState<VideoMetadata | null>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
+
+  // Demo mode state
+  const [demoTranscript, setDemoTranscript] = useState<TranscriptData | null>(
+    null
+  )
 
   // Transcription hook
   const {
@@ -70,6 +79,13 @@ function App() {
 
   const handleReset = () => {
     handleRemoveVideo()
+    setDemoTranscript(null)
+  }
+
+  const loadDemoTranscript = () => {
+    setDemoTranscript(largeTranscriptDemo)
+    // Clear any existing video/transcript
+    handleRemoveVideo()
   }
 
   const handleAuthSuccess = () => {
@@ -87,7 +103,7 @@ function App() {
     setAuthMode(authMode === 'login' ? 'register' : 'login')
   }
 
-  const handleLoadTranscript = (loadedTranscript: any) => {
+  const handleLoadTranscript = (loadedTranscript: TranscriptData) => {
     // TODO: Implement loading transcript into the UI
     console.log('Loading transcript:', loadedTranscript)
     setShowLibrary(false)
@@ -139,22 +155,44 @@ function App() {
       <Header />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        {/* Auth buttons */}
-        <div className="mb-6 flex justify-end gap-2">
-          {!isAuthenticated ? (
-            <Button onClick={() => setShowAuth(true)}>
-              Login / Register
+        {/* Auth and Demo buttons */}
+        <div className="mb-6 flex justify-between items-center">
+          <div>
+            {/* Demo button - Sprint 4 Feature */}
+            <Button
+              variant="outline"
+              onClick={loadDemoTranscript}
+              className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 hover:from-purple-600 hover:to-pink-600"
+            >
+              🎬 Load Sprint 4 Demo (60 Entries)
             </Button>
-          ) : (
-            <>
-              <Button variant="outline" onClick={() => setShowLibrary(true)}>
-                My Transcripts
+            {demoTranscript && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleReset}
+                className="ml-2"
+              >
+                Clear Demo
               </Button>
-              <Button variant="outline" onClick={handleLogout}>
-                Logout
+            )}
+          </div>
+          <div className="flex gap-2">
+            {!isAuthenticated ? (
+              <Button onClick={() => setShowAuth(true)}>
+                Login / Register
               </Button>
-            </>
-          )}
+            ) : (
+              <>
+                <Button variant="outline" onClick={() => setShowLibrary(true)}>
+                  My Transcripts
+                </Button>
+                <Button variant="outline" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -182,7 +220,7 @@ function App() {
           {/* Right Column */}
           <div>
             <TranscriptView
-              transcript={transcript}
+              transcript={demoTranscript || transcript}
               onExport={() => console.log('Transcript exported')}
             />
           </div>

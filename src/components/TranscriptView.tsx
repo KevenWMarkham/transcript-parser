@@ -2,7 +2,8 @@ import { FileText, Download, Users } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { TranscriptEntry } from '@/components/TranscriptEntry'
+import { TranscriptList } from '@/components/TranscriptList'
+import { SpeakerSummary } from '@/components/SpeakerSummary'
 import { formatTimestamp } from '@/utils/fileUtils'
 import type { TranscriptData } from '@/types/transcript'
 
@@ -68,57 +69,60 @@ export function TranscriptView({ transcript, onExport }: TranscriptViewProps) {
             </p>
           </div>
         ) : (
-          <div className="flex-1 overflow-auto">
-            <div className="flex items-center gap-2 mb-6">
-              <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                <Users className="w-4 h-4" />
-                Identified Speakers
-              </span>
-              <Badge variant="secondary">{transcript.speakers.length}</Badge>
+          <div className="flex flex-col lg:flex-row gap-6 flex-1 overflow-hidden">
+            {/* Main transcript area */}
+            <div className="flex-1 flex flex-col min-w-0">
+              <div className="flex items-center gap-2 mb-6">
+                <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  Identified Speakers
+                </span>
+                <Badge variant="secondary">{transcript.speakers.length}</Badge>
+              </div>
+
+              <div className="flex flex-wrap gap-2 mb-6">
+                {transcript.speakers.map(speaker => {
+                  const colorClasses: Record<string, string> = {
+                    blue: 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border-blue-200 dark:border-blue-800',
+                    emerald:
+                      'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+                    purple:
+                      'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border-purple-200 dark:border-purple-800',
+                  }
+                  const dotClasses: Record<string, string> = {
+                    blue: 'bg-blue-500',
+                    emerald: 'bg-emerald-500',
+                    purple: 'bg-purple-500',
+                  }
+
+                  return (
+                    <Badge
+                      key={speaker.id}
+                      className={
+                        colorClasses[speaker.color] || colorClasses.blue
+                      }
+                    >
+                      <span
+                        className={`w-2 h-2 rounded-full mr-2 ${dotClasses[speaker.color] || dotClasses.blue}`}
+                      ></span>
+                      {speaker.name}
+                    </Badge>
+                  )
+                })}
+              </div>
+
+              <TranscriptList
+                entries={transcript.entries}
+                speakers={transcript.speakers}
+              />
             </div>
 
-            <div className="flex flex-wrap gap-2 mb-8">
-              {transcript.speakers.map(speaker => {
-                const colorClasses: Record<string, string> = {
-                  blue: 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border-blue-200 dark:border-blue-800',
-                  emerald:
-                    'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
-                  purple:
-                    'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border-purple-200 dark:border-purple-800',
-                }
-                const dotClasses: Record<string, string> = {
-                  blue: 'bg-blue-500',
-                  emerald: 'bg-emerald-500',
-                  purple: 'bg-purple-500',
-                }
-
-                return (
-                  <Badge
-                    key={speaker.id}
-                    className={colorClasses[speaker.color] || colorClasses.blue}
-                  >
-                    <span
-                      className={`w-2 h-2 rounded-full mr-2 ${dotClasses[speaker.color] || dotClasses.blue}`}
-                    ></span>
-                    {speaker.name}
-                  </Badge>
-                )
-              })}
-            </div>
-
-            <div className="space-y-1">
-              {transcript.entries.map(entry => {
-                const speaker = transcript.speakers.find(
-                  s => s.id === entry.speakerNumber
-                )
-                return (
-                  <TranscriptEntry
-                    key={entry.id}
-                    entry={entry}
-                    speakerColor={speaker?.color || 'blue'}
-                  />
-                )
-              })}
+            {/* Speaker Summary Sidebar */}
+            <div className="w-full lg:w-80 flex-shrink-0">
+              <SpeakerSummary
+                entries={transcript.entries}
+                speakers={transcript.speakers}
+              />
             </div>
           </div>
         )}
