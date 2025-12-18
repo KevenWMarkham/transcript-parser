@@ -9,6 +9,7 @@ This document outlines the **iOS-inspired glassmorphism design system** from the
 ## 🎨 Design Philosophy
 
 ### Core Principles
+
 1. **Glassmorphism** - Frosted glass effects with backdrop blur
 2. **iOS Aesthetic** - Rounded corners, smooth shadows, clean typography
 3. **Gradient Accents** - Subtle blue-to-purple gradients for visual interest
@@ -20,6 +21,7 @@ This document outlines the **iOS-inspired glassmorphism design system** from the
 ## 🌈 Color System
 
 ### Background Gradients
+
 ```css
 /* Main app background */
 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30
@@ -30,6 +32,7 @@ from-blue-50/80 to-purple-50/80   /* Alt panels */
 ```
 
 ### Brand Gradients
+
 ```css
 /* Icon backgrounds */
 bg-gradient-to-br from-blue-500 to-purple-600
@@ -39,6 +42,7 @@ bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent
 ```
 
 ### Glassmorphism
+
 ```css
 /* Glass card effect */
 backdrop-blur-xl bg-white/80 border border-white/20
@@ -52,6 +56,7 @@ backdrop-blur-sm bg-white/60 border border-white/80
 ## 📦 Component Styling
 
 ### Header Card
+
 ```tsx
 <div className="backdrop-blur-xl bg-white/80 rounded-3xl p-6 sm:p-8 shadow-lg border border-white/20">
   {/* Header content */}
@@ -59,6 +64,7 @@ backdrop-blur-sm bg-white/60 border border-white/80
 ```
 
 **Key Features:**
+
 - `rounded-3xl` - Extra large border radius (24px)
 - `backdrop-blur-xl` - Heavy blur effect
 - `bg-white/80` - 80% opacity white background
@@ -66,6 +72,7 @@ backdrop-blur-sm bg-white/60 border border-white/80
 - `border-white/20` - Subtle white border
 
 ### Icon Containers
+
 ```tsx
 <div className="relative">
   {/* Glow effect */}
@@ -79,11 +86,13 @@ backdrop-blur-sm bg-white/60 border border-white/80
 ```
 
 **Key Features:**
+
 - Layered blur glow effect
 - Gradient background
 - Rounded-2xl (16px radius)
 
 ### Buttons
+
 ```tsx
 <Button
   variant="outline"
@@ -95,11 +104,13 @@ backdrop-blur-sm bg-white/60 border border-white/80
 ```
 
 **Key Features:**
+
 - `rounded-xl` - Extra rounded (12px)
 - Hover state transitions (300ms)
 - Color-coded hover effects (blue for primary, red for logout)
 
 ### Format Cards (Export Panel)
+
 ```tsx
 <div className="backdrop-blur-sm bg-white/60 rounded-xl p-3 border border-white/80">
   <div className="flex items-center gap-3">
@@ -117,6 +128,7 @@ backdrop-blur-sm bg-white/60 border border-white/80
 ## 🎭 Animation System (Framer Motion)
 
 ### Page Transitions
+
 ```tsx
 <motion.div
   initial={{ opacity: 0, y: -20 }}
@@ -128,20 +140,24 @@ backdrop-blur-sm bg-white/60 border border-white/80
 ```
 
 ### Staggered List Items
+
 ```tsx
-{items.map((item, index) => (
-  <motion.div
-    key={item.id}
-    initial={{ opacity: 0, x: -20 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ delay: 0.1 + index * 0.05 }}
-  >
-    {/* Item content */}
-  </motion.div>
-))}
+{
+  items.map((item, index) => (
+    <motion.div
+      key={item.id}
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.1 + index * 0.05 }}
+    >
+      {/* Item content */}
+    </motion.div>
+  ))
+}
 ```
 
 ### Modal/Panel Entrance
+
 ```tsx
 <AnimatePresence mode="wait">
   {isVisible && (
@@ -161,6 +177,7 @@ backdrop-blur-sm bg-white/60 border border-white/80
 ## 📐 Layout Structure
 
 ### Main Grid
+
 ```tsx
 <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
   {/* Left Column - Upload & Processing */}
@@ -169,17 +186,14 @@ backdrop-blur-sm bg-white/60 border border-white/80
   </div>
 
   {/* Right Column - Transcript */}
-  <div>
-    {/* Transcript viewer */}
-  </div>
+  <div>{/* Transcript viewer */}</div>
 </div>
 ```
 
 ### Container
+
 ```tsx
-<div className="max-w-7xl mx-auto">
-  {/* App content */}
-</div>
+<div className="max-w-7xl mx-auto">{/* App content */}</div>
 ```
 
 ---
@@ -187,19 +201,25 @@ backdrop-blur-sm bg-white/60 border border-white/80
 ## 🔤 Typography
 
 ### Headings
+
 ```tsx
-{/* Main title with gradient */}
-<h1 className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+{
+  /* Main title with gradient */
+}
+;<h1 className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
   Video Transcript Parser
 </h1>
 
-{/* Subtitle */}
-<p className="text-slate-600 text-sm sm:text-base mt-1">
+{
+  /* Subtitle */
+}
+;<p className="text-slate-600 text-sm sm:text-base mt-1">
   AI-powered speaker identification and transcription
 </p>
 ```
 
 ### Card Titles
+
 ```tsx
 <h3 className="text-slate-800">
   Advanced Export
@@ -214,16 +234,19 @@ backdrop-blur-sm bg-white/60 border border-white/80
 ## 🎯 Spacing System
 
 ### Padding Scale
+
 - Cards: `p-6` (24px) on mobile, `p-8` (32px) on desktop
 - Small cards: `p-3` (12px)
 - Icon containers: `p-2.5` (10px) or `p-3` (12px)
 
 ### Gap Scale
+
 - Main grid: `gap-4 sm:gap-6` (16px → 24px)
 - Stack spacing: `space-y-4 sm:space-y-6`
 - Inline spacing: `gap-2`, `gap-3`, `gap-4`
 
 ### Margin Scale
+
 - Section margins: `mb-6 sm:mb-8`
 - Element margins: `mt-1`, `mt-0.5`, `mb-4`
 
@@ -232,6 +255,7 @@ backdrop-blur-sm bg-white/60 border border-white/80
 ## 🌟 Special Effects
 
 ### Info Callout
+
 ```tsx
 <div className="mt-4 p-3 bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl border border-blue-200/50">
   <p className="text-xs text-slate-700 text-center">
@@ -241,6 +265,7 @@ backdrop-blur-sm bg-white/60 border border-white/80
 ```
 
 ### Gradient Panel
+
 ```tsx
 <div className="backdrop-blur-xl bg-gradient-to-br from-purple-50/80 to-pink-50/80 rounded-3xl shadow-xl border border-purple-200/50 p-6">
   {/* Panel content */}
@@ -252,23 +277,33 @@ backdrop-blur-sm bg-white/60 border border-white/80
 ## 📱 Responsive Design
 
 ### Breakpoint Strategy
+
 - Mobile-first approach
 - Use `sm:` prefix for tablet (640px+)
 - Use `lg:` prefix for desktop (1024px+)
 
 ### Common Patterns
+
 ```tsx
-{/* Text size */}
-className="text-sm sm:text-base"
+{
+  /* Text size */
+}
+className = 'text-sm sm:text-base'
 
-{/* Padding */}
-className="p-4 sm:p-6 lg:p-8"
+{
+  /* Padding */
+}
+className = 'p-4 sm:p-6 lg:p-8'
 
-{/* Grid */}
-className="grid lg:grid-cols-2 gap-4 sm:gap-6"
+{
+  /* Grid */
+}
+className = 'grid lg:grid-cols-2 gap-4 sm:gap-6'
 
-{/* Spacing */}
-className="space-y-4 sm:space-y-6"
+{
+  /* Spacing */
+}
+className = 'space-y-4 sm:space-y-6'
 ```
 
 ---
@@ -276,6 +311,7 @@ className="space-y-4 sm:space-y-6"
 ## 🎨 Component Examples
 
 ### 1. Video Uploader Card
+
 ```tsx
 <div className="backdrop-blur-xl bg-white/80 rounded-3xl p-8 shadow-lg border border-white/20">
   <div className="relative aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
@@ -285,6 +321,7 @@ className="space-y-4 sm:space-y-6"
 ```
 
 ### 2. Processing Status Card
+
 ```tsx
 <div className="backdrop-blur-xl bg-gradient-to-br from-blue-50/80 to-purple-50/80 rounded-3xl shadow-xl border border-blue-200/50 p-6">
   {/* Status indicators with animated progress */}
@@ -292,6 +329,7 @@ className="space-y-4 sm:space-y-6"
 ```
 
 ### 3. Transcript Segment
+
 ```tsx
 <div className="backdrop-blur-sm bg-white/60 rounded-2xl p-4 border border-white/80 hover:bg-white/80 transition-all duration-300">
   {/* Speaker name with gradient badge */}
@@ -305,6 +343,7 @@ className="space-y-4 sm:space-y-6"
 ## 🔧 Implementation Checklist
 
 ### Phase 1: Core Styling ✅ READY TO IMPLEMENT
+
 - [ ] Apply gradient background to main app container
 - [ ] Update header with glassmorphism card
 - [ ] Add icon with glow effect
@@ -312,6 +351,7 @@ className="space-y-4 sm:space-y-6"
 - [ ] Update buttons with rounded corners and hover effects
 
 ### Phase 2: Cards & Panels
+
 - [ ] Convert all cards to glassmorphism style
 - [ ] Add backdrop-blur effects
 - [ ] Update border radius to rounded-3xl/2xl/xl
@@ -319,6 +359,7 @@ className="space-y-4 sm:space-y-6"
 - [ ] Apply shadow-lg to floating cards
 
 ### Phase 3: Animations
+
 - [ ] Install `motion/react` (Framer Motion)
 - [ ] Add page entrance animations
 - [ ] Implement staggered list animations
@@ -326,12 +367,14 @@ className="space-y-4 sm:space-y-6"
 - [ ] Implement AnimatePresence for modals/panels
 
 ### Phase 4: Typography & Colors
+
 - [ ] Update color palette to slate-based grays
 - [ ] Apply gradient text to headings
 - [ ] Use text-slate-600 for secondary text
 - [ ] Update spacing to match design system
 
 ### Phase 5: Special Components
+
 - [ ] Create Export Panel with format cards
 - [ ] Add emoji icons to format options
 - [ ] Create info callouts with gradient backgrounds
@@ -354,16 +397,16 @@ className="space-y-4 sm:space-y-6"
 
 ## 🎯 Key Visual Differences from Current Design
 
-| Current | Demo Design |
-|---------|-------------|
-| Solid white cards | Glassmorphism with backdrop blur |
-| Simple rounded corners (md) | Extra rounded (3xl, 2xl, xl) |
-| No animations | Smooth Framer Motion animations |
-| Flat backgrounds | Gradient backgrounds everywhere |
-| Standard shadows | Layered glow effects |
-| Simple icons | Icons with gradient backgrounds + blur glow |
-| No motion | Entrance/exit animations + staggered lists |
-| Plain buttons | Rounded buttons with color-coded hovers |
+| Current                     | Demo Design                                 |
+| --------------------------- | ------------------------------------------- |
+| Solid white cards           | Glassmorphism with backdrop blur            |
+| Simple rounded corners (md) | Extra rounded (3xl, 2xl, xl)                |
+| No animations               | Smooth Framer Motion animations             |
+| Flat backgrounds            | Gradient backgrounds everywhere             |
+| Standard shadows            | Layered glow effects                        |
+| Simple icons                | Icons with gradient backgrounds + blur glow |
+| No motion                   | Entrance/exit animations + staggered lists  |
+| Plain buttons               | Rounded buttons with color-coded hovers     |
 
 ---
 

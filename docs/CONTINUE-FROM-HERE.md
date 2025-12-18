@@ -10,12 +10,14 @@
 ## 🎬 Quick Start (Next Session)
 
 ### Option 1: Guided Start (Recommended)
+
 ```bash
 # Open the session start prompt
 cat specs/sprints/sprint-6/SESSION-START-PROMPT.md
 ```
 
 This file contains:
+
 - Complete context and background
 - Phase-by-phase implementation guide
 - Code examples for each step
@@ -23,6 +25,7 @@ This file contains:
 - Common issues and solutions
 
 ### Option 2: Jump Right In
+
 ```bash
 # 1. Install Framer Motion
 npm install framer-motion
@@ -39,23 +42,25 @@ npm run dev
 
 ## 📚 Essential Documentation
 
-| File | Purpose |
-|------|---------|
+| File                                                                          | Purpose                                    |
+| ----------------------------------------------------------------------------- | ------------------------------------------ |
 | **[SESSION-START-PROMPT.md](specs/sprints/sprint-6/SESSION-START-PROMPT.md)** | 👈 **START HERE** - Complete session guide |
-| [UX-DESIGN-SYSTEM.md](UX-DESIGN-SYSTEM.md) | Design system reference |
-| [Execution-Prompt.md](specs/sprints/sprint-6/Execution-Prompt.md) | Detailed implementation plan |
-| [SPRINT-5-SUMMARY.md](SPRINT-5-SUMMARY.md) | What was built in Sprint 5 |
+| [UX-DESIGN-SYSTEM.md](UX-DESIGN-SYSTEM.md)                                    | Design system reference                    |
+| [Execution-Prompt.md](specs/sprints/sprint-6/Execution-Prompt.md)             | Detailed implementation plan               |
+| [SPRINT-5-SUMMARY.md](SPRINT-5-SUMMARY.md)                                    | What was built in Sprint 5                 |
 
 ---
 
 ## 🎯 Sprint 6 Goal
 
 Transform this basic UI:
+
 ```
 Current: Solid white cards + No animations + Simple corners
 ```
 
 Into this premium UI:
+
 ```
 Target:  Frosted glass blur + Smooth animations + Gradient accents
 ```
@@ -67,6 +72,7 @@ Target:  Frosted glass blur + Smooth animations + Gradient accents
 ## 🎨 What You're Building
 
 ### Key Visual Features
+
 1. **Glassmorphism Cards**
    - Frosted glass effect with backdrop blur
    - Semi-transparent white backgrounds
@@ -107,15 +113,18 @@ Target:  Frosted glass blur + Smooth animations + Gradient accents
 ## 🔥 First Three Tasks (Start Here)
 
 ### Task 1: Install Dependencies
+
 ```bash
 npm install framer-motion
 npm run dev
 ```
 
 ### Task 2: Update App Background
+
 **File**: `src/App.tsx`
 
 Find the main container div and update:
+
 ```tsx
 // OLD:
 <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -131,6 +140,7 @@ Find the main container div and update:
 **Test**: Reload browser - you should see a subtle gradient background
 
 ### Task 3: Create Header Component
+
 **File**: `src/components/Header.tsx`
 
 Follow the code example in `SESSION-START-PROMPT.md` → Phase 3
@@ -152,11 +162,13 @@ Follow the code example in `SESSION-START-PROMPT.md` → Phase 3
 ## 🎨 Design Pattern Cheat Sheet
 
 ### Glassmorphism Card
+
 ```tsx
 <div className="backdrop-blur-xl bg-white/80 rounded-3xl shadow-lg border border-white/20 p-6">
 ```
 
 ### Icon with Glow
+
 ```tsx
 <div className="relative">
   <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl blur-lg opacity-50" />
@@ -167,6 +179,7 @@ Follow the code example in `SESSION-START-PROMPT.md` → Phase 3
 ```
 
 ### Gradient Text
+
 ```tsx
 <h1 className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
   Title
@@ -174,13 +187,11 @@ Follow the code example in `SESSION-START-PROMPT.md` → Phase 3
 ```
 
 ### Entrance Animation
+
 ```tsx
 import { motion } from 'framer-motion'
 
-<motion.div
-  initial={{ opacity: 0, y: -20 }}
-  animate={{ opacity: 1, y: 0 }}
->
+;<motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
   {/* content */}
 </motion.div>
 ```
@@ -198,6 +209,7 @@ import { motion } from 'framer-motion'
 ## ✅ Success Criteria
 
 You'll know Sprint 6 is complete when:
+
 - [ ] App has gradient background
 - [ ] All cards have glassmorphism effect
 - [ ] Header has glowing icon and gradient text
@@ -223,21 +235,25 @@ If you get stuck:
 ## 📊 Context for AI Assistant
 
 **Current State**:
+
 - Sprint 5 complete with all features working
 - Application has basic styling (solid cards, no animations)
 - All functionality tested and working (48 unit + 22 E2E tests)
 
 **Goal**:
+
 - Apply iOS-inspired glassmorphism design
 - Add Framer Motion animations throughout
 - Transform visual appearance to production-ready premium UI
 
 **Approach**:
+
 - Incremental transformation (one component at a time)
 - Test after each change
 - Follow the demo design as reference
 
 **Key Technologies**:
+
 - Framer Motion for animations
 - Tailwind CSS for styling
 - backdrop-filter for glassmorphism
