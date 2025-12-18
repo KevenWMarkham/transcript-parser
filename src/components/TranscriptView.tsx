@@ -1,64 +1,230 @@
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { FileText, Download, Users } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { TranscriptList } from '@/components/TranscriptList'
-import { SpeakerSummary } from '@/components/SpeakerSummary'
+import { SpeakerAnalytics } from '@/components/SpeakerAnalytics'
+import { TranscriptSearch } from '@/components/TranscriptSearch'
+import {
+  TranscriptFilters,
+  type TranscriptFilterOptions,
+} from '@/components/TranscriptFilters'
+import { KeyboardShortcuts } from '@/components/KeyboardShortcuts'
+import { ExportDialog } from '@/components/ExportDialog'
+import { TranscriptListSkeleton } from '@/components/TranscriptListSkeleton'
+import { useKeyboardNavigation } from '@/hooks/useKeyboardNavigation'
+import { useEditHistory } from '@/hooks/useEditHistory'
+import { useToast } from '@/components/ui/toast'
 import { formatTimestamp } from '@/utils/fileUtils'
-import type { TranscriptData } from '@/types/transcript'
+import { countMatches } from '@/utils/textHighlight'
+import { performanceMonitor } from '@/utils/performance'
+import type { TranscriptData, TranscriptEntry } from '@/types/transcript'
 
 interface TranscriptViewProps {
   transcript?: TranscriptData | null
   onExport?: () => void
+  isLoading?: boolean
 }
 
-export function TranscriptView({ transcript, onExport }: TranscriptViewProps) {
+export function TranscriptView({
+  transcript,
+  onExport,
+  isLoading = false,
+}: TranscriptViewProps) {
   const hasTranscript = transcript && transcript.entries.length > 0
+  const { addToast } = useToast()
+  const { addEdit, canUndo, canRedo, undo, redo } = useEditHistory()
 
-  const exportTranscript = () => {
-    if (!transcript) return
+  // Export dialog state
+  const [isExportDialogOpen, setIsExportDialogOpen] = useState(false)
+  const [editedEntries, setEditedEntries] = useState<Set<string>>(new Set())
 
-    // Format transcript as plain text
-    const content = transcript.entries
-      .map(
-        entry =>
-          `[${formatTimestamp(entry.startTime)} - ${formatTimestamp(entry.endTime)}] ${entry.speaker}:\n${entry.text}\n`
-      )
-      .join('\n')
+  // Search and filter state
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filters, setFilters] = useState<TranscriptFilterOptions>({
+    selectedSpeakers: new Set<number>(),
+    timeRange: {
+      start: 0,
+      end: transcript?.metadata.duration || 0,
+    },
+  })
 
-    // Create and download file
-    const blob = new Blob([content], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `transcript-${new Date().toISOString().split('T')[0]}.txt`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
+  // Update time range when transcript changes
+  useMemo(() => {
+    if (transcript) {
+      setFilters(prev => ({
+        ...prev,
+        timeRange: {
+          start: 0,
+          end: transcript.metadata.duration,
+        },
+      }))
+    }
+  }, [transcript])
 
-    if (onExport) onExport()
+  // Memoize search query normalization
+  const normalizedSearchQuery = useMemo(
+    () => searchQuery.trim().toLowerCase(),
+    [searchQuery]
+  )
+
+  // Step 1: Apply speaker filter
+  const speakerFilteredEntries = useMemo(() => {
+    const end = performanceMonitor.start('speaker-filter')
+    if (!transcript) return []
+
+    const result =
+      filters.selectedSpeakers.size > 0
+        ? transcript.entries.filter(entry =>
+            filters.selectedSpeakers.has(entry.speakerNumber)
+          )
+        : transcript.entries
+
+    end()
+    return result
+  }, [transcript, filters.selectedSpeakers])
+
+  // Step 2: Apply time range filter
+  const timeFilteredEntries = useMemo(() => {
+    const end = performanceMonitor.start('time-filter')
+    const result = speakerFilteredEntries.filter(
+      entry =>
+        entry.startTime >= filters.timeRange.start &&
+        entry.endTime <= filters.timeRange.end
+    )
+    end()
+    return result
+  }, [speakerFilteredEntries, filters.timeRange])
+
+  // Step 3: Apply search filter
+  const filteredEntries = useMemo(() => {
+    const end = performanceMonitor.start('search-filter')
+    const result = normalizedSearchQuery
+      ? timeFilteredEntries.filter(entry =>
+          entry.text.toLowerCase().includes(normalizedSearchQuery)
+        )
+      : timeFilteredEntries
+    end()
+    return result
+  }, [timeFilteredEntries, normalizedSearchQuery])
+
+  // Count search results
+  const searchResultCount = useMemo(() => {
+    if (!searchQuery.trim() || !transcript) return undefined
+
+    return transcript.entries.reduce(
+      (count, entry) => count + countMatches(entry.text, searchQuery),
+      0
+    )
+  }, [transcript, searchQuery])
+
+  const handleClearFilters = useCallback(() => {
+    setFilters({
+      selectedSpeakers: new Set<number>(),
+      timeRange: {
+        start: 0,
+        end: transcript?.metadata.duration || 0,
+      },
+    })
+  }, [transcript])
+
+  // Keyboard navigation
+  const searchInputRef = useRef<HTMLInputElement>(null)
+
+  const focusSearch = useCallback(() => {
+    searchInputRef.current?.focus()
+  }, [])
+
+  const handleEscape = useCallback(() => {
+    setSearchQuery('')
+    handleClearFilters()
+  }, [handleClearFilters])
+
+  const { selectedIndex } = useKeyboardNavigation({
+    itemCount: filteredEntries.length,
+    onSearch: focusSearch,
+    onEscape: handleEscape,
+    enabled: hasTranscript,
+  })
+
+  const handleExportClick = () => {
+    setIsExportDialogOpen(true)
   }
 
+  const handleEntryEdit = useCallback(
+    (entryId: string, field: 'text' | 'startTime' | 'endTime', value: string | number) => {
+      // Find the original entry to get old value
+      const entry = transcript?.entries.find(e => e.id === entryId)
+      if (!entry) return
+
+      const oldValue = entry[field]
+
+      // Add to edit history
+      addEdit({
+        entryId,
+        field,
+        oldValue,
+        newValue: value,
+      })
+
+      // Mark entry as edited
+      setEditedEntries(prev => new Set(prev).add(entryId))
+
+      // Show success toast
+      addToast(`${field} updated successfully`, 'success')
+
+      // TODO: Actually update the transcript data (would need state management)
+      // For now, this is just tracking edits in history
+    },
+    [transcript, addEdit, addToast]
+  )
+
   return (
-    <Card className="shadow-lg h-full flex flex-col">
-      <CardContent className="p-6 flex-1 flex flex-col">
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.2 }}
+      className="h-full flex flex-col"
+    >
+      <div className="backdrop-blur-xl bg-white/80 rounded-3xl shadow-lg border border-white/20 p-6 flex-1 flex flex-col">
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center">
-              <FileText className="w-6 h-6 text-white" />
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-3xl blur-lg opacity-30" />
+              <div className="relative w-16 h-16 rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-xl">
+                <FileText className="w-8 h-8 text-white" />
+              </div>
             </div>
-            <h2 className="text-xl font-semibold">Transcript</h2>
+            <h2 className="text-2xl font-bold text-slate-800">Transcript</h2>
           </div>
-          {hasTranscript && (
-            <Button variant="outline" size="sm" onClick={exportTranscript}>
-              <Download className="w-4 h-4 mr-2" />
-              Export
-            </Button>
-          )}
+          <div className="flex items-center gap-3">
+            {hasTranscript && (
+              <>
+                <KeyboardShortcuts />
+                <Button variant="outline" size="sm" onClick={handleExportClick} className="rounded-2xl gap-2">
+                  <Download className="w-4 h-4" />
+                  Export
+                </Button>
+              </>
+            )}
+          </div>
         </div>
 
-        {!hasTranscript ? (
+        {isLoading ? (
+          <div className="flex flex-col lg:flex-row gap-6 flex-1 overflow-hidden">
+            <div className="flex-1 flex flex-col min-w-0">
+              <TranscriptListSkeleton count={8} />
+            </div>
+            <div className="w-full lg:w-80 flex-shrink-0">
+              <div className="space-y-4">
+                <div className="h-32 bg-muted animate-pulse rounded-lg" />
+                <div className="h-48 bg-muted animate-pulse rounded-lg" />
+              </div>
+            </div>
+          </div>
+        ) : !hasTranscript ? (
           <div className="flex flex-col items-center justify-center flex-1 text-center py-12">
             <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mb-4">
               <FileText className="w-12 h-12 text-muted-foreground" />
@@ -72,61 +238,78 @@ export function TranscriptView({ transcript, onExport }: TranscriptViewProps) {
           <div className="flex flex-col lg:flex-row gap-6 flex-1 overflow-hidden">
             {/* Main transcript area */}
             <div className="flex-1 flex flex-col min-w-0">
-              <div className="flex items-center gap-2 mb-6">
-                <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                  <Users className="w-4 h-4" />
-                  Identified Speakers
-                </span>
-                <Badge variant="secondary">{transcript.speakers.length}</Badge>
+              {/* Search Bar */}
+              <div className="mb-6">
+                <TranscriptSearch
+                  onSearchChange={setSearchQuery}
+                  resultCount={searchResultCount}
+                />
               </div>
 
-              <div className="flex flex-wrap gap-2 mb-6">
-                {transcript.speakers.map(speaker => {
-                  const colorClasses: Record<string, string> = {
-                    blue: 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border-blue-200 dark:border-blue-800',
-                    emerald:
-                      'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
-                    purple:
-                      'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border-purple-200 dark:border-purple-800',
-                  }
-                  const dotClasses: Record<string, string> = {
-                    blue: 'bg-blue-500',
-                    emerald: 'bg-emerald-500',
-                    purple: 'bg-purple-500',
-                  }
-
-                  return (
-                    <Badge
-                      key={speaker.id}
-                      className={
-                        colorClasses[speaker.color] || colorClasses.blue
-                      }
-                    >
-                      <span
-                        className={`w-2 h-2 rounded-full mr-2 ${dotClasses[speaker.color] || dotClasses.blue}`}
-                      ></span>
-                      {speaker.name}
-                    </Badge>
-                  )
-                })}
+              {/* Filters */}
+              <div className="mb-6">
+                <TranscriptFilters
+                  speakers={transcript.speakers}
+                  maxDuration={transcript.metadata.duration}
+                  filters={filters}
+                  onFiltersChange={setFilters}
+                  onClearFilters={handleClearFilters}
+                />
               </div>
 
-              <TranscriptList
-                entries={transcript.entries}
-                speakers={transcript.speakers}
-              />
+              {/* Show no results message */}
+              {filteredEntries.length === 0 ? (
+                <div className="flex flex-col items-center justify-center flex-1 text-center py-12">
+                  <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mb-4">
+                    <FileText className="w-12 h-12 text-muted-foreground" />
+                  </div>
+                  <h3 className="text-lg font-medium mb-2">No results found</h3>
+                  <p className="text-sm text-muted-foreground max-w-sm mb-4">
+                    Try adjusting your search query or filters
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setSearchQuery('')
+                      handleClearFilters()
+                    }}
+                  >
+                    Clear search and filters
+                  </Button>
+                </div>
+              ) : (
+                <TranscriptList
+                  entries={filteredEntries}
+                  speakers={transcript.speakers}
+                  searchQuery={searchQuery}
+                  selectedIndex={selectedIndex}
+                  onEntryEdit={handleEntryEdit}
+                  editedEntries={editedEntries}
+                  enableEditing={true}
+                />
+              )}
             </div>
 
-            {/* Speaker Summary Sidebar */}
+            {/* Speaker Analytics Sidebar */}
             <div className="w-full lg:w-80 flex-shrink-0">
-              <SpeakerSummary
-                entries={transcript.entries}
+              <SpeakerAnalytics
+                entries={filteredEntries}
                 speakers={transcript.speakers}
               />
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+
+      {/* Export Dialog */}
+      {hasTranscript && (
+        <ExportDialog
+          entries={filteredEntries}
+          isOpen={isExportDialogOpen}
+          onClose={() => setIsExportDialogOpen(false)}
+        />
+      )}
+    </motion.div>
   )
 }

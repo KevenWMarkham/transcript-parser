@@ -2,9 +2,18 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 
 export class ApiClient {
   private token: string | null = null
+  private currentUser: any = null
 
   constructor() {
     this.token = localStorage.getItem('auth_token')
+    const storedUser = localStorage.getItem('current_user')
+    if (storedUser) {
+      try {
+        this.currentUser = JSON.parse(storedUser)
+      } catch (e) {
+        // Invalid stored user, ignore
+      }
+    }
   }
 
   private async request<T>(
@@ -49,7 +58,9 @@ export class ApiClient {
     )
 
     this.token = token
+    this.currentUser = user
     localStorage.setItem('auth_token', token)
+    localStorage.setItem('current_user', JSON.stringify(user))
     return user
   }
 
@@ -63,13 +74,17 @@ export class ApiClient {
     )
 
     this.token = token
+    this.currentUser = user
     localStorage.setItem('auth_token', token)
+    localStorage.setItem('current_user', JSON.stringify(user))
     return user
   }
 
   async logout() {
     this.token = null
+    this.currentUser = null
     localStorage.removeItem('auth_token')
+    localStorage.removeItem('current_user')
   }
 
   async getMe() {
@@ -106,6 +121,10 @@ export class ApiClient {
 
   isAuthenticated(): boolean {
     return this.token !== null
+  }
+
+  getCurrentUser(): any {
+    return this.currentUser
   }
 }
 

@@ -56,7 +56,9 @@ describe('useTranscription', () => {
     jest.clearAllMocks()
 
     // Setup default mocks
-    const mockAudioBlob = new Blob(['audio'], { type: 'audio/webm;codecs=opus' })
+    const mockAudioBlob = new Blob(['audio'], {
+      type: 'audio/webm;codecs=opus',
+    })
 
     const MockAudioExtractor = jest.fn().mockImplementation(() => ({
       extractAudio: jest.fn().mockImplementation(async (file, options) => {
@@ -64,7 +66,7 @@ describe('useTranscription', () => {
         if (options?.onProgress) {
           for (let i = 0; i <= 100; i += 20) {
             options.onProgress(i)
-            await new Promise((resolve) => setTimeout(resolve, 10))
+            await new Promise(resolve => setTimeout(resolve, 10))
           }
         }
         return mockAudioBlob

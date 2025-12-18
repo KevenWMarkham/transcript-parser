@@ -6,7 +6,9 @@ interface TranscriptLibraryProps {
   onLoadTranscript?: (transcript: any) => void
 }
 
-export function TranscriptLibrary({ onLoadTranscript }: TranscriptLibraryProps) {
+export function TranscriptLibrary({
+  onLoadTranscript,
+}: TranscriptLibraryProps) {
   const [transcripts, setTranscripts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -51,17 +53,24 @@ export function TranscriptLibrary({ onLoadTranscript }: TranscriptLibraryProps) 
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold">My Transcripts ({transcripts.length})</h2>
+      <h2 className="text-2xl font-bold">
+        My Transcripts ({transcripts.length})
+      </h2>
 
       <div className="grid gap-4">
-        {transcripts.map((transcript) => (
-          <div key={transcript.id} className="p-4 border rounded-lg shadow-sm bg-white">
+        {transcripts.map(transcript => (
+          <div
+            key={transcript.id}
+            className="p-4 border rounded-lg shadow-sm bg-white"
+          >
             <h3 className="font-semibold">{transcript.title}</h3>
             <p className="text-sm text-muted-foreground">
-              {new Date(transcript.createdAt).toLocaleDateString()} • {transcript.duration ? `${transcript.duration}s` : 'N/A'}
+              {new Date(transcript.createdAt).toLocaleDateString()} •{' '}
+              {transcript.duration ? `${transcript.duration}s` : 'N/A'}
             </p>
             <p className="text-sm text-muted-foreground">
-              {transcript.speakers?.length || 0} speakers • {transcript.fileName}
+              {transcript.speakers?.length || 0} speakers •{' '}
+              {transcript.fileName}
             </p>
             <div className="mt-2 flex gap-2">
               <Button size="sm" onClick={() => handleLoad(transcript.id)}>

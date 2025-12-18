@@ -30,7 +30,8 @@ export interface UseTranscriptionResult {
 }
 
 export function useTranscription(): UseTranscriptionResult {
-  const [processingState, setProcessingState] = useState<ProcessingState>('idle')
+  const [processingState, setProcessingState] =
+    useState<ProcessingState>('idle')
   const [progress, setProgress] = useState(0)
   const [transcript, setTranscript] = useState<TranscriptData | null>(null)
   const [error, setError] = useState<Error | null>(null)
@@ -63,7 +64,7 @@ export function useTranscription(): UseTranscriptionResult {
             setProcessingState('extracting-audio')
             const audioExtractor = new AudioExtractor()
             audioBlob = await audioExtractor.extractAudio(file, {
-              onProgress: (audioProgress) => {
+              onProgress: audioProgress => {
                 // Map 0-100% audio extraction to 0-30% total progress
                 const totalProgress = (audioProgress / 100) * 30
                 setProgress(totalProgress)
@@ -72,7 +73,10 @@ export function useTranscription(): UseTranscriptionResult {
             console.log('[Transcription] Browser extraction successful ✅')
             setProgress(30)
           } catch (browserError) {
-            console.warn('[Transcription] Browser extraction failed:', browserError)
+            console.warn(
+              '[Transcription] Browser extraction failed:',
+              browserError
+            )
             console.log('[Transcription] Falling back to FFmpeg.wasm...')
 
             // Fallback to FFmpeg.wasm
@@ -86,15 +90,24 @@ export function useTranscription(): UseTranscriptionResult {
               let lastUpdate = 0
 
               await ffmpegExtractor.load({
-                onProgress: (loadProgress) => {
+                onProgress: loadProgress => {
                   // FFmpeg already provides 0-100 range, map to 0-20% of total
                   const mappedProgress = (loadProgress / 100) * 20
                   const now = Date.now()
 
                   // Throttle updates to every 200ms to avoid overwhelming React
                   // Always update on first call (lastUpdate === 0) and last call (loadProgress >= 99)
-                  if (lastUpdate === 0 || now - lastUpdate > 200 || loadProgress >= 99) {
-                    console.log('[Transcription] FFmpeg load progress:', loadProgress.toFixed(1), '-> mapped:', mappedProgress.toFixed(1))
+                  if (
+                    lastUpdate === 0 ||
+                    now - lastUpdate > 200 ||
+                    loadProgress >= 99
+                  ) {
+                    console.log(
+                      '[Transcription] FFmpeg load progress:',
+                      loadProgress.toFixed(1),
+                      '-> mapped:',
+                      mappedProgress.toFixed(1)
+                    )
                     setProgress(mappedProgress)
                     lastUpdate = now
                   }
@@ -107,7 +120,7 @@ export function useTranscription(): UseTranscriptionResult {
             setProcessingState('extracting-audio')
             setProgress(20)
             audioBlob = await ffmpegExtractor.extractAudio(file, {
-              onProgress: (extractProgress) => {
+              onProgress: extractProgress => {
                 // Map audio extraction (0-100) to 20-30% of total
                 setProgress(20 + (extractProgress / 100) * 10)
               },
@@ -122,7 +135,7 @@ export function useTranscription(): UseTranscriptionResult {
 
         // Simulate progress for transcription (since Gemini doesn't provide progress)
         const progressInterval = setInterval(() => {
-          setProgress((prev) => {
+          setProgress(prev => {
             if (prev >= 95) {
               clearInterval(progressInterval)
               return 95
@@ -134,9 +147,8 @@ export function useTranscription(): UseTranscriptionResult {
 
         try {
           const geminiClient = new GeminiClient()
-          const transcriptData = await geminiClient.transcribeWithSpeakers(
-            audioBlob
-          )
+          const transcriptData =
+            await geminiClient.transcribeWithSpeakers(audioBlob)
 
           clearInterval(progressInterval)
 

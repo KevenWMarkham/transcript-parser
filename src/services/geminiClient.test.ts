@@ -152,16 +152,14 @@ describe('GeminiClient', () => {
       let attemptCount = 0
 
       // Use network error handler for first 2 attempts, then success
-      server.use(
-        (req, res, ctx) => {
-          attemptCount++
-          if (attemptCount < 3) {
-            return networkErrorHandler(req, res, ctx)
-          }
-          // Return default success response
-          return undefined
+      server.use((req, res, ctx) => {
+        attemptCount++
+        if (attemptCount < 3) {
+          return networkErrorHandler(req, res, ctx)
         }
-      )
+        // Return default success response
+        return undefined
+      })
 
       const audioBlob = new Blob(['mock audio'], {
         type: 'audio/webm;codecs=opus',
@@ -239,7 +237,7 @@ describe('GeminiClient', () => {
       const result = await client.transcribeWithSpeakers(audioBlob)
 
       // Speakers should have different colors
-      const colors = result.speakers.map((s) => s.color)
+      const colors = result.speakers.map(s => s.color)
       expect(new Set(colors).size).toBe(colors.length)
     })
 
@@ -251,7 +249,7 @@ describe('GeminiClient', () => {
       const result = await client.transcribeWithSpeakers(audioBlob)
 
       // Speakers should be sorted by ID
-      const ids = result.speakers.map((s) => s.id)
+      const ids = result.speakers.map(s => s.id)
       expect(ids).toEqual([...ids].sort((a, b) => a - b))
     })
   })

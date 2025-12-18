@@ -2,8 +2,20 @@
 export default {
   darkMode: ['class'],
   content: ['./index.html', './src/**/*.{ts,tsx,js,jsx}'],
+  safelist: [
+    'backdrop-blur-xl',
+    'backdrop-blur-sm',
+    'bg-white/80',
+    'bg-white/60',
+    'bg-white/95',
+    'border-white/20',
+    'border-white/80',
+  ],
   theme: {
     extend: {
+      backdropBlur: {
+        xs: '2px',
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',

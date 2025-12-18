@@ -8,7 +8,10 @@ export interface AudioExtractionOptions {
 }
 
 export class AudioExtractionError extends Error {
-  constructor(message: string, public readonly code: string) {
+  constructor(
+    message: string,
+    public readonly code: string
+  ) {
     super(message)
     this.name = 'AudioExtractionError'
   }
@@ -47,7 +50,7 @@ export class AudioExtractor {
 
       // Start playing the video first (required for captureStream in some browsers)
       video.currentTime = 0
-      await video.play().catch((err) => {
+      await video.play().catch(err => {
         URL.revokeObjectURL(video.src)
         throw new AudioExtractionError(
           `Failed to play video: ${err.message}`,
@@ -108,7 +111,9 @@ export class AudioExtractor {
 
       let mediaRecorder: MediaRecorder
       try {
-        mediaRecorder = new MediaRecorder(stream, { mimeType: selectedMimeType })
+        mediaRecorder = new MediaRecorder(stream, {
+          mimeType: selectedMimeType,
+        })
       } catch (err) {
         URL.revokeObjectURL(video.src)
         throw new AudioExtractionError(
@@ -120,7 +125,7 @@ export class AudioExtractor {
       const audioChunks: Blob[] = []
 
       // Collect audio chunks
-      mediaRecorder.ondataavailable = (event) => {
+      mediaRecorder.ondataavailable = event => {
         if (event.data.size > 0) {
           audioChunks.push(event.data)
         }
@@ -157,7 +162,7 @@ export class AudioExtractor {
       }, 100)
 
       // Play video to trigger recording
-      video.play().catch((err) => {
+      video.play().catch(err => {
         clearInterval(progressInterval)
         mediaRecorder.stop()
         URL.revokeObjectURL(video.src)
@@ -187,7 +192,7 @@ export class AudioExtractor {
           resolve(blob)
         }
 
-        mediaRecorder.onerror = (event) => {
+        mediaRecorder.onerror = event => {
           clearInterval(progressInterval)
           URL.revokeObjectURL(video.src)
           reject(

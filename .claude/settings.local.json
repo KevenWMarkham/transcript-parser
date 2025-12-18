@@ -39,7 +39,13 @@
       "Bash(findstr:*)",
       "Bash(npm run db:generate:*)",
       "Bash(curl:*)",
-      "Bash(netstat:*)"
+      "Bash(netstat:*)",
+      "Bash(npm run format:*)",
+      "Bash(npx vite build)",
+      "Bash(npx playwright:*)",
+      "Bash(nul)",
+      "Bash(unzip:*)",
+      "Bash(copy:*)"
     ],
     "deny": [],
     "ask": []

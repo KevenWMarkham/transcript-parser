@@ -56,7 +56,9 @@ describe('AudioExtractor', () => {
           setTimeout(() => {
             if (mockMediaRecorder.ondataavailable) {
               mockMediaRecorder.ondataavailable({
-                data: new Blob(['audio data'], { type: 'audio/webm;codecs=opus' }),
+                data: new Blob(['audio data'], {
+                  type: 'audio/webm;codecs=opus',
+                }),
               })
             }
           }, 10)
@@ -70,7 +72,9 @@ describe('AudioExtractor', () => {
         }),
       }
 
-      global.MediaRecorder = jest.fn().mockImplementation(() => mockMediaRecorder) as any
+      global.MediaRecorder = jest
+        .fn()
+        .mockImplementation(() => mockMediaRecorder) as any
       ;(global.MediaRecorder as any).isTypeSupported = jest
         .fn()
         .mockReturnValue(true)
@@ -146,7 +150,9 @@ describe('AudioExtractor', () => {
         }),
       }
 
-      global.MediaRecorder = jest.fn().mockImplementation(() => mockMediaRecorder) as any
+      global.MediaRecorder = jest
+        .fn()
+        .mockImplementation(() => mockMediaRecorder) as any
       ;(global.MediaRecorder as any).isTypeSupported = jest
         .fn()
         .mockReturnValue(true)

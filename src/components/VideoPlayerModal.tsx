@@ -134,7 +134,7 @@ export function VideoPlayerModal({
               controls
               autoPlay
               className="w-full max-h-[70vh]"
-              onError={(e) => {
+              onError={e => {
                 console.error('[VideoPlayerModal] Playback error:', e)
               }}
             >
@@ -147,18 +147,38 @@ export function VideoPlayerModal({
             <div className="text-sm text-muted-foreground">
               <p>
                 If the video doesn't play, it may use a codec not supported by
-                your browser. The transcript will still be generated successfully.
+                your browser. The transcript will still be generated
+                successfully.
               </p>
             </div>
             <div className="text-xs text-muted-foreground">
               <p className="font-medium mb-1">Keyboard shortcuts:</p>
               <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                <span><kbd className="px-1.5 py-0.5 bg-muted rounded">Space</kbd> or <kbd className="px-1.5 py-0.5 bg-muted rounded">K</kbd> Play/Pause</span>
-                <span><kbd className="px-1.5 py-0.5 bg-muted rounded">←</kbd> <kbd className="px-1.5 py-0.5 bg-muted rounded">→</kbd> Seek ±5s</span>
-                <span><kbd className="px-1.5 py-0.5 bg-muted rounded">↑</kbd> <kbd className="px-1.5 py-0.5 bg-muted rounded">↓</kbd> Volume</span>
-                <span><kbd className="px-1.5 py-0.5 bg-muted rounded">F</kbd> Fullscreen</span>
-                <span><kbd className="px-1.5 py-0.5 bg-muted rounded">M</kbd> Mute</span>
-                <span><kbd className="px-1.5 py-0.5 bg-muted rounded">ESC</kbd> Close</span>
+                <span>
+                  <kbd className="px-1.5 py-0.5 bg-muted rounded">Space</kbd> or{' '}
+                  <kbd className="px-1.5 py-0.5 bg-muted rounded">K</kbd>{' '}
+                  Play/Pause
+                </span>
+                <span>
+                  <kbd className="px-1.5 py-0.5 bg-muted rounded">←</kbd>{' '}
+                  <kbd className="px-1.5 py-0.5 bg-muted rounded">→</kbd> Seek
+                  ±5s
+                </span>
+                <span>
+                  <kbd className="px-1.5 py-0.5 bg-muted rounded">↑</kbd>{' '}
+                  <kbd className="px-1.5 py-0.5 bg-muted rounded">↓</kbd> Volume
+                </span>
+                <span>
+                  <kbd className="px-1.5 py-0.5 bg-muted rounded">F</kbd>{' '}
+                  Fullscreen
+                </span>
+                <span>
+                  <kbd className="px-1.5 py-0.5 bg-muted rounded">M</kbd> Mute
+                </span>
+                <span>
+                  <kbd className="px-1.5 py-0.5 bg-muted rounded">ESC</kbd>{' '}
+                  Close
+                </span>
               </div>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react'
+import { motion } from 'framer-motion'
 import { Upload, Video, Sparkles, AlertCircle } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -47,13 +48,20 @@ export function UploadVideo({ onUpload, error }: UploadVideoProps) {
   }
 
   return (
-    <Card className="shadow-lg">
-      <CardContent className="p-6">
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.1 }}
+    >
+      <Card className="p-6 sm:p-8">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 rounded-xl bg-purple-500 flex items-center justify-center">
-            <Video className="w-6 h-6 text-white" />
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl blur opacity-40" />
+            <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+              <Video className="w-6 h-6 text-white" />
+            </div>
           </div>
-          <h2 className="text-xl font-semibold">Upload Video or Audio</h2>
+          <h2 className="text-xl font-semibold text-slate-800">Upload Video or Audio</h2>
         </div>
 
         <div
@@ -95,7 +103,8 @@ export function UploadVideo({ onUpload, error }: UploadVideoProps) {
                 Drop your file here or click to browse
               </p>
               <p id="upload-formats" className="text-sm text-muted-foreground">
-                Video: MP4, MOV, WebM • Audio: MP3, WAV, M4A (recommended) • Max 2GB
+                Video: MP4, MOV, WebM • Audio: MP3, WAV, M4A (recommended) • Max
+                2GB
               </p>
             </div>
 
@@ -134,7 +143,7 @@ export function UploadVideo({ onUpload, error }: UploadVideoProps) {
             <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </Card>
+    </motion.div>
   )
 }

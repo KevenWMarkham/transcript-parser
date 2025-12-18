@@ -1,3 +1,4 @@
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Wand2,
   CheckCircle2,
@@ -5,7 +6,6 @@ import {
   Loader2,
   AlertCircle,
 } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import type { ProcessingState } from '@/hooks/useTranscription'
@@ -30,7 +30,8 @@ export function ProcessingStatus({
       case 'loading-ffmpeg':
         return {
           title: 'Loading FFmpeg',
-          description: 'Downloading universal audio extraction engine (31MB, one-time download)...',
+          description:
+            'Downloading universal audio extraction engine (31MB, one-time download)...',
           icon: <Loader2 className="w-5 h-5 text-orange-600 animate-spin" />,
           color: 'orange',
         }
@@ -78,14 +79,23 @@ export function ProcessingStatus({
   }
 
   return (
-    <Card className="shadow-lg">
-      <CardContent className="p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 rounded-xl bg-blue-500 flex items-center justify-center">
-            <Wand2 className="w-6 h-6 text-white" />
-          </div>
-          <h2 className="text-xl font-semibold">Processing Status</h2>
-        </div>
+    <AnimatePresence mode="wait">
+      {processingState !== 'idle' && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+        >
+          <div className="backdrop-blur-xl bg-gradient-to-br from-blue-50/80 to-purple-50/80 rounded-3xl shadow-xl border border-blue-200/50 p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl blur opacity-40" />
+                <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+                  <Wand2 className="w-6 h-6 text-white" />
+                </div>
+              </div>
+              <h2 className="text-xl font-semibold text-slate-800">Processing Status</h2>
+            </div>
 
         <div className="space-y-4">
           {/* Status message */}
@@ -95,9 +105,7 @@ export function ProcessingStatus({
             <div className="flex items-start gap-3">
               {stateMessage.icon}
               <div className="flex-1">
-                <p className="font-medium text-sm mb-1">
-                  {stateMessage.title}
-                </p>
+                <p className="font-medium text-sm mb-1">{stateMessage.title}</p>
                 <p
                   className={`text-sm text-${stateMessage.color}-600 dark:text-${stateMessage.color}-400`}
                 >
@@ -122,19 +130,17 @@ export function ProcessingStatus({
           )}
         </div>
 
-        {/* Action button */}
-        {(processingState === 'complete' || processingState === 'error') &&
-          onReset && (
-            <Button
-              variant="outline"
-              className="w-full mt-6"
-              onClick={onReset}
-            >
-              <UploadIcon className="w-4 h-4 mr-2" />
-              Process Another Video
-            </Button>
-          )}
-      </CardContent>
-    </Card>
+            {/* Action button */}
+            {(processingState === 'complete' || processingState === 'error') &&
+              onReset && (
+                <Button variant="outline" className="w-full mt-6" onClick={onReset}>
+                  <UploadIcon className="w-4 h-4 mr-2" />
+                  Process Another Video
+                </Button>
+              )}
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }

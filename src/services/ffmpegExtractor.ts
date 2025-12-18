@@ -33,7 +33,10 @@ export class FFmpegExtractor {
 
     try {
       console.log('[FFmpeg] Initializing...')
-      console.log('[FFmpeg] onProgress callback provided?', !!options?.onProgress)
+      console.log(
+        '[FFmpeg] onProgress callback provided?',
+        !!options?.onProgress
+      )
       this.ffmpeg = new FFmpeg()
 
       this.ffmpeg.on('log', ({ message }) => {
@@ -56,17 +59,27 @@ export class FFmpegExtractor {
       try {
         // Use ESM distribution from jsdelivr CDN for better compatibility with Vite
         // ESM is the proper module format for modern build tools
-        const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm'
+        const baseURL =
+          'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm'
         console.log('[FFmpeg] Loading from ESM build:', baseURL)
 
         console.log('[FFmpeg] Converting core.js to blob URL...')
-        const coreURL = await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript')
+        const coreURL = await toBlobURL(
+          `${baseURL}/ffmpeg-core.js`,
+          'text/javascript'
+        )
 
         console.log('[FFmpeg] Converting WASM to blob URL...')
-        const wasmURL = await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm')
+        const wasmURL = await toBlobURL(
+          `${baseURL}/ffmpeg-core.wasm`,
+          'application/wasm'
+        )
 
         console.log('[FFmpeg] Converting worker to blob URL...')
-        const workerURL = await toBlobURL(`${baseURL}/ffmpeg-core.worker.js`, 'text/javascript')
+        const workerURL = await toBlobURL(
+          `${baseURL}/ffmpeg-core.worker.js`,
+          'text/javascript'
+        )
 
         clearInterval(progressInterval)
         options?.onProgress?.(95)
@@ -88,7 +101,10 @@ export class FFmpegExtractor {
       } catch (error) {
         clearInterval(progressInterval)
         console.error('[FFmpeg] Detailed error:', error)
-        console.error('[FFmpeg] Error stack:', error instanceof Error ? error.stack : 'No stack')
+        console.error(
+          '[FFmpeg] Error stack:',
+          error instanceof Error ? error.stack : 'No stack'
+        )
         throw error
       }
 
