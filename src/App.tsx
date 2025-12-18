@@ -9,6 +9,7 @@ import { Login } from '@/components/Login'
 import { Register } from '@/components/Register'
 import { TranscriptLibrary } from '@/components/TranscriptLibrary'
 import { CostSummaryModal } from '@/components/CostSummaryModal'
+import { VideoPlayerModal } from '@/components/VideoPlayerModal'
 import { useTranscription } from '@/hooks/useTranscription'
 import { apiClient } from '@/services/apiClient'
 import { usageTracker } from '@/services/usageTracker'
@@ -40,6 +41,21 @@ function App() {
   const [demoTranscript, setDemoTranscript] = useState<TranscriptData | null>(
     null
   )
+
+  // Video player state
+  const [isVideoPlayerOpen, setIsVideoPlayerOpen] = useState(false)
+  const [videoObjectUrl, setVideoObjectUrl] = useState<string | null>(null)
+
+  // Create and cleanup video object URL
+  useEffect(() => {
+    if (videoFile) {
+      const url = URL.createObjectURL(videoFile)
+      setVideoObjectUrl(url)
+      return () => URL.revokeObjectURL(url)
+    } else {
+      setVideoObjectUrl(null)
+    }
+  }, [videoFile])
 
   // Transcription hook
   const {
@@ -88,7 +104,8 @@ function App() {
         }
       }
     }
-  }, []) // Empty dependency array - only run on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Only run on mount - isAuthenticated is intentionally not in deps
 
   const handleVideoUpload = async (file: File) => {
     setUploadError(null)
@@ -150,9 +167,12 @@ function App() {
   }
 
   const handleLoadTranscript = (loadedTranscript: TranscriptData) => {
-    // TODO: Implement loading transcript into the UI
-    console.log('Loading transcript:', loadedTranscript)
+    // Load the transcript into demo mode
+    setDemoTranscript(loadedTranscript)
+    // Clear any existing video/transcription
+    handleRemoveVideo()
     setShowLibrary(false)
+    console.log('✅ Loaded transcript from library:', loadedTranscript.metadata.fileName)
   }
 
   // Show auth modal
@@ -269,6 +289,7 @@ function App() {
                 file={videoFile}
                 metadata={videoMetadata!}
                 onRemove={handleRemoveVideo}
+                onPlayVideo={() => setIsVideoPlayerOpen(true)}
               />
             )}
             {processingState !== 'idle' && (
@@ -298,6 +319,17 @@ function App() {
             isOpen={showCostSummary}
             onClose={() => setShowCostSummary(false)}
             stats={usageTracker.getUserUsage(apiClient.getCurrentUser()?.id || 1)}
+          />
+        )}
+
+        {/* Video Player Modal */}
+        {videoFile && videoObjectUrl && (
+          <VideoPlayerModal
+            isOpen={isVideoPlayerOpen}
+            onClose={() => setIsVideoPlayerOpen(false)}
+            videoFile={videoFile}
+            videoUrl={videoObjectUrl}
+            fileName={videoFile.name}
           />
         )}
       </div>

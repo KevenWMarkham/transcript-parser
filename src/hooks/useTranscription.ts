@@ -3,14 +3,17 @@
  * Coordinates AudioExtractor and GeminiClient services
  */
 
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback } from 'react'
+import { openDB } from 'idb'
 import type { TranscriptData } from '@/types/transcript'
 import type { VideoMetadata } from '@/utils/fileUtils'
 import { isAudioFile } from '@/utils/fileUtils'
 import { AudioExtractor } from '@/services/audioExtractor'
 import { GeminiClient } from '@/services/geminiClient'
 import { FFmpegExtractor } from '@/services/ffmpegExtractor'
-import { apiClient } from '@/services/apiClient'
+
+const DB_NAME = 'transcript-db'
+const STORE_NAME = 'transcripts'
 
 export type ProcessingState =
   | 'idle'
@@ -161,24 +164,22 @@ export function useTranscription(): UseTranscriptionResult {
             videoFormat: metadata.format,
           }
 
-          // Auto-save to backend if authenticated
-          if (apiClient.isAuthenticated()) {
-            try {
-              const { transcriptId } = await apiClient.saveTranscript({
-                title: file.name,
-                fileName: file.name,
-                fileSize: file.size,
-                duration: metadata.duration,
-                videoFormat: metadata.format,
-                model: transcriptData.metadata.model,
-                speakersData: transcriptData.speakers,
-                entries: transcriptData.entries,
-              })
-              console.log('✅ Transcript saved to database:', transcriptId)
-            } catch (saveError) {
-              console.warn('⚠️ Failed to save transcript:', saveError)
-              // Don't throw - transcription still succeeded locally
-            }
+          // Auto-save to IndexedDB
+          try {
+            const db = await openDB(DB_NAME, 1, {
+              upgrade(db) {
+                if (!db.objectStoreNames.contains(STORE_NAME)) {
+                  db.createObjectStore(STORE_NAME, { keyPath: 'id' })
+                }
+              },
+            })
+
+            // Save the complete transcript data to IndexedDB
+            await db.put(STORE_NAME, transcriptData)
+            console.log('✅ Transcript saved to IndexedDB:', transcriptData.id)
+          } catch (saveError) {
+            console.warn('⚠️ Failed to save transcript to IndexedDB:', saveError)
+            // Don't throw - transcription still succeeded locally
           }
 
           setTranscript(transcriptData)
