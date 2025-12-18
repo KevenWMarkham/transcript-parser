@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { TranscriptEntry } from '@/components/TranscriptEntry'
+import { formatTimestamp } from '@/utils/fileUtils'
 import type { TranscriptData } from '@/types/transcript'
 
 interface TranscriptViewProps {
@@ -20,7 +21,7 @@ export function TranscriptView({ transcript, onExport }: TranscriptViewProps) {
     const content = transcript.entries
       .map(
         entry =>
-          `[${entry.startTime} - ${entry.endTime}] ${entry.speaker}:\n${entry.text}\n`
+          `[${formatTimestamp(entry.startTime)} - ${formatTimestamp(entry.endTime)}] ${entry.speaker}:\n${entry.text}\n`
       )
       .join('\n')
 

@@ -9,6 +9,18 @@ export const ACCEPTED_VIDEO_FORMATS = [
   'video/webm',
 ]
 
+export const ACCEPTED_AUDIO_FORMATS = [
+  'audio/mpeg', // MP3
+  'audio/mp3',
+  'audio/wav',
+  'audio/wave',
+  'audio/x-wav',
+  'audio/mp4', // M4A
+  'audio/x-m4a',
+  'audio/webm',
+  'audio/ogg',
+]
+
 export const MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024 // 2GB
 
 export interface ValidationResult {
@@ -56,6 +68,15 @@ export function formatDuration(seconds: number): string {
 }
 
 /**
+ * Formats seconds to timestamp string (for transcript entries)
+ * @param seconds - Time in seconds (can be decimal, e.g., 5.2)
+ * @returns Formatted string (e.g., "0:05" or "1:23:45")
+ */
+export function formatTimestamp(seconds: number): string {
+  return formatDuration(seconds)
+}
+
+/**
  * Pads number with leading zero
  */
 function pad(num: number): string {
@@ -63,16 +84,26 @@ function pad(num: number): string {
 }
 
 /**
- * Validates video file type and size
+ * Check if file is audio-only
+ */
+export function isAudioFile(file: File): boolean {
+  return ACCEPTED_AUDIO_FORMATS.includes(file.type)
+}
+
+/**
+ * Validates video or audio file type and size
  * @param file - File to validate
  * @returns Validation result with error message if invalid
  */
 export function validateVideoFile(file: File): ValidationResult {
-  if (!ACCEPTED_VIDEO_FORMATS.includes(file.type)) {
+  const isVideo = ACCEPTED_VIDEO_FORMATS.includes(file.type)
+  const isAudio = ACCEPTED_AUDIO_FORMATS.includes(file.type)
+
+  if (!isVideo && !isAudio) {
     return {
       valid: false,
       error:
-        'Invalid file type. Please select a video file (MP4, MOV, AVI, WebM).',
+        'Invalid file type. Please select a video (MP4, MOV, WebM) or audio file (MP3, WAV, M4A recommended).',
     }
   }
 
@@ -87,17 +118,43 @@ export function validateVideoFile(file: File): ValidationResult {
 }
 
 /**
- * Extracts metadata from video file
- * @param file - Video file
+ * Extracts metadata from video or audio file
+ * @param file - Video or audio file
  * @returns Promise with video metadata
  */
 export function extractVideoMetadata(file: File): Promise<VideoMetadata> {
   return new Promise((resolve, reject) => {
+    // Handle audio files
+    if (isAudioFile(file)) {
+      const audio = document.createElement('audio')
+      audio.preload = 'metadata'
+
+      audio.onloadedmetadata = () => {
+        URL.revokeObjectURL(audio.src)
+
+        resolve({
+          duration: audio.duration,
+          width: 0,
+          height: 0,
+          format: file.type,
+          size: file.size,
+        })
+      }
+
+      audio.onerror = () => {
+        URL.revokeObjectURL(audio.src)
+        reject(new Error('Unable to read audio file'))
+      }
+
+      audio.src = URL.createObjectURL(file)
+      return
+    }
+
+    // Handle video files
     const video = document.createElement('video')
     video.preload = 'metadata'
 
     video.onloadedmetadata = () => {
-      // Clean up object URL
       URL.revokeObjectURL(video.src)
 
       resolve({

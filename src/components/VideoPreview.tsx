@@ -23,21 +23,29 @@ export function VideoPreview({ file, metadata, onRemove }: VideoPreviewProps) {
     return () => URL.revokeObjectURL(mediaUrl)
   }, [mediaUrl])
 
+  // Log media information for debugging
+  useEffect(() => {
+    console.log('[VideoPreview] Media type:', file.type)
+    console.log('[VideoPreview] Is audio:', isAudio)
+    console.log('[VideoPreview] Media URL:', mediaUrl)
+  }, [file.type, isAudio, mediaUrl])
+
   return (
-    <Card className="p-6 space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">
-          {isAudio ? 'Audio Preview' : 'Video Preview'}
-        </h2>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onRemove}
-          aria-label={isAudio ? 'Remove audio' : 'Remove video'}
-        >
-          <X className="w-4 h-4" />
-        </Button>
-      </div>
+    <>
+      <Card className="p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">
+            {isAudio ? 'Audio Preview' : 'Video Preview'}
+          </h2>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onRemove}
+            aria-label={isAudio ? 'Remove audio' : 'Remove video'}
+          >
+            <X className="w-4 h-4" />
+          </Button>
+        </div>
 
       {/* Audio/Video player */}
       <div className="rounded-lg overflow-hidden bg-black">
@@ -48,6 +56,11 @@ export function VideoPreview({ file, metadata, onRemove }: VideoPreviewProps) {
             preload="metadata"
             className="w-full"
             data-testid="audio-preview-player"
+            onError={(e) => {
+              console.error('[VideoPreview] Audio playback error:', e)
+              console.error('[VideoPreview] Audio element:', e.currentTarget)
+            }}
+            onCanPlay={() => console.log('[VideoPreview] Audio can play')}
           >
             <source src={mediaUrl} type={file.type} />
             Your browser does not support the audio tag.
@@ -59,6 +72,11 @@ export function VideoPreview({ file, metadata, onRemove }: VideoPreviewProps) {
             preload="metadata"
             className="w-full max-h-96"
             data-testid="video-preview-player"
+            onError={(e) => {
+              console.error('[VideoPreview] Video playback error:', e)
+              console.error('[VideoPreview] Video element:', e.currentTarget)
+            }}
+            onCanPlay={() => console.log('[VideoPreview] Video can play')}
           >
             <source src={mediaUrl} type={file.type} />
             Your browser does not support the video tag.
@@ -92,5 +110,6 @@ export function VideoPreview({ file, metadata, onRemove }: VideoPreviewProps) {
         )}
       </div>
     </Card>
+    </>
   )
 }

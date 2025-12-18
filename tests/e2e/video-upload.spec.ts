@@ -2,15 +2,15 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Video Upload Workflow', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173')
+    await page.goto('/')
   })
 
   test('displays upload interface on initial load', async ({ page }) => {
-    await expect(page.getByText(/drop your video here/i)).toBeVisible()
+    await expect(page.getByText(/drop your file here/i)).toBeVisible()
     await expect(
       page.getByRole('button', { name: /choose file/i })
     ).toBeVisible()
-    await expect(page.getByText(/supports mp4, mov, avi, webm/i)).toBeVisible()
+    await expect(page.getByText(/video.*audio.*mp3.*wav/i)).toBeVisible()
   })
 
   test('accepts valid video file via file input', async ({ page }) => {
@@ -19,7 +19,7 @@ test.describe('Video Upload Workflow', () => {
     const fileInput = page.locator('input[type="file"]')
     await expect(fileInput).toHaveAttribute(
       'accept',
-      'video/mp4,video/quicktime,video/x-msvideo,video/webm'
+      /video\/mp4.*audio\/mpeg/
     )
   })
 
@@ -73,12 +73,12 @@ test.describe('Video Upload Workflow', () => {
 
   test('has proper ARIA labels for accessibility', async ({ page }) => {
     const fileInput = page.locator('input[type="file"]')
-    await expect(fileInput).toHaveAttribute('aria-label', 'Choose video file')
+    await expect(fileInput).toHaveAttribute('aria-label', 'Choose video or audio file')
 
     const dropZone = page.getByTestId('upload-drop-zone')
     await expect(dropZone).toHaveAttribute(
       'aria-label',
-      'Upload video by dragging and dropping or clicking to browse'
+      'Upload video or audio file by dragging and dropping or clicking to browse'
     )
   })
 
@@ -131,11 +131,11 @@ test.describe('Video Preview', () => {
 
 test.describe('Cross-browser Compatibility', () => {
   test('works in all configured browsers', async ({ page, browserName }) => {
-    await page.goto('http://localhost:5173')
+    await page.goto('/')
 
     console.log(`Testing in ${browserName}`)
 
-    await expect(page.getByText(/drop your video here/i)).toBeVisible()
+    await expect(page.getByText(/drop your file here/i)).toBeVisible()
     await expect(
       page.getByRole('button', { name: /choose file/i })
     ).toBeVisible()

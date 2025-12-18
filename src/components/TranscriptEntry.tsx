@@ -1,5 +1,6 @@
 import { Clock, Check } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { formatTimestamp } from '@/utils/fileUtils'
 import type { TranscriptEntry as TranscriptEntryType } from '@/types/transcript'
 
 interface TranscriptEntryProps {
@@ -41,14 +42,14 @@ export function TranscriptEntry({ entry, speakerColor }: TranscriptEntryProps) {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Clock className="w-3.5 h-3.5" />
           <span>
-            {entry.startTime} - {entry.endTime}
+            {formatTimestamp(entry.startTime)} - {formatTimestamp(entry.endTime)}
           </span>
         </div>
 
         {entry.confidence && (
           <div className="flex items-center gap-1 text-sm text-emerald-600 dark:text-emerald-400">
             <Check className="w-3.5 h-3.5" />
-            <span>{entry.confidence}%</span>
+            <span>{Math.round(entry.confidence * 100)}%</span>
           </div>
         )}
       </div>

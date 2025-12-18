@@ -1,27 +1,81 @@
-import { Wand2, CheckCircle2, Upload as UploadIcon } from 'lucide-react'
+import {
+  Wand2,
+  CheckCircle2,
+  Upload as UploadIcon,
+  Loader2,
+  AlertCircle,
+} from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Progress } from '@/components/ui/progress'
+import type { ProcessingState } from '@/hooks/useTranscription'
 
-interface StatusStep {
-  title: string
-  description: string
-  completed: boolean
+interface ProcessingStatusProps {
+  processingState: ProcessingState
+  progress: number
+  error?: Error | null
+  onReset?: () => void
 }
 
-export function ProcessingStatus() {
-  // Mock data - replace with actual state
-  const steps: StatusStep[] = [
-    {
-      title: 'Uploading video',
-      description: 'Upload successful',
-      completed: true,
-    },
-    {
-      title: 'Transcription complete',
-      description: 'All speakers identified successfully',
-      completed: true,
-    },
-  ]
+export function ProcessingStatus({
+  processingState,
+  progress,
+  error,
+  onReset,
+}: ProcessingStatusProps) {
+  const getStateMessage = () => {
+    switch (processingState) {
+      case 'idle':
+        return null
+      case 'loading-ffmpeg':
+        return {
+          title: 'Loading FFmpeg',
+          description: 'Downloading universal audio extraction engine (31MB, one-time download)...',
+          icon: <Loader2 className="w-5 h-5 text-orange-600 animate-spin" />,
+          color: 'orange',
+        }
+      case 'extracting-audio':
+        return {
+          title: 'Extracting audio',
+          description: 'Preparing audio for transcription...',
+          icon: <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />,
+          color: 'blue',
+        }
+      case 'transcribing':
+        return {
+          title: 'Transcribing with AI',
+          description: 'Identifying speakers and generating transcript...',
+          icon: <Loader2 className="w-5 h-5 text-purple-600 animate-spin" />,
+          color: 'purple',
+        }
+      case 'complete':
+        return {
+          title: 'Processing complete',
+          description: 'Transcript generated successfully!',
+          icon: (
+            <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+          ),
+          color: 'emerald',
+        }
+      case 'error':
+        return {
+          title: 'Processing failed',
+          description: error?.message || 'An unknown error occurred',
+          icon: (
+            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+          ),
+          color: 'red',
+        }
+      default:
+        return null
+    }
+  }
+
+  const stateMessage = getStateMessage()
+
+  if (!stateMessage) {
+    return null
+  }
 
   return (
     <Card className="shadow-lg">
@@ -34,34 +88,52 @@ export function ProcessingStatus() {
         </div>
 
         <div className="space-y-4">
-          {steps.map((step, index) => (
-            <div
-              key={index}
-              className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4"
-            >
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 mt-0.5 flex-shrink-0" />
-                <div className="flex-1">
-                  <p className="font-medium text-sm mb-1">{step.title}</p>
-                  <p className="text-sm text-emerald-600 dark:text-emerald-400">
-                    {step.description}
-                  </p>
-                </div>
+          {/* Status message */}
+          <div
+            className={`bg-${stateMessage.color}-50 dark:bg-${stateMessage.color}-950/20 border border-${stateMessage.color}-200 dark:border-${stateMessage.color}-800 rounded-lg p-4`}
+          >
+            <div className="flex items-start gap-3">
+              {stateMessage.icon}
+              <div className="flex-1">
+                <p className="font-medium text-sm mb-1">
+                  {stateMessage.title}
+                </p>
+                <p
+                  className={`text-sm text-${stateMessage.color}-600 dark:text-${stateMessage.color}-400`}
+                >
+                  {stateMessage.description}
+                </p>
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* Progress bar for active processing */}
+          {(processingState === 'loading-ffmpeg' ||
+            processingState === 'extracting-audio' ||
+            processingState === 'transcribing') && (
+            <div className="space-y-2">
+              <Progress value={progress} className="h-2" />
+              <p className="text-sm text-center text-muted-foreground">
+                {processingState === 'loading-ffmpeg' && progress === 0
+                  ? 'Initializing...'
+                  : `${Math.round(progress)}%`}
+              </p>
+            </div>
+          )}
         </div>
 
-        <Button
-          variant="outline"
-          className="w-full mt-6"
-          onClick={() => {
-            /* Handle process another video */
-          }}
-        >
-          <UploadIcon className="w-4 h-4 mr-2" />
-          Process Another Video
-        </Button>
+        {/* Action button */}
+        {(processingState === 'complete' || processingState === 'error') &&
+          onReset && (
+            <Button
+              variant="outline"
+              className="w-full mt-6"
+              onClick={onReset}
+            >
+              <UploadIcon className="w-4 h-4 mr-2" />
+              Process Another Video
+            </Button>
+          )}
       </CardContent>
     </Card>
   )

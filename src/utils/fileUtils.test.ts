@@ -98,7 +98,7 @@ describe('fileUtils', () => {
       const result = validateVideoFile(file)
       expect(result.valid).toBe(false)
       expect(result.error).toBe(
-        'Invalid file type. Please select a video file (MP4, MOV, AVI, WebM).'
+        'Invalid file type. Please select a video (MP4, MOV, WebM) or audio file (MP3, WAV, M4A recommended).'
       )
     })
 

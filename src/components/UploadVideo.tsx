@@ -53,7 +53,7 @@ export function UploadVideo({ onUpload, error }: UploadVideoProps) {
           <div className="w-12 h-12 rounded-xl bg-purple-500 flex items-center justify-center">
             <Video className="w-6 h-6 text-white" />
           </div>
-          <h2 className="text-xl font-semibold">Upload Video</h2>
+          <h2 className="text-xl font-semibold">Upload Video or Audio</h2>
         </div>
 
         <div
@@ -69,7 +69,7 @@ export function UploadVideo({ onUpload, error }: UploadVideoProps) {
           }}
           role="button"
           tabIndex={0}
-          aria-label="Upload video by dragging and dropping or clicking to browse"
+          aria-label="Upload video or audio file by dragging and dropping or clicking to browse"
           aria-describedby="upload-formats"
           data-testid="upload-drop-zone"
           className={`
@@ -92,10 +92,10 @@ export function UploadVideo({ onUpload, error }: UploadVideoProps) {
 
             <div>
               <p className="text-base font-medium mb-1">
-                Drop your video here or click to browse
+                Drop your file here or click to browse
               </p>
               <p id="upload-formats" className="text-sm text-muted-foreground">
-                Supports MP4, MOV, AVI, WebM • Max 2GB
+                Video: MP4, MOV, WebM • Audio: MP3, WAV, M4A (recommended) • Max 2GB
               </p>
             </div>
 
@@ -116,10 +116,10 @@ export function UploadVideo({ onUpload, error }: UploadVideoProps) {
           <input
             ref={fileInputRef}
             type="file"
-            accept="video/mp4,video/quicktime,video/x-msvideo,video/webm"
+            accept="video/mp4,video/quicktime,video/x-msvideo,video/webm,audio/mpeg,audio/mp3,audio/wav,audio/mp4,audio/x-m4a,audio/webm,audio/ogg"
             onChange={handleFileChange}
             className="hidden"
-            aria-label="Choose video file"
+            aria-label="Choose video or audio file"
           />
         </div>
 
