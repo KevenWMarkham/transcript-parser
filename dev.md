@@ -19,6 +19,8 @@ This will install all required dependencies including:
 - React 18.3.1
 - TypeScript 5.6.2
 - Vite 6.0.5
+- Tailwind CSS 3 (utility-first CSS framework)
+- shadcn/ui (re-usable component library)
 - Drizzle ORM 0.45.1 (database toolkit)
 - Jest 30.2.0 (testing framework)
 - ESLint 9 with Prettier integration
@@ -107,6 +109,11 @@ transcript-parser/
 │   ├── pre-commit          # Pre-commit hook (runs lint-staged)
 │   └── commit-msg          # Commit-msg hook (validates commit format)
 ├── src/
+│   ├── components/         # React components
+│   │   └── ui/             # shadcn/ui components
+│   │       └── button.tsx  # Button component
+│   ├── lib/                # Utility functions
+│   │   └── utils.ts        # cn() for class merging
 │   ├── db/                 # Database layer
 │   │   ├── schema.ts       # Drizzle ORM schema definitions
 │   │   └── index.ts        # Database connection setup
@@ -114,12 +121,15 @@ transcript-parser/
 │   ├── App.test.tsx        # App component tests
 │   ├── App.css             # App-specific styles
 │   ├── main.tsx            # Application entry point
-│   ├── index.css           # Global styles
+│   ├── index.css           # Global styles with Tailwind
 │   └── vite-env.d.ts       # Vite type definitions
 ├── drizzle/                # Generated migrations (auto-created)
 ├── public/                 # Static assets
 ├── index.html              # HTML entry point
 ├── vite.config.ts          # Vite configuration
+├── tailwind.config.js      # Tailwind CSS configuration
+├── postcss.config.js       # PostCSS configuration
+├── components.json         # shadcn/ui configuration
 ├── drizzle.config.ts       # Drizzle ORM configuration
 ├── jest.config.ts          # Jest testing configuration
 ├── jest.setup.ts           # Jest setup file
@@ -221,6 +231,8 @@ If any hook fails, the commit will be rejected. Fix the issues and try again.
 - **React 18.3**: UI library
 - **TypeScript 5.6**: Type-safe JavaScript
 - **Vite 6**: Fast build tool and dev server
+- **Tailwind CSS 3**: Utility-first CSS framework
+- **shadcn/ui**: High-quality, accessible component library
 - **Drizzle ORM 0.45**: TypeScript ORM for SQL databases
 - **Jest 30**: Testing framework with React Testing Library
 - **ESLint 9**: Code linting and quality
@@ -229,6 +241,80 @@ If any hook fails, the commit will be rejected. Fix the issues and try again.
 - **Commitizen**: Interactive commit message tool
 - **Commitlint**: Commit message validation
 - **lint-staged**: Run linters on staged files only
+
+## Tailwind CSS & shadcn/ui
+
+This project uses Tailwind CSS for styling and shadcn/ui for pre-built, customizable components.
+
+### Tailwind CSS
+
+Tailwind CSS is configured and ready to use. Style your components using utility classes:
+
+```tsx
+<div className="flex items-center justify-center p-4 bg-background">
+  <h1 className="text-4xl font-bold text-foreground">Hello World</h1>
+</div>
+```
+
+**Configuration files:**
+
+- [tailwind.config.js](tailwind.config.js) - Tailwind configuration
+- [postcss.config.js](postcss.config.js) - PostCSS configuration
+- [src/index.css](src/index.css) - Global styles with Tailwind directives
+
+**Theme customization:**
+The project uses CSS variables for theming (light/dark mode support). Customize colors in [src/index.css](src/index.css).
+
+### shadcn/ui Components
+
+shadcn/ui components are pre-configured and ready to use. Components are added to your project (not installed as dependencies).
+
+**Adding new components:**
+
+You can manually add components or use the CLI (if available):
+
+```bash
+# Example: manually create components in src/components/ui/
+# See https://ui.shadcn.com for component code
+```
+
+**Available components:**
+
+- Button - [src/components/ui/button.tsx](src/components/ui/button.tsx)
+
+**Using components:**
+
+```tsx
+import { Button } from '@/components/ui/button'
+
+function MyComponent() {
+  return (
+    <div>
+      <Button variant="default">Click me</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="ghost">Ghost</Button>
+    </div>
+  )
+}
+```
+
+**Path aliases:**
+The project uses `@/*` aliases for imports:
+
+- `@/components` → `src/components`
+- `@/lib` → `src/lib`
+
+**Utility function:**
+
+- [src/lib/utils.ts](src/lib/utils.ts) - `cn()` function for merging Tailwind classes
+
+### Adding More Components
+
+Visit [ui.shadcn.com](https://ui.shadcn.com) and copy component code into `src/components/ui/`.
+
+Popular components to add:
+
+- Card, Dialog, Dropdown Menu, Input, Label, Select, Textarea, Toast, etc.
 
 ## Drizzle ORM
 
