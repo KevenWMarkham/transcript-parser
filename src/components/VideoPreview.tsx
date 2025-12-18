@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import {
   formatFileSize,
   formatDuration,
+  isAudioFile,
   type VideoMetadata,
 } from '@/utils/fileUtils'
 
@@ -15,36 +16,54 @@ interface VideoPreviewProps {
 }
 
 export function VideoPreview({ file, metadata, onRemove }: VideoPreviewProps) {
-  const videoUrl = useMemo(() => URL.createObjectURL(file), [file])
+  const mediaUrl = useMemo(() => URL.createObjectURL(file), [file])
+  const isAudio = isAudioFile(file)
 
   useEffect(() => {
-    return () => URL.revokeObjectURL(videoUrl)
-  }, [videoUrl])
+    return () => URL.revokeObjectURL(mediaUrl)
+  }, [mediaUrl])
 
   return (
     <Card className="p-6 space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Video Preview</h2>
+        <h2 className="text-lg font-semibold">
+          {isAudio ? 'Audio Preview' : 'Video Preview'}
+        </h2>
         <Button
           variant="ghost"
           size="sm"
           onClick={onRemove}
-          aria-label="Remove video"
+          aria-label={isAudio ? 'Remove audio' : 'Remove video'}
         >
           <X className="w-4 h-4" />
         </Button>
       </div>
 
-      {/* Video player */}
+      {/* Audio/Video player */}
       <div className="rounded-lg overflow-hidden bg-black">
-        <video
-          src={videoUrl}
-          controls
-          className="w-full max-h-96"
-          data-testid="video-preview-player"
-        >
-          Your browser does not support the video tag.
-        </video>
+        {isAudio ? (
+          <audio
+            src={mediaUrl}
+            controls
+            preload="metadata"
+            className="w-full"
+            data-testid="audio-preview-player"
+          >
+            <source src={mediaUrl} type={file.type} />
+            Your browser does not support the audio tag.
+          </audio>
+        ) : (
+          <video
+            src={mediaUrl}
+            controls
+            preload="metadata"
+            className="w-full max-h-96"
+            data-testid="video-preview-player"
+          >
+            <source src={mediaUrl} type={file.type} />
+            Your browser does not support the video tag.
+          </video>
+        )}
       </div>
 
       {/* Metadata */}
@@ -63,12 +82,14 @@ export function VideoPreview({ file, metadata, onRemove }: VideoPreviewProps) {
           <p className="text-muted-foreground">Duration</p>
           <p className="font-medium">{formatDuration(metadata.duration)}</p>
         </div>
-        <div>
-          <p className="text-muted-foreground">Resolution</p>
-          <p className="font-medium">
-            {metadata.width} × {metadata.height}
-          </p>
-        </div>
+        {!isAudio && (
+          <div>
+            <p className="text-muted-foreground">Resolution</p>
+            <p className="font-medium">
+              {metadata.width} × {metadata.height}
+            </p>
+          </div>
+        )}
       </div>
     </Card>
   )

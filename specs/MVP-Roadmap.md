@@ -43,8 +43,10 @@ Create a powerful, privacy-focused video transcription tool that:
 
 ### Data Storage
 
-- **Primary**: IndexedDB for local transcript persistence
-- **Fallback**: localStorage for user preferences
+- **Primary**: PostgreSQL database with Docker Desktop (for transcript archiving)
+- **Backend**: Node.js + Express + Drizzle ORM
+- **Local**: IndexedDB for offline capability (future enhancement)
+- **Preferences**: localStorage for user settings
 - **Session**: In-memory state for active processing
 
 ### Video Handling
@@ -84,18 +86,18 @@ Create a powerful, privacy-focused video transcription tool that:
 
 ## Sprint Timeline (20 Weeks)
 
-| Sprint        | Weeks | Focus Area           | Key Deliverables                                                |
-| ------------- | ----- | -------------------- | --------------------------------------------------------------- |
-| **Sprint 1**  | 1-2   | Foundation & Upload  | Video upload component, validation, preview, tests              |
-| **Sprint 2**  | 3-4   | AI Integration       | Gemini API setup, audio extraction, basic transcription         |
-| **Sprint 3**  | 5-6   | Speaker Processing   | Speaker diarization, transcript data model, processing pipeline |
-| **Sprint 4**  | 7-8   | Transcript Display   | Enhanced viewer, real-time updates, metadata display            |
-| **Sprint 5**  | 9-10  | Export Features      | JSON, SRT, VTT exporters with validation                        |
-| **Sprint 6**  | 11-12 | Video Sync           | Playback controls, timestamp navigation, seek functionality     |
-| **Sprint 7**  | 13-14 | Speaker Management   | Edit names, speaker UI, persistence of customizations           |
-| **Sprint 8**  | 15-16 | Search & UX          | Search/filter, keyboard shortcuts, improved interactions        |
-| **Sprint 9**  | 17-18 | Data Persistence     | IndexedDB schema, CRUD operations, transcript library           |
-| **Sprint 10** | 19-20 | Integration & Polish | E2E tests, performance tuning, accessibility, bug fixes         |
+| Sprint        | Weeks | Focus Area             | Key Deliverables                                              |
+| ------------- | ----- | ---------------------- | ------------------------------------------------------------- |
+| **Sprint 1**  | 1-2   | Foundation & Upload    | Video upload component, validation, preview, tests            |
+| **Sprint 2**  | 3-4   | AI Integration         | Gemini API setup, audio extraction, basic transcription       |
+| **Sprint 3**  | 5-6   | Backend Infrastructure | Docker PostgreSQL, Express API, user auth, transcript storage |
+| **Sprint 4**  | 7-8   | Transcript Display     | Enhanced viewer, real-time updates, metadata display          |
+| **Sprint 5**  | 9-10  | Export Features        | JSON, SRT, VTT exporters with validation                      |
+| **Sprint 6**  | 11-12 | Video Sync             | Playback controls, timestamp navigation, seek functionality   |
+| **Sprint 7**  | 13-14 | Speaker Management     | Edit names, speaker UI, persistence of customizations         |
+| **Sprint 8**  | 15-16 | Search & UX            | Search/filter, keyboard shortcuts, improved interactions      |
+| **Sprint 9**  | 17-18 | PWA Features           | Service worker, manifest, offline support, installable app    |
+| **Sprint 10** | 19-20 | Integration & Polish   | E2E tests, performance tuning, accessibility, bug fixes       |
 
 ## Success Metrics
 
@@ -160,11 +162,21 @@ Create a powerful, privacy-focused video transcription tool that:
 
 ### Third-Party Libraries
 
-- `@google/generative-ai` - Gemini SDK
-- `ffmpeg.wasm` - Audio extraction (if needed)
-- `subsrt` or similar - SRT/VTT generation
-- `dexie` - IndexedDB wrapper
+**Frontend:**
+
+- `@google/genai` - Gemini SDK (v1.34.0)
+- `@ffmpeg/ffmpeg` - Audio extraction fallback (optional)
+- `drizzle-orm` - Type-safe database ORM
 - `@playwright/test` - E2E testing
+
+**Backend:**
+
+- `express` - Web framework
+- `pg` - PostgreSQL client
+- `drizzle-orm` - Database ORM
+- `jsonwebtoken` - JWT authentication
+- `bcrypt` - Password hashing
+- `cors` - CORS middleware
 
 ## Post-MVP Roadmap (Future Iterations)
 
@@ -184,10 +196,11 @@ Create a powerful, privacy-focused video transcription tool that:
 ### Technical Debt to Address Post-MVP
 
 - Consider migration to state management library if complexity grows (Zustand, Redux Toolkit)
-- Implement proper backend if server-side processing becomes necessary
-- Add user authentication if cloud features are needed
+- Add production-ready deployment (Vercel + Railway)
+- Implement backup/restore functionality for PostgreSQL data
 - Optimize bundle size with code splitting and lazy loading
-- Implement service worker for offline capability
+- Add real-time collaboration features (WebSockets)
+- Implement admin dashboard for user management
 
 ## Team Structure
 
