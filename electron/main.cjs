@@ -1,13 +1,24 @@
-const { app, BrowserWindow, ipcMain, dialog, Menu, Tray, nativeImage } = require('electron')
 const path = require('path')
 const fs = require('fs')
+
+// Get Electron modules - only available when running inside Electron
+const electron = require('electron')
+
+// Validate that we're running in Electron, not just loading the path
+if (typeof electron === 'string' || !electron.app) {
+  console.error('This file must be run within Electron, not Node.js directly')
+  console.error('Use: npx electron . or npm run electron:dev')
+  process.exit(1)
+}
+
+const { app, BrowserWindow, dialog, Menu, Tray, nativeImage } = electron
 
 let mainWindow = null
 let tray = null
 
 // Enable live reload for development
-// Check if running in development mode
-const isDev = process.env.NODE_ENV === 'development' && !app.isPackaged
+// Check if running in development mode - use environment variable or check for dist folder
+const isDev = process.env.NODE_ENV === 'development' || !require('fs').existsSync(path.join(__dirname, '../dist/index.html'))
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -174,49 +185,54 @@ async function openVideoFile() {
   }
 }
 
-// IPC Handlers
-ipcMain.handle('select-video-file', async () => {
-  const result = await dialog.showOpenDialog(mainWindow, {
-    properties: ['openFile'],
-    filters: [
-      { name: 'Videos', extensions: ['mp4', 'webm', 'mov', 'avi', 'mkv', 'm4v'] },
-      { name: 'All Files', extensions: ['*'] },
-    ],
-  })
+// Setup IPC Handlers
+function setupIPCHandlers() {
+  const { ipcMain: ipc } = require('electron')
 
-  if (!result.canceled && result.filePaths.length > 0) {
-    return result.filePaths[0]
-  }
-  return null
-})
+  ipc.handle('select-video-file', async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      properties: ['openFile'],
+      filters: [
+        { name: 'Videos', extensions: ['mp4', 'webm', 'mov', 'avi', 'mkv', 'm4v'] },
+        { name: 'All Files', extensions: ['*'] },
+      ],
+    })
 
-ipcMain.handle('save-transcript', async (event, transcript) => {
-  const result = await dialog.showSaveDialog(mainWindow, {
-    defaultPath: `transcript-${Date.now()}.json`,
-    filters: [
-      { name: 'JSON', extensions: ['json'] },
-      { name: 'Text', extensions: ['txt'] },
-      { name: 'All Files', extensions: ['*'] },
-    ],
-  })
-
-  if (!result.canceled && result.filePath) {
-    try {
-      fs.writeFileSync(result.filePath, JSON.stringify(transcript, null, 2))
-      return { success: true, path: result.filePath }
-    } catch (error) {
-      return { success: false, error: error.message }
+    if (!result.canceled && result.filePaths.length > 0) {
+      return result.filePaths[0]
     }
-  }
-  return { success: false, error: 'Cancelled' }
-})
+    return null
+  })
 
-ipcMain.handle('get-app-version', () => {
-  return app.getVersion()
-})
+  ipc.handle('save-transcript', async (event, transcript) => {
+    const result = await dialog.showSaveDialog(mainWindow, {
+      defaultPath: `transcript-${Date.now()}.json`,
+      filters: [
+        { name: 'JSON', extensions: ['json'] },
+        { name: 'Text', extensions: ['txt'] },
+        { name: 'All Files', extensions: ['*'] },
+      ],
+    })
+
+    if (!result.canceled && result.filePath) {
+      try {
+        fs.writeFileSync(result.filePath, JSON.stringify(transcript, null, 2))
+        return { success: true, path: result.filePath }
+      } catch (error) {
+        return { success: false, error: error.message }
+      }
+    }
+    return { success: false, error: 'Cancelled' }
+  })
+
+  ipc.handle('get-app-version', () => {
+    return app.getVersion()
+  })
+}
 
 // App lifecycle
 app.whenReady().then(() => {
+  setupIPCHandlers()
   createWindow()
   createTray()
 
