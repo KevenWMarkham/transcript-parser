@@ -11,11 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -36,34 +32,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Windows artifacts
-        if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: windows-installer
           path: |
             release/*.exe
-            release/*.zip
-          retention-days: 30
-
-      - name: Upload macOS artifacts
-        if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos-installer
-          path: |
-            release/*.dmg
-            release/*.zip
-          retention-days: 30
-
-      - name: Upload Linux artifacts
-        if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-installer
-          path: |
-            release/*.AppImage
-            release/*.deb
-            release/*.rpm
           retention-days: 30
 
   # Optional: Create GitHub Release on tag push
@@ -81,10 +54,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            artifacts/windows-installer/*
-            artifacts/macos-installer/*
-            artifacts/linux-installer/*
+          files: artifacts/windows-installer/*
           draft: false
           prerelease: false
         env:
