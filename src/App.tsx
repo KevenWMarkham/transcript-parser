@@ -339,10 +339,7 @@ function App() {
 
           {/* Right Column - Transcript */}
           <div className="lg:col-span-2">
-            <TranscriptView
-              transcript={demoTranscript || transcript}
-              onExport={() => console.log('Transcript exported')}
-            />
+            <TranscriptView transcript={demoTranscript || transcript} />
           </div>
         </div>
 
