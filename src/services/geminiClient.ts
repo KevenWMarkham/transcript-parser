@@ -70,6 +70,9 @@ export class GeminiClient {
           const config = JSON.parse(stored)
           if (config.mode === 'own' && config.ownKey) {
             apiKey = config.ownKey
+          } else if (config.mode === 'code' && config.accessCode) {
+            // In code mode, use developer's API key from environment
+            apiKey = import.meta.env.VITE_GEMINI_API_KEY
           }
         }
       } catch (error) {

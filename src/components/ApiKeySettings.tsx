@@ -12,14 +12,16 @@ import {
   CreditCard,
   CheckCircle2,
   AlertCircle,
+  Ticket,
 } from 'lucide-react'
 import { PaymentModal } from './PaymentModal'
 import { GoogleGenAI } from '@google/genai'
 
 export interface ApiKeyConfig {
-  mode: 'own' | 'paid'
+  mode: 'own' | 'paid' | 'code'
   ownKey?: string
   paidBalance?: number
+  accessCode?: string
 }
 
 interface ApiKeySettingsProps {
@@ -30,6 +32,7 @@ interface ApiKeySettingsProps {
 }
 
 const API_KEY_STORAGE_KEY = 'gemini_api_config'
+const CODE_PATTERN = /^\d{3}-\d{4}-\d{3}$/ // Format: 000-0000-000
 
 export function ApiKeySettings({
   isOpen,
@@ -37,8 +40,11 @@ export function ApiKeySettings({
   onSave,
   currentConfig,
 }: ApiKeySettingsProps) {
-  const [mode, setMode] = useState<'own' | 'paid'>(currentConfig?.mode || 'own')
+  const [mode, setMode] = useState<'own' | 'paid' | 'code'>(
+    currentConfig?.mode || 'own'
+  )
   const [apiKey, setApiKey] = useState(currentConfig?.ownKey || '')
+  const [accessCode, setAccessCode] = useState(currentConfig?.accessCode || '')
   const [isValidating, setIsValidating] = useState(false)
   const [validationStatus, setValidationStatus] = useState<
     'idle' | 'valid' | 'invalid'
@@ -53,9 +59,47 @@ export function ApiKeySettings({
     if (currentConfig) {
       setMode(currentConfig.mode)
       setApiKey(currentConfig.ownKey || '')
+      setAccessCode(currentConfig.accessCode || '')
       setPaidBalance(currentConfig.paidBalance || 0)
     }
   }, [currentConfig])
+
+  const formatAccessCode = (value: string): string => {
+    // Remove all non-digits
+    const digits = value.replace(/\D/g, '')
+
+    // Limit to 10 digits
+    const limited = digits.slice(0, 10)
+
+    // Add dashes at positions 3 and 7 (after 3 digits and after 4 more digits)
+    if (limited.length <= 3) {
+      return limited
+    } else if (limited.length <= 7) {
+      return `${limited.slice(0, 3)}-${limited.slice(3)}`
+    } else {
+      return `${limited.slice(0, 3)}-${limited.slice(3, 7)}-${limited.slice(7)}`
+    }
+  }
+
+  const validateAccessCode = (): boolean => {
+    if (!accessCode || accessCode.trim().length === 0) {
+      setValidationStatus('invalid')
+      setValidationMessage('Please enter an access code')
+      return false
+    }
+
+    if (!CODE_PATTERN.test(accessCode)) {
+      setValidationStatus('invalid')
+      setValidationMessage('Invalid code format. Use format: 000-0000-000')
+      return false
+    }
+
+    // Code format is valid - mark as valid
+    // In a production app, you would verify this code against a database
+    setValidationStatus('valid')
+    setValidationMessage('Access code format is valid!')
+    return true
+  }
 
   const validateApiKey = async () => {
     if (!apiKey || apiKey.trim().length === 0) {
@@ -152,10 +196,18 @@ export function ApiKeySettings({
       }
     }
 
+    if (mode === 'code') {
+      const isValid = validateAccessCode()
+      if (!isValid) {
+        return
+      }
+    }
+
     const config: ApiKeyConfig = {
       mode,
       ownKey: mode === 'own' ? apiKey : undefined,
       paidBalance: mode === 'paid' ? paidBalance : undefined,
+      accessCode: mode === 'code' ? accessCode : undefined,
     }
 
     // Save to localStorage
@@ -213,7 +265,7 @@ export function ApiKeySettings({
             <label className="text-sm font-medium text-gray-700">
               Access Mode
             </label>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Own API Key Option */}
               <button
                 onClick={() => setMode('own')}
@@ -234,12 +286,43 @@ export function ApiKeySettings({
                       Use Your Own Key
                     </h3>
                     <p className="text-sm text-gray-600 mt-1">
-                      Free with Google's generous quota
+                      Free with Google's quota
                     </p>
                     <ul className="text-xs text-gray-500 mt-2 space-y-1">
-                      <li>• No additional costs from us</li>
-                      <li>• Direct Google API billing</li>
-                      <li>• Full control over usage</li>
+                      <li>• No costs from us</li>
+                      <li>• Direct Google billing</li>
+                      <li>• Full control</li>
+                    </ul>
+                  </div>
+                </div>
+              </button>
+
+              {/* Access Code Option */}
+              <button
+                onClick={() => setMode('code')}
+                className={`p-4 border-2 rounded-lg text-left transition-all ${
+                  mode === 'code'
+                    ? 'border-purple-500 bg-purple-50'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <div
+                    className={`mt-1 ${mode === 'code' ? 'text-purple-600' : 'text-gray-400'}`}
+                  >
+                    <Ticket className="w-5 h-5" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900">
+                      Use Access Code
+                    </h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Promotional or trial code
+                    </p>
+                    <ul className="text-xs text-gray-500 mt-2 space-y-1">
+                      <li>• Free trial access</li>
+                      <li>• Special promotions</li>
+                      <li>• Beta access</li>
                     </ul>
                   </div>
                 </div>
@@ -269,8 +352,8 @@ export function ApiKeySettings({
                     </p>
                     <ul className="text-xs text-gray-500 mt-2 space-y-1">
                       <li>• No API key needed</li>
-                      <li>• Simple monthly billing</li>
-                      <li>• Transparent cost tracking</li>
+                      <li>• Monthly billing</li>
+                      <li>• Cost tracking</li>
                     </ul>
                   </div>
                 </div>
@@ -358,6 +441,84 @@ export function ApiKeySettings({
             </div>
           )}
 
+          {/* Access Code Configuration */}
+          {mode === 'code' && (
+            <div className="space-y-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
+              <div>
+                <label
+                  htmlFor="accessCode"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Access Code
+                </label>
+                <input
+                  id="accessCode"
+                  type="text"
+                  value={accessCode}
+                  onChange={e => {
+                    setAccessCode(formatAccessCode(e.target.value))
+                    setValidationStatus('idle')
+                  }}
+                  placeholder="000-0000-000"
+                  maxLength={12}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-lg tracking-wider"
+                />
+                {validationStatus === 'valid' && (
+                  <div className="flex items-center gap-2 mt-2 text-sm text-emerald-600">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>{validationMessage}</span>
+                  </div>
+                )}
+                {validationStatus === 'invalid' && (
+                  <div className="flex items-center gap-2 mt-2 text-sm text-red-600">
+                    <AlertCircle className="w-4 h-4" />
+                    <span>{validationMessage}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium text-gray-700">
+                  About Access Codes:
+                </h4>
+                <ul className="text-sm text-gray-600 space-y-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600">•</span>
+                    <span>
+                      Access codes are provided for free trials, promotional
+                      offers, or beta testing
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600">•</span>
+                    <span>
+                      Enter the code exactly as provided (format: 000-0000-000)
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600">•</span>
+                    <span>Codes may have expiration dates or usage limits</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600">•</span>
+                    <span>
+                      Contact support if you need an access code or have issues
+                      redeeming one
+                    </span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="p-3 bg-purple-100 rounded-lg">
+                <p className="text-xs text-purple-800">
+                  <strong>Note:</strong> Access codes use our API
+                  infrastructure, so you don't need your own Gemini API key.
+                  Perfect for trying out the service!
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Paid Service Configuration */}
           {mode === 'paid' && (
             <div className="space-y-4 p-4 bg-emerald-50 rounded-lg border border-emerald-200">
@@ -417,7 +578,9 @@ export function ApiKeySettings({
               ? 'Validating...'
               : mode === 'own'
                 ? 'Validate & Save'
-                : 'Save Settings'}
+                : mode === 'code'
+                  ? 'Redeem Code'
+                  : 'Save Settings'}
           </Button>
         </div>
       </div>
@@ -451,6 +614,10 @@ export function getCurrentApiKey(): string | null {
   const config = loadApiConfig()
   if (config?.mode === 'own' && config.ownKey) {
     return config.ownKey
+  }
+  if (config?.mode === 'code' && config.accessCode) {
+    // In code mode, use the developer's API key from environment
+    return import.meta.env.VITE_GEMINI_API_KEY || null
   }
   // Fall back to environment variable
   return import.meta.env.VITE_GEMINI_API_KEY || null
