@@ -59,7 +59,29 @@ export class GeminiClient {
   private readonly RETRY_DELAY = 1000 // ms
 
   constructor(options?: TranscriptionOptions) {
-    const apiKey = options?.apiKey || import.meta.env.VITE_GEMINI_API_KEY
+    // Priority: 1) options.apiKey, 2) localStorage config, 3) env variable
+    let apiKey = options?.apiKey
+
+    if (!apiKey) {
+      // Try to load from localStorage
+      try {
+        const stored = localStorage.getItem('gemini_api_config')
+        if (stored) {
+          const config = JSON.parse(stored)
+          if (config.mode === 'own' && config.ownKey) {
+            apiKey = config.ownKey
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load API config from localStorage:', error)
+      }
+    }
+
+    // Fall back to environment variable
+    if (!apiKey) {
+      apiKey = import.meta.env.VITE_GEMINI_API_KEY
+    }
+
     if (!apiKey) {
       throw new GeminiError('Gemini API key is required', 'MISSING_API_KEY')
     }

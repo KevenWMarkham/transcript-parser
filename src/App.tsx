@@ -10,6 +10,12 @@ import { Register } from '@/components/Register'
 import { TranscriptLibrary } from '@/components/TranscriptLibrary'
 import { CostSummaryModal } from '@/components/CostSummaryModal'
 import { VideoPlayerModal } from '@/components/VideoPlayerModal'
+import {
+  ApiKeySettings,
+  loadApiConfig,
+  type ApiKeyConfig,
+} from '@/components/ApiKeySettings'
+import { BalanceAlert, shouldShowBalanceAlert } from '@/components/BalanceAlert'
 import { useTranscription } from '@/hooks/useTranscription'
 import { apiClient } from '@/services/apiClient'
 import { usageTracker } from '@/services/usageTracker'
@@ -31,6 +37,11 @@ function App() {
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
   const [showLibrary, setShowLibrary] = useState(false)
   const [showCostSummary, setShowCostSummary] = useState(false)
+  const [showApiSettings, setShowApiSettings] = useState(false)
+  const [apiConfig, setApiConfig] = useState<ApiKeyConfig | null>(
+    loadApiConfig()
+  )
+  const [balanceAlertDismissed, setBalanceAlertDismissed] = useState(false)
 
   // Video upload state
   const [videoFile, setVideoFile] = useState<File | null>(null)
@@ -79,7 +90,7 @@ function App() {
         inputTokens: 5234,
         outputTokens: 3421,
         totalTokens: 8655,
-        metadata: { duration: '3:45', fileSize: '15MB' }
+        metadata: { duration: '3:45', fileSize: '15MB' },
       })
 
       usageTracker.track({
@@ -89,7 +100,7 @@ function App() {
         inputTokens: 2735,
         outputTokens: 0,
         totalTokens: 2735,
-        metadata: { speakers: 3 }
+        metadata: { speakers: 3 },
       })
     }
   }
@@ -174,7 +185,10 @@ function App() {
     // Clear any existing video/transcription
     handleRemoveVideo()
     setShowLibrary(false)
-    console.log('✅ Loaded transcript from library:', loadedTranscript.metadata.fileName)
+    console.log(
+      '✅ Loaded transcript from library:',
+      loadedTranscript.metadata.fileName
+    )
   }
 
   // Show auth modal
@@ -183,7 +197,8 @@ function App() {
       <div
         className="min-h-screen flex items-center justify-center p-4"
         style={{
-          background: 'linear-gradient(135deg, #f8fafc 0%, rgba(239, 246, 255, 0.5) 50%, rgba(250, 245, 255, 0.5) 100%)'
+          background:
+            'linear-gradient(135deg, #f8fafc 0%, rgba(239, 246, 255, 0.5) 50%, rgba(250, 245, 255, 0.5) 100%)',
         }}
       >
         <div className="w-full max-w-md">
@@ -210,7 +225,8 @@ function App() {
       <div
         className="min-h-screen p-4 sm:p-6 lg:p-8"
         style={{
-          background: 'linear-gradient(135deg, #f8fafc 0%, rgba(239, 246, 255, 0.5) 50%, rgba(250, 245, 255, 0.5) 100%)'
+          background:
+            'linear-gradient(135deg, #f8fafc 0%, rgba(239, 246, 255, 0.5) 50%, rgba(250, 245, 255, 0.5) 100%)',
         }}
       >
         <div className="max-w-7xl mx-auto">
@@ -232,7 +248,8 @@ function App() {
     <div
       className="min-h-screen p-4 sm:p-6 lg:p-8"
       style={{
-        background: 'linear-gradient(135deg, #f8fafc 0%, rgba(239, 246, 255, 0.5) 50%, rgba(250, 245, 255, 0.5) 100%)'
+        background:
+          'linear-gradient(135deg, #f8fafc 0%, rgba(239, 246, 255, 0.5) 50%, rgba(250, 245, 255, 0.5) 100%)',
       }}
     >
       <div className="max-w-7xl mx-auto">
@@ -261,6 +278,17 @@ function App() {
             )}
           </div>
           <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setShowApiSettings(true)}
+              className={
+                apiConfig
+                  ? 'border-emerald-500 text-emerald-600 hover:bg-emerald-50'
+                  : 'border-red-500 text-red-600 hover:bg-red-50'
+              }
+            >
+              {apiConfig ? '🔑 API Configured' : '⚠️ Configure API'}
+            </Button>
             {!isAuthenticated ? (
               <Button onClick={() => setShowAuth(true)}>
                 Login / Register
@@ -270,7 +298,10 @@ function App() {
                 <Button variant="outline" onClick={() => setShowLibrary(true)}>
                   My Transcripts
                 </Button>
-                <Button variant="outline" onClick={() => setShowCostSummary(true)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowCostSummary(true)}
+                >
                   Summary
                 </Button>
                 <Button variant="outline" onClick={handleLogout}>
@@ -320,7 +351,9 @@ function App() {
           <CostSummaryModal
             isOpen={showCostSummary}
             onClose={() => setShowCostSummary(false)}
-            stats={usageTracker.getUserUsage(apiClient.getCurrentUser()?.id || 1)}
+            stats={usageTracker.getUserUsage(
+              apiClient.getCurrentUser()?.id || 1
+            )}
           />
         )}
 
@@ -334,6 +367,31 @@ function App() {
             fileName={videoFile.name}
           />
         )}
+
+        {/* API Key Settings Modal */}
+        <ApiKeySettings
+          isOpen={showApiSettings}
+          onClose={() => setShowApiSettings(false)}
+          onSave={config => {
+            setApiConfig(config)
+            // Reset dismissed flag when config changes
+            setBalanceAlertDismissed(false)
+          }}
+          currentConfig={apiConfig || undefined}
+        />
+
+        {/* Balance Alert for Paid Mode */}
+        {apiConfig?.mode === 'paid' &&
+          shouldShowBalanceAlert(
+            apiConfig.paidBalance || 0,
+            balanceAlertDismissed
+          ) && (
+            <BalanceAlert
+              balance={apiConfig.paidBalance || 0}
+              onAddCredit={() => setShowApiSettings(true)}
+              onDismiss={() => setBalanceAlertDismissed(true)}
+            />
+          )}
       </div>
     </div>
   )
