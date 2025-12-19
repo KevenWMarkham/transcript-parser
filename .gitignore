@@ -24,3 +24,18 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# Build artifacts (Electron installers)
+release/
+dist-electron/
+out/
+
+# Installers - exclude by default
+*.exe
+!windows-installer/*.exe
+*.dmg
+*.AppImage
+*.snap
+*.deb
+*.rpm
+*.zip
