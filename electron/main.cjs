@@ -6,7 +6,8 @@ let mainWindow = null
 let tray = null
 
 // Enable live reload for development
-const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
+// Check if running in development mode
+const isDev = process.env.NODE_ENV === 'development' && !app.isPackaged
 
 function createWindow() {
   mainWindow = new BrowserWindow({
