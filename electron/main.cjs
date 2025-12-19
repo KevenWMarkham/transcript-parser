@@ -47,7 +47,12 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:5173')
     mainWindow.webContents.openDevTools()
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
+    const indexPath = path.join(__dirname, '../dist/index.html')
+    console.log('Loading index.html from:', indexPath)
+    console.log('File exists:', fs.existsSync(indexPath))
+    mainWindow.loadFile(indexPath)
+    // Temporarily open DevTools in production to debug
+    mainWindow.webContents.openDevTools()
   }
 
   // Create application menu
