@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate PWA Icons</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin: 10px;
+        }
+        button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #059669;
+        }
+        .icon-container {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>PWA Icon Generator for Transcript Parser</h1>
+    <p>Click the buttons below to download the PWA icons:</p>
+
+    <div class="icon-container">
+        <canvas id="canvas192" width="192" height="192"></canvas>
+        <button onclick="download('canvas192', 'pwa-192x192.png')">Download 192x192</button>
+    </div>
+
+    <div class="icon-container">
+        <canvas id="canvas512" width="512" height="512"></canvas>
+        <button onclick="download('canvas512', 'pwa-512x512.png')">Download 512x512</button>
+    </div>
+
+    <div class="icon-container">
+        <canvas id="canvasApple" width="180" height="180"></canvas>
+        <button onclick="download('canvasApple', 'apple-touch-icon.png')">Download Apple Touch Icon</button>
+    </div>
+
+    <script>
+        function drawIcon(canvas) {
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#10b981');
+            gradient.addColorStop(1, '#059669');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+
+            // Add rounded corners
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.beginPath();
+            const radius = size * 0.15;
+            ctx.roundRect(0, 0, size, size, radius);
+            ctx.fill();
+            ctx.globalCompositeOperation = 'source-over';
+
+            // Draw waveform icon
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = size * 0.08;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            const padding = size * 0.2;
+            const width = size - (padding * 2);
+            const centerY = size / 2;
+            const barCount = 5;
+            const barWidth = width / (barCount * 2);
+
+            for (let i = 0; i < barCount; i++) {
+                const x = padding + (i * barWidth * 2) + barWidth;
+                const heights = [0.3, 0.6, 0.8, 0.5, 0.4];
+                const barHeight = size * heights[i % heights.length];
+
+                ctx.beginPath();
+                ctx.moveTo(x, centerY - barHeight / 2);
+                ctx.lineTo(x, centerY + barHeight / 2);
+                ctx.stroke();
+            }
+
+            // Add subtle text label
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.font = `bold ${size * 0.12}px system-ui, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.fillText('TP', size / 2, size * 0.85);
+        }
+
+        // Generate all icons
+        drawIcon(document.getElementById('canvas192'));
+        drawIcon(document.getElementById('canvas512'));
+        drawIcon(document.getElementById('canvasApple'));
+
+        function download(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = url;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            });
+        }
+    </script>
+</body>
+</html>
