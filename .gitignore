@@ -29,10 +29,8 @@ dist-ssr
 release/
 dist-electron/
 out/
-
-# Installers - exclude by default
+windows-installer/
 *.exe
-!windows-installer/*.exe
 *.dmg
 *.AppImage
 *.snap
