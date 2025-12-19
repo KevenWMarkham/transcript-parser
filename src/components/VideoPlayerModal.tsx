@@ -97,10 +97,10 @@ export function VideoPlayerModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl w-full max-h-[90vh] p-0">
+      <DialogContent className="max-w-4xl w-full max-h-[90vh] p-0 bg-white dark:bg-slate-900">
         <DialogHeader className="p-6 pb-0">
           <div className="flex items-center justify-between">
-            <DialogTitle className="flex items-center gap-2">
+            <DialogTitle className="flex items-center gap-2 text-slate-900 dark:text-white">
               <Play className="w-5 h-5" />
               {fileName}
             </DialogTitle>
@@ -109,7 +109,7 @@ export function VideoPlayerModal({
                 variant="outline"
                 size="sm"
                 onClick={handleDownload}
-                className="h-8"
+                className="h-8 bg-white hover:bg-slate-100 text-slate-900 border-slate-300"
               >
                 <Download className="w-4 h-4 mr-2" />
                 Download
@@ -118,7 +118,7 @@ export function VideoPlayerModal({
                 variant="ghost"
                 size="sm"
                 onClick={onClose}
-                className="h-8 w-8 p-0"
+                className="h-8 w-8 p-0 hover:bg-slate-100 text-slate-900"
               >
                 <X className="w-4 h-4" />
               </Button>
@@ -143,40 +143,40 @@ export function VideoPlayerModal({
             </video>
           </div>
 
-          <div className="mt-4 space-y-2">
-            <div className="text-sm text-muted-foreground">
+          <div className="mt-4 space-y-2 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+            <div className="text-sm text-slate-700 dark:text-slate-300">
               <p>
                 If the video doesn't play, it may use a codec not supported by
                 your browser. The transcript will still be generated
                 successfully.
               </p>
             </div>
-            <div className="text-xs text-muted-foreground">
-              <p className="font-medium mb-1">Keyboard shortcuts:</p>
+            <div className="text-xs text-slate-600 dark:text-slate-400">
+              <p className="font-medium mb-1 text-slate-900 dark:text-white">Keyboard shortcuts:</p>
               <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                 <span>
-                  <kbd className="px-1.5 py-0.5 bg-muted rounded">Space</kbd> or{' '}
-                  <kbd className="px-1.5 py-0.5 bg-muted rounded">K</kbd>{' '}
+                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded text-slate-900 dark:text-white">Space</kbd> or{' '}
+                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded text-slate-900 dark:text-white">K</kbd>{' '}
                   Play/Pause
                 </span>
                 <span>
-                  <kbd className="px-1.5 py-0.5 bg-muted rounded">←</kbd>{' '}
-                  <kbd className="px-1.5 py-0.5 bg-muted rounded">→</kbd> Seek
+                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded text-slate-900 dark:text-white">←</kbd>{' '}
+                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded text-slate-900 dark:text-white">→</kbd> Seek
                   ±5s
                 </span>
                 <span>
-                  <kbd className="px-1.5 py-0.5 bg-muted rounded">↑</kbd>{' '}
-                  <kbd className="px-1.5 py-0.5 bg-muted rounded">↓</kbd> Volume
+                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded text-slate-900 dark:text-white">↑</kbd>{' '}
+                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded text-slate-900 dark:text-white">↓</kbd> Volume
                 </span>
                 <span>
-                  <kbd className="px-1.5 py-0.5 bg-muted rounded">F</kbd>{' '}
+                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded text-slate-900 dark:text-white">F</kbd>{' '}
                   Fullscreen
                 </span>
                 <span>
-                  <kbd className="px-1.5 py-0.5 bg-muted rounded">M</kbd> Mute
+                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded text-slate-900 dark:text-white">M</kbd> Mute
                 </span>
                 <span>
-                  <kbd className="px-1.5 py-0.5 bg-muted rounded">ESC</kbd>{' '}
+                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded text-slate-900 dark:text-white">ESC</kbd>{' '}
                   Close
                 </span>
               </div>

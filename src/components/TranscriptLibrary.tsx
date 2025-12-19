@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { apiClient } from '@/services/apiClient'
+import { openDB } from 'idb'
+import type { TranscriptData } from '@/types/transcript'
 
 interface TranscriptLibraryProps {
-  onLoadTranscript?: (transcript: any) => void
+  onLoadTranscript?: (transcript: TranscriptData) => void
 }
+
+const DB_NAME = 'transcript-db'
+const STORE_NAME = 'transcripts'
 
 export function TranscriptLibrary({
   onLoadTranscript,
 }: TranscriptLibraryProps) {
-  const [transcripts, setTranscripts] = useState<any[]>([])
+  const [transcripts, setTranscripts] = useState<TranscriptData[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -18,10 +22,19 @@ export function TranscriptLibrary({
 
   const loadTranscripts = async () => {
     try {
-      const { transcripts: data } = await apiClient.getTranscripts()
-      setTranscripts(data)
+      const db = await openDB(DB_NAME, 1, {
+        upgrade(db) {
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME, { keyPath: 'id' })
+          }
+        },
+      })
+
+      const allTranscripts = await db.getAll(STORE_NAME)
+      setTranscripts(allTranscripts || [])
     } catch (error) {
       console.error('Failed to load transcripts:', error)
+      setTranscripts([])
     } finally {
       setLoading(false)
     }
@@ -30,7 +43,8 @@ export function TranscriptLibrary({
   const handleDelete = async (id: string) => {
     if (confirm('Delete this transcript?')) {
       try {
-        await apiClient.deleteTranscript(id)
+        const db = await openDB(DB_NAME, 1)
+        await db.delete(STORE_NAME, id)
         await loadTranscripts()
       } catch (error) {
         console.error('Failed to delete:', error)
@@ -40,8 +54,11 @@ export function TranscriptLibrary({
 
   const handleLoad = async (id: string) => {
     try {
-      const { transcript } = await apiClient.getTranscript(id)
-      onLoadTranscript?.(transcript)
+      const db = await openDB(DB_NAME, 1)
+      const transcript = await db.get(STORE_NAME, id)
+      if (transcript) {
+        onLoadTranscript?.(transcript)
+      }
     } catch (error) {
       console.error('Failed to load transcript:', error)
     }
@@ -63,14 +80,14 @@ export function TranscriptLibrary({
             key={transcript.id}
             className="p-4 border rounded-lg shadow-sm bg-white"
           >
-            <h3 className="font-semibold">{transcript.title}</h3>
+            <h3 className="font-semibold">{transcript.metadata.fileName || 'Untitled'}</h3>
             <p className="text-sm text-muted-foreground">
-              {new Date(transcript.createdAt).toLocaleDateString()} •{' '}
-              {transcript.duration ? `${transcript.duration}s` : 'N/A'}
+              {transcript.metadata.createdAt ? new Date(transcript.metadata.createdAt).toLocaleDateString() : 'Unknown date'} •{' '}
+              {transcript.metadata.duration ? `${Math.floor(transcript.metadata.duration)}s` : 'N/A'}
             </p>
             <p className="text-sm text-muted-foreground">
               {transcript.speakers?.length || 0} speakers •{' '}
-              {transcript.fileName}
+              {transcript.entries?.length || 0} entries
             </p>
             <div className="mt-2 flex gap-2">
               <Button size="sm" onClick={() => handleLoad(transcript.id)}>

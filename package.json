@@ -2,6 +2,7 @@
   "name": "transcript-parser",
   "version": "1.0.0",
   "description": "React TypeScript application",
+  "main": "electron/main.cjs",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -24,7 +25,13 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "commit": "cz",
-    "prepare": "husky"
+    "prepare": "husky",
+    "electron": "electron .",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
+    "electron:build": "npm run build && electron-builder",
+    "electron:build:win": "npm run build && cross-env ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true electron-builder --win --x64",
+    "electron:build:mac": "npm run build && electron-builder --mac",
+    "electron:build:linux": "npm run build && electron-builder --linux"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -79,8 +86,12 @@
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.23",
     "commitizen": "^4.3.1",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
     "cz-conventional-changelog": "^3.3.0",
     "drizzle-kit": "^0.31.8",
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
@@ -104,6 +115,7 @@
     "undici": "^7.16.0",
     "vite": "^6.0.5",
     "vite-plugin-pwa": "^1.2.0",
+    "wait-on": "^9.0.3",
     "whatwg-fetch": "^3.6.20"
   },
   "keywords": [],

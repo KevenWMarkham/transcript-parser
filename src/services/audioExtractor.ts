@@ -188,7 +188,7 @@ export class AudioExtractor {
             return
           }
 
-          const blob = new Blob(audioChunks, { type: mimeType })
+          const blob = new Blob(audioChunks, { type: selectedMimeType })
           resolve(blob)
         }
 

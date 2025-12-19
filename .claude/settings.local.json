@@ -45,7 +45,17 @@
       "Bash(npx playwright:*)",
       "Bash(nul)",
       "Bash(unzip:*)",
-      "Bash(copy:*)"
+      "Bash(copy:*)",
+      "Bash(mkdir:*)",
+      "Bash(echo:*)",
+      "Bash(c:codetranscript-parserdocker-compose.yml)",
+      "Bash(\"c:\\code\\transcript-parser\\docker-compose.yml\")",
+      "Bash(.gitkeep)",
+      "Bash(dir:*)",
+      "Bash(ls:*)",
+      "Bash(npm run preview:*)",
+      "Bash(npx vercel --version)",
+      "Bash(npx vercel:*)"
     ],
     "deny": [],
     "ask": []

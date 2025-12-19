@@ -102,8 +102,8 @@ export class ApiClient {
     }
 
     // Verify password
-    const passwordHash = btoa(password)
-    if (userWithPassword.passwordHash !== passwordHash) {
+    const inputPasswordHash = btoa(password)
+    if (userWithPassword.passwordHash !== inputPasswordHash) {
       throw new Error('Invalid email or password')
     }
 

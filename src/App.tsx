@@ -78,6 +78,7 @@ function App() {
         operation: 'Transcribe Video',
         inputTokens: 5234,
         outputTokens: 3421,
+        totalTokens: 8655,
         metadata: { duration: '3:45', fileSize: '15MB' }
       })
 
@@ -87,6 +88,7 @@ function App() {
         operation: 'Speaker Diarization',
         inputTokens: 2735,
         outputTokens: 0,
+        totalTokens: 2735,
         metadata: { speakers: 3 }
       })
     }

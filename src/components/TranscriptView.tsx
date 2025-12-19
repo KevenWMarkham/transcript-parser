@@ -33,7 +33,7 @@ export function TranscriptView({
   onExport,
   isLoading = false,
 }: TranscriptViewProps) {
-  const hasTranscript = transcript && transcript.entries.length > 0
+  const hasTranscript = !!(transcript && transcript.entries.length > 0)
   const { addToast } = useToast()
   const { addEdit, canUndo, canRedo, undo, redo } = useEditHistory()
 
@@ -47,13 +47,19 @@ export function TranscriptView({
     selectedSpeakers: new Set<number>(),
     timeRange: {
       start: 0,
-      end: transcript?.metadata.duration || 0,
+      end: Infinity, // Use Infinity so all entries pass the filter initially
     },
   })
 
   // Update time range when transcript changes
-  useMemo(() => {
+  useEffect(() => {
     if (transcript) {
+      console.log('[TranscriptView] Transcript loaded:', {
+        entriesCount: transcript.entries.length,
+        duration: transcript.metadata.duration,
+        firstEntry: transcript.entries[0]
+      })
+
       setFilters(prev => ({
         ...prev,
         timeRange: {
@@ -107,8 +113,18 @@ export function TranscriptView({
         )
       : timeFilteredEntries
     end()
+
+    console.log('[TranscriptView] Filtering results:', {
+      originalEntries: transcript?.entries.length || 0,
+      speakerFiltered: speakerFilteredEntries.length,
+      timeFiltered: timeFilteredEntries.length,
+      finalFiltered: result.length,
+      timeRange: filters.timeRange,
+      searchQuery: normalizedSearchQuery
+    })
+
     return result
-  }, [timeFilteredEntries, normalizedSearchQuery])
+  }, [timeFilteredEntries, normalizedSearchQuery, transcript?.entries.length, speakerFilteredEntries.length, filters.timeRange])
 
   // Count search results
   const searchResultCount = useMemo(() => {
