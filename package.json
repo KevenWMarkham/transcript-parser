@@ -119,7 +119,10 @@
     "whatwg-fetch": "^3.6.20"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Keven Markham",
+    "email": "keven@example.com"
+  },
   "license": "ISC",
   "config": {
     "commitizen": {
