@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcript Parser - User Manual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 3px;
+        }
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        .nav-link {
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+            background-color: #e0e7ff;
+            border-left-color: #4f46e5;
+        }
+        .nav-link.active {
+            background-color: #dbeafe;
+            border-left-color: #3b82f6;
+            font-weight: 600;
+        }
+        code {
+            background-color: #f1f5f9;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.875em;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1rem 0;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50">
+    <div class="flex">
+        <!-- Left Sidebar -->
+        <aside class="sidebar w-80 bg-white border-r border-slate-200 shadow-lg">
+            <div class="p-6 border-b border-slate-200">
+                <h1 class="text-2xl font-bold text-slate-800 mb-2">Transcript Parser</h1>
+                <p class="text-sm text-slate-600">User Manual v1.0.0</p>
+            </div>
+
+            <nav class="p-4">
+                <ul class="space-y-1">
+                    <li><a href="#overview" class="nav-link block px-4 py-2 text-sm text-slate-700 rounded-lg border-l-4 border-transparent">Overview</a></li>
+                    <li><a href="#getting-started" class="nav-link block px-4 py-2 text-sm text-slate-700 rounded-lg border-l-4 border-transparent">Getting Started</a></li>
+                    <li><a href="#core-features" class="nav-link block px-4 py-2 text-sm text-slate-700 rounded-lg border-l-4 border-transparent">Core Features</a></li>
+                    <li><a href="#authentication" class="nav-link block px-4 py-2 text-sm text-slate-700 rounded-lg border-l-4 border-transparent">Authentication & API</a></li>
+                    <li><a href="#video-processing" class="nav-link block px-4 py-2 text-sm text-slate-700 rounded-lg border-l-4 border-transparent">Video Processing</a></li>
+                    <li><a href="#transcript-management" class="nav-link block px-4 py-2 text-sm text-slate-700 rounded-lg border-l-4 border-transparent">Transcript Management</a></li>
+                    <li><a href="#ai-features" class="nav-link block px-4 py-2 text-sm text-slate-700 rounded-lg border-l-4 border-transparent">AI-Powered Features</a></li>
+                    <li><a href="#cost-tracking" class="nav-link block px-4 py-2 text-sm text-slate-700 rounded-lg border-l-4 border-transparent">Cost Tracking & Billing</a></li>
+                    <li><a href="#export-options" class="nav-link block px-4 py-2 text-sm text-slate-700 rounded-lg border-l-4 border-transparent">Export Options</a></li>
+                    <li><a href="#keyboard-shortcuts" class="nav-link block px-4 py-2 text-sm text-slate-700 rounded-lg border-l-4 border-transparent">Keyboard Shortcuts</a></li>
+                    <li><a href="#advanced-features" class="nav-link block px-4 py-2 text-sm text-slate-700 rounded-lg border-l-4 border-transparent">Advanced Features</a></li>
+                    <li><a href="#troubleshooting" class="nav-link block px-4 py-2 text-sm text-slate-700 rounded-lg border-l-4 border-transparent">Troubleshooting</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 px-12 py-8 max-w-5xl">
+            <section id="overview" class="mb-16">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6">Overview</h2>
+                <p class="text-lg text-slate-700 mb-4">
+                    <strong>Transcript Parser</strong> is an advanced AI-powered desktop application that converts video/audio files into searchable, editable transcripts with speaker diarization. Built with Electron, React, and Google Gemini AI, it provides professional-grade transcription with intelligent speaker identification and comprehensive editing capabilities.
+                </p>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Key Capabilities</h3>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li><strong>AI-Powered Transcription</strong>: Uses Google Gemini 2.5 Flash for accurate speech-to-text</li>
+                    <li><strong>Speaker Diarization</strong>: Automatically identifies and separates different speakers</li>
+                    <li><strong>AI Name Detection</strong>: Intelligently detects speaker names from introductions</li>
+                    <li><strong>Real-Time Editing</strong>: Edit transcripts with full undo/redo support</li>
+                    <li><strong>Advanced Search</strong>: Search across transcripts with highlighting</li>
+                    <li><strong>Cost Tracking</strong>: Real-time token usage and monthly billing breakdown</li>
+                    <li><strong>Multiple Export Formats</strong>: TXT, JSON, SRT, VTT formats</li>
+                    <li><strong>Cross-Platform</strong>: Available for Windows, macOS, and Linux</li>
+                </ul>
+            </section>
+
+            <section id="getting-started" class="mb-16">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6">Getting Started</h2>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Installation</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Windows</h4>
+                <ol class="list-decimal list-inside space-y-2 text-slate-700 mb-6">
+                    <li>Download <code>Transcript Parser-Setup-1.0.0.exe</code> from the releases</li>
+                    <li>Run the installer and follow the setup wizard</li>
+                    <li>Launch <strong>Transcript Parser</strong> from Start Menu</li>
+                </ol>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Portable Version</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
+                    <li>Download <code>Transcript Parser-Portable-1.0.0.exe</code></li>
+                    <li>Run directly without installation (no admin rights required)</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">First Launch</h3>
+                <ol class="list-decimal list-inside space-y-3 text-slate-700">
+                    <li>
+                        <strong>Set up API Access</strong>
+                        <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+                            <li>Click the settings icon (⚙️) in the top-right</li>
+                            <li>Choose your API configuration method</li>
+                            <li>Enter credentials as needed</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Load Your First Video</strong>
+                        <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+                            <li>Click "Choose Video File" or drag & drop a video</li>
+                            <li>Supported formats: MP4, AVI, MOV, WebM, MP3, WAV</li>
+                            <li>Maximum file size: 2GB recommended</li>
+                        </ul>
+                    </li>
+                </ol>
+            </section>
+
+            <section id="core-features" class="mb-16">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6">Core Features</h2>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">1. Video/Audio Upload</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Upload Methods:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li><strong>Click Button</strong>: Click "Choose Video File" button</li>
+                    <li><strong>Drag & Drop</strong>: Drag video/audio files directly into the upload area</li>
+                    <li><strong>Recent Files</strong>: Access recently processed files from history</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Supported Formats:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Video: <code>.mp4</code>, <code>.avi</code>, <code>.mov</code>, <code>.webm</code></li>
+                    <li>Audio: <code>.mp3</code>, <code>.wav</code>, <code>.m4a</code>, <code>.flac</code></li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Processing:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>File size: Up to 2GB (recommended)</li>
+                    <li>Conversion: Automatically converts to WebM/Opus for optimal processing</li>
+                    <li>Progress: Real-time progress bar with percentage and status updates</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">2. Automatic Transcription</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">How It Works:</h4>
+                <ol class="list-decimal list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Upload your media file</li>
+                    <li>Click "Start Transcription"</li>
+                    <li>AI processes audio and generates transcript</li>
+                    <li>Speakers are automatically identified and separated</li>
+                </ol>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Transcription Features:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li><strong>Automatic Speaker Detection</strong>: Identifies unique speakers</li>
+                    <li><strong>Timestamps</strong>: Precise start/end times for each segment</li>
+                    <li><strong>Confidence Scores</strong>: Quality indicators for each segment</li>
+                    <li><strong>Real-Time Updates</strong>: See transcript build as processing completes</li>
+                </ul>
+            </section>
+
+            <section id="authentication" class="mb-16">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6">Authentication & API Configuration</h2>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Configuration Modes</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">1. Own API Key (Recommended)</h4>
+                <p class="text-slate-700 mb-3"><strong>Best for:</strong> Individual users, full control</p>
+                <ol class="list-decimal list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Click Settings (⚙️) → "API Configuration"</li>
+                    <li>Select "Use Own API Key"</li>
+                    <li>Get API key from <a href="https://makersuite.google.com/app/apikey" class="text-blue-600 hover:underline" target="_blank">Google AI Studio</a></li>
+                    <li>Paste key and click "Save"</li>
+                </ol>
+                <p class="text-slate-700 mb-3"><strong>Advantages:</strong></p>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
+                    <li>Full cost control</li>
+                    <li>No access codes needed</li>
+                    <li>Direct billing through Google</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">2. Access Code</h4>
+                <p class="text-slate-700 mb-3"><strong>Best for:</strong> Shared access, organizations</p>
+                <ol class="list-decimal list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Select "Use Access Code"</li>
+                    <li>Enter 10-digit code: <code>XXX-XXXX-XXX</code></li>
+                    <li>Developer's API key is used automatically</li>
+                </ol>
+                <p class="text-slate-700 mb-3"><strong>Access Code Validation:</strong></p>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
+                    <li>Format: 3-4-3 digits</li>
+                    <li>Example: <code>123-4567-890</code></li>
+                    <li>Contact admin for codes</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">3. Paid Service (Future)</h4>
+                <p class="text-slate-700"><strong>Coming soon:</strong> Pay-as-you-go with monthly billing</p>
+            </section>
+
+            <section id="video-processing" class="mb-16">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6">Video Processing</h2>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Video Player Features</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Playback Controls:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>▶️ Play/Pause: Click video or press <code>Space</code></li>
+                    <li>⏩ Fast Forward: Press <code>→</code> or <code>L</code></li>
+                    <li>⏪ Rewind: Press <code>←</code> or <code>J</code></li>
+                    <li>🔇 Mute/Unmute: Press <code>M</code></li>
+                    <li>📽️ Fullscreen: Press <code>F</code></li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Transcript Sync:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li><strong>Click Entry</strong>: Jump to timestamp in video</li>
+                    <li><strong>Auto-Highlight</strong>: Current speaking segment highlighted</li>
+                    <li><strong>Seek Bar</strong>: Visual timeline with segment markers</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Advanced Controls:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li>Playback speed: 0.25x to 2x</li>
+                    <li>Volume control: 0% to 100%</li>
+                    <li>Frame-by-frame navigation</li>
+                </ul>
+            </section>
+
+            <section id="transcript-management" class="mb-16">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6">Transcript Management</h2>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Viewing Transcripts</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Layout:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li><strong>Left Panel</strong>: Speaker analytics and statistics</li>
+                    <li><strong>Center Panel</strong>: Transcript entries with search</li>
+                    <li><strong>Right Panel</strong>: (Optional) Video player</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Entry Information:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Speaker name/color</li>
+                    <li>Start and end timestamps</li>
+                    <li>Confidence percentage</li>
+                    <li>Full text content</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Editing Transcripts</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Enable Editing:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Toggle edit mode in top toolbar</li>
+                    <li>Double-click any entry to edit</li>
+                    <li>Modify text, start time, or end time</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Edit Operations:</h4>
+                <ol class="list-decimal list-inside space-y-3 text-slate-700 mb-4">
+                    <li>
+                        <strong>Text Editing</strong>:
+                        <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+                            <li>Double-click entry text</li>
+                            <li>Make changes in textarea</li>
+                            <li>Click "Save" or press <code>Enter</code></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Timestamp Editing</strong>:
+                        <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+                            <li>Click edit icon</li>
+                            <li>Modify start/end times (in seconds)</li>
+                            <li>Format: Decimal (e.g., 12.5)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Undo/Redo</strong>:
+                        <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+                            <li>Undo: <code>Ctrl+Z</code> (Windows) / <code>Cmd+Z</code> (Mac)</li>
+                            <li>Redo: <code>Ctrl+Shift+Z</code> / <code>Cmd+Shift+Z</code></li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Visual Indicators:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
+                    <li>🔄 <strong>Edited Badge</strong>: Shows modified entries</li>
+                    <li>✓ <strong>Save Confirmation</strong>: Visual feedback on save</li>
+                    <li>❌ <strong>Cancel Option</strong>: Discard changes</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Speaker Management</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Rename Speakers:</h4>
+                <ol class="list-decimal list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Find speaker in left panel</li>
+                    <li>Click edit icon (✏️) next to speaker name</li>
+                    <li>Type new name</li>
+                    <li>Press <code>Enter</code> or click ✓</li>
+                    <li>Name updates across all entries</li>
+                </ol>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Speaker Colors:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li>Blue, Emerald, Purple, Orange, Pink, Cyan</li>
+                    <li>Automatically assigned</li>
+                    <li>Consistent throughout transcript</li>
+                </ul>
+            </section>
+
+            <section id="ai-features" class="mb-16">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6">AI-Powered Features</h2>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">AI Speaker Name Detection</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Automatic Detection:</h4>
+                <ol class="list-decimal list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Click "Detect Names" button (✨ Sparkles icon)</li>
+                    <li>AI analyzes first 30 entries of each speaker</li>
+                    <li>Looks for self-introduction patterns</li>
+                    <li>Returns suggestions with confidence levels</li>
+                </ol>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Detection Patterns:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>"My name is [name]"</li>
+                    <li>"I'm [name]"</li>
+                    <li>"This is [name]"</li>
+                    <li>"Hi, I'm [name]"</li>
+                    <li>"[name] here"</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Confidence Levels:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li><strong>High</strong>: Clear, unambiguous introduction (e.g., "My name is John Smith")</li>
+                    <li><strong>Medium</strong>: Less formal introduction (e.g., "I'm Sarah")</li>
+                    <li><strong>Low</strong>: Ambiguous or indirect reference</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Review Suggestions:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
+                    <li><strong>Evidence Quote</strong>: See exact text where name was detected</li>
+                    <li><strong>Accept</strong>: Applies name to all speaker entries</li>
+                    <li><strong>Reject</strong>: Dismisses suggestion</li>
+                    <li><strong>Dismiss All</strong>: Remove all suggestions</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Search & Filter</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Text Search:</h4>
+                <ol class="list-decimal list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Type query in search box</li>
+                    <li>Live results with match count</li>
+                    <li>Highlighting in transcript entries</li>
+                    <li>Case-insensitive matching</li>
+                </ol>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Filters:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li><strong>Speaker Filter</strong>: Show only specific speakers</li>
+                    <li><strong>Time Range</strong>: Filter by start/end timestamps</li>
+                    <li><strong>Confidence</strong>: (Future) Filter by confidence score</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Combined Filters:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li>Search + Speaker: Find text from specific speaker</li>
+                    <li>Search + Time: Find text in time range</li>
+                    <li>All filters stack together</li>
+                </ul>
+            </section>
+
+            <section id="cost-tracking" class="mb-16">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6">Cost Tracking & Billing</h2>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Real-Time Cost Tracking</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">What's Tracked:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Input tokens (prompt + audio analysis)</li>
+                    <li>Output tokens (generated transcript)</li>
+                    <li>Total tokens per operation</li>
+                    <li>Estimated cost in USD</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Cost Calculation:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
+                    <li>Gemini 2.5 Flash: $0.075/1M input, $0.30/1M output</li>
+                    <li>Real-time updates from API responses</li>
+                    <li>Persists across sessions (localStorage)</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Viewing Cost Summary</h3>
+                <ol class="list-decimal list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Click "Cost Summary" button (💰)</li>
+                    <li>See overview cards:
+                        <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+                            <li>Total Tokens Used</li>
+                            <li>Total Cost (USD)</li>
+                            <li>Total Operations</li>
+                            <li>Average Cost per Operation</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Monthly Billing Breakdown</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Current Month Card:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Tokens used this month</li>
+                    <li>Current month cost</li>
+                    <li>Operations count</li>
+                    <li>Highlighted in amber/gold</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Historical Billing:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>All past months sorted newest first</li>
+                    <li>Monthly totals: tokens, cost, operations</li>
+                    <li>Format: "December 2024"</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Usage by Category:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li><strong>By Model</strong>: Gemini 2.5 Flash, 1.5 Flash, etc.</li>
+                    <li><strong>By Operation</strong>: Video Transcription, Name Detection</li>
+                </ul>
+            </section>
+
+            <section id="export-options" class="mb-16">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6">Export Options</h2>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Export Formats</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">1. Plain Text (.txt)</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Speaker labels</li>
+                    <li>Timestamps in <code>[HH:MM:SS]</code> format</li>
+                    <li>Clean, readable format</li>
+                    <li>Best for: Documentation, notes</li>
+                </ul>
+                <p class="text-slate-700 font-semibold mb-2">Example:</p>
+                <pre><code>[00:00:05] Speaker 1: Hello everyone, welcome to the meeting.
+[00:00:12] Speaker 2: Thanks for having me.</code></pre>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">2. JSON (.json)</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Complete structured data</li>
+                    <li>All metadata preserved</li>
+                    <li>Speakers, timestamps, confidence</li>
+                    <li>Best for: Developers, data analysis</li>
+                </ul>
+                <p class="text-slate-700 font-semibold mb-2">Example:</p>
+                <pre><code>{
+  "entries": [{
+    "id": "1",
+    "speaker": "Speaker 1",
+    "speakerNumber": 1,
+    "startTime": 0.0,
+    "endTime": 5.2,
+    "text": "Hello everyone",
+    "confidence": 0.95
+  }],
+  "speakers": [...],
+  "metadata": {...}
+}</code></pre>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">3. SubRip (.srt)</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Standard subtitle format</li>
+                    <li>Numbered sequences</li>
+                    <li>Timestamp format: <code>HH:MM:SS,mmm</code></li>
+                    <li>Best for: Video subtitles, YouTube</li>
+                </ul>
+                <p class="text-slate-700 font-semibold mb-2">Example:</p>
+                <pre><code>1
+00:00:00,000 --> 00:00:05,200
+Speaker 1: Hello everyone
+
+2
+00:00:05,200 --> 00:00:12,000
+Speaker 2: Thanks for having me</code></pre>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">4. WebVTT (.vtt)</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Web video text tracks</li>
+                    <li>HTML5 compatible</li>
+                    <li>Metadata support</li>
+                    <li>Best for: Web players, accessibility</li>
+                </ul>
+                <p class="text-slate-700 font-semibold mb-2">Example:</p>
+                <pre><code>WEBVTT
+
+00:00:00.000 --> 00:00:05.200
+&lt;v Speaker 1&gt;Hello everyone
+
+00:00:05.200 --> 00:00:12.000
+&lt;v Speaker 2&gt;Thanks for having me</code></pre>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Export Process</h3>
+                <ol class="list-decimal list-inside space-y-2 text-slate-700">
+                    <li>Click "Export" button (📥)</li>
+                    <li>Select format from dropdown</li>
+                    <li>Choose save location</li>
+                    <li>File is generated and downloaded</li>
+                </ol>
+            </section>
+
+            <section id="keyboard-shortcuts" class="mb-16">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6">Keyboard Shortcuts</h2>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Global Shortcuts</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Shortcut</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>Ctrl/Cmd + O</code></td><td>Open video file</td></tr>
+                        <tr><td><code>Ctrl/Cmd + S</code></td><td>Save transcript</td></tr>
+                        <tr><td><code>Ctrl/Cmd + E</code></td><td>Export transcript</td></tr>
+                        <tr><td><code>Ctrl/Cmd + F</code></td><td>Focus search box</td></tr>
+                        <tr><td><code>Ctrl/Cmd + Z</code></td><td>Undo edit</td></tr>
+                        <tr><td><code>Ctrl/Cmd + Shift + Z</code></td><td>Redo edit</td></tr>
+                        <tr><td><code>Escape</code></td><td>Clear search/filters</td></tr>
+                    </tbody>
+                </table>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Video Player Shortcuts</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Shortcut</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>Space</code></td><td>Play/Pause</td></tr>
+                        <tr><td><code>→</code> or <code>L</code></td><td>Skip forward 5s</td></tr>
+                        <tr><td><code>←</code> or <code>J</code></td><td>Skip backward 5s</td></tr>
+                        <tr><td><code>↑</code></td><td>Volume up</td></tr>
+                        <tr><td><code>↓</code></td><td>Volume down</td></tr>
+                        <tr><td><code>M</code></td><td>Mute/Unmute</td></tr>
+                        <tr><td><code>F</code></td><td>Toggle fullscreen</td></tr>
+                        <tr><td><code>0-9</code></td><td>Jump to 0%-90%</td></tr>
+                    </tbody>
+                </table>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Transcript Navigation</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Shortcut</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>↑/↓</code></td><td>Navigate entries</td></tr>
+                        <tr><td><code>Enter</code></td><td>Play entry timestamp</td></tr>
+                        <tr><td><code>Double-Click</code></td><td>Edit entry (if enabled)</td></tr>
+                        <tr><td><code>Ctrl/Cmd + Click</code></td><td>Multi-select</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="advanced-features" class="mb-16">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6">Advanced Features</h2>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Speaker Analytics</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Statistics Displayed:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Total speaking time per speaker</li>
+                    <li>Percentage of total conversation</li>
+                    <li>Number of segments</li>
+                    <li>Average segment duration</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Visual Indicators:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
+                    <li>Progress bars for speaking time</li>
+                    <li>Color-coded speakers</li>
+                    <li>Segment count badges</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Transcript History</h3>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
+                    <li>Recently processed files</li>
+                    <li>Quick reload previous transcripts</li>
+                    <li>Automatic save on process</li>
+                    <li>Indexed for fast search</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Performance Optimization</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Virtual Scrolling:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>Handles 10,000+ entries smoothly</li>
+                    <li>Only renders visible entries</li>
+                    <li>Smooth 60fps scrolling</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Progressive Loading:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li>Entries load as transcription completes</li>
+                    <li>No waiting for full completion</li>
+                    <li>Real-time updates</li>
+                </ul>
+            </section>
+
+            <section id="troubleshooting" class="mb-16">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6">Troubleshooting</h2>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Common Issues</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">1. "API Key Invalid" Error</h4>
+                <p class="text-slate-700 font-semibold mb-2">Solution:</p>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
+                    <li>Verify API key is correct</li>
+                    <li>Check key has Gemini API access enabled</li>
+                    <li>Regenerate key from Google AI Studio</li>
+                    <li>Ensure billing is enabled on Google Cloud</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">2. Transcription Fails</h4>
+                <p class="text-slate-700 font-semibold mb-2">Possible Causes:</p>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-3">
+                    <li>File too large (>2GB)</li>
+                    <li>Unsupported format</li>
+                    <li>Poor audio quality</li>
+                    <li>API quota exceeded</li>
+                </ul>
+                <p class="text-slate-700 font-semibold mb-2">Solutions:</p>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
+                    <li>Compress video/audio file</li>
+                    <li>Convert to supported format (MP4, WebM)</li>
+                    <li>Improve audio quality</li>
+                    <li>Check API quota limits</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">3. Video Won't Play</h4>
+                <p class="text-slate-700 font-semibold mb-2">Solutions:</p>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
+                    <li>Update Electron app to latest version</li>
+                    <li>Check video codec compatibility</li>
+                    <li>Convert video to WebM format</li>
+                    <li>Verify file isn't corrupted</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">4. Slow Performance</h4>
+                <p class="text-slate-700 font-semibold mb-2">Solutions:</p>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
+                    <li>Close unnecessary background apps</li>
+                    <li>Process smaller files</li>
+                    <li>Enable hardware acceleration</li>
+                    <li>Increase available RAM</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">5. Export Fails</h4>
+                <p class="text-slate-700 font-semibold mb-2">Solutions:</p>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
+                    <li>Check disk space</li>
+                    <li>Verify write permissions</li>
+                    <li>Choose different save location</li>
+                    <li>Check file name validity</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Getting Help</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Support Channels:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li>GitHub Issues: <a href="https://github.com/KevenWMarkham/transcript-parser/issues" class="text-blue-600 hover:underline" target="_blank">Report bugs</a></li>
+                    <li>Documentation: Check implementation guides in <code>docs/implementation/</code></li>
+                    <li>Community: (Future) Discord/Slack channels</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Before Reporting:</h4>
+                <ol class="list-decimal list-inside space-y-2 text-slate-700 mb-6">
+                    <li>Check this manual</li>
+                    <li>Review error messages</li>
+                    <li>Check console logs (<code>Ctrl+Shift+I</code> in app)</li>
+                    <li>Note steps to reproduce</li>
+                    <li>Include system info (OS, version)</li>
+                </ol>
+
+                <h3 class="text-2xl font-semibold text-slate-800 mt-8 mb-4">Technical Requirements</h3>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Minimum System Requirements:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
+                    <li><strong>OS</strong>: Windows 10+, macOS 10.13+, Ubuntu 18.04+</li>
+                    <li><strong>RAM</strong>: 4GB (8GB recommended)</li>
+                    <li><strong>Disk</strong>: 500MB for app + space for videos</li>
+                    <li><strong>Internet</strong>: Required for transcription API calls</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Recommended:</h4>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li><strong>RAM</strong>: 8GB+ for large files</li>
+                    <li><strong>CPU</strong>: Multi-core processor for faster processing</li>
+                    <li><strong>SSD</strong>: For better video loading performance</li>
+                    <li><strong>Bandwidth</strong>: Stable connection for API calls</li>
+                </ul>
+            </section>
+
+            <!-- Footer -->
+            <footer class="mt-16 pt-8 border-t border-slate-200">
+                <div class="text-center text-slate-600">
+                    <p class="mb-2"><strong>License:</strong> MIT License</p>
+                    <p class="mb-2"><strong>Developer:</strong> Keven W. Markham</p>
+                    <p class="mb-2"><strong>GitHub:</strong> <a href="https://github.com/KevenWMarkham/transcript-parser" class="text-blue-600 hover:underline" target="_blank">transcript-parser</a></p>
+                    <p class="mt-4 text-sm">Last Updated: December 19, 2024 • Version 1.0.0</p>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // Active navigation link highlighting on scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        function highlightActiveSection() {
+            let scrollY = window.pageYOffset;
+
+            sections.forEach(section => {
+                const sectionHeight = section.offsetHeight;
+                const sectionTop = section.offsetTop - 100;
+                const sectionId = section.getAttribute('id');
+
+                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+
+        window.addEventListener('scroll', highlightActiveSection);
+
+        // Initial highlight
+        highlightActiveSection();
+    </script>
+</body>
+</html>
