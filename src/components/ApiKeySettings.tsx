@@ -34,6 +34,34 @@ interface ApiKeySettingsProps {
 const API_KEY_STORAGE_KEY = 'gemini_api_config'
 const CODE_PATTERN = /^\d{3}-\d{4}-\d{3}$/ // Format: 000-0000-000
 
+// Valid access codes with expiration dates and descriptions
+// Option 2: Hardcoded list (for quick testing/permanent codes)
+const VALID_CODES = [
+  {
+    code: '123-4567-890',
+    expiresAt: '2025-12-31',
+    description: 'Beta Tester Access',
+  },
+  {
+    code: '999-8888-777',
+    expiresAt: '2025-06-30',
+    description: 'Promotional Code',
+  },
+  {
+    code: '555-1234-999',
+    expiresAt: null,
+    description: 'Lifetime Access',
+  },
+]
+
+// Option 3: Load additional codes from environment variable
+// Set VITE_VALID_ACCESS_CODES=123-4567-890,999-8888-777,555-1234-999 in .env
+const getValidCodesFromEnv = (): string[] => {
+  const envCodes = import.meta.env.VITE_VALID_ACCESS_CODES
+  if (!envCodes) return []
+  return envCodes.split(',').map((code: string) => code.trim())
+}
+
 export function ApiKeySettings({
   isOpen,
   onClose,
@@ -94,11 +122,45 @@ export function ApiKeySettings({
       return false
     }
 
-    // Code format is valid - mark as valid
-    // In a production app, you would verify this code against a database
-    setValidationStatus('valid')
-    setValidationMessage('Access code format is valid!')
-    return true
+    // Check Option 2: Hardcoded list with expiration dates
+    const validCode = VALID_CODES.find(c => c.code === accessCode)
+
+    if (validCode) {
+      // Check if code is expired
+      if (validCode.expiresAt) {
+        const expiryDate = new Date(validCode.expiresAt)
+        if (expiryDate < new Date()) {
+          setValidationStatus('invalid')
+          setValidationMessage('This access code has expired.')
+          return false
+        }
+      }
+
+      // Code is valid!
+      setValidationStatus('valid')
+      const expiryMessage = validCode.expiresAt
+        ? ` Valid until ${new Date(validCode.expiresAt).toLocaleDateString()}.`
+        : ' No expiration.'
+      setValidationMessage(
+        `Access code verified! ${validCode.description}.${expiryMessage}`
+      )
+      return true
+    }
+
+    // Check Option 3: Environment variable codes (no expiration)
+    const envCodes = getValidCodesFromEnv()
+    if (envCodes.includes(accessCode)) {
+      setValidationStatus('valid')
+      setValidationMessage('Access code verified! No expiration.')
+      return true
+    }
+
+    // Code not found in either list
+    setValidationStatus('invalid')
+    setValidationMessage(
+      'Invalid access code. Please contact support for a valid code.'
+    )
+    return false
   }
 
   const validateApiKey = async () => {
