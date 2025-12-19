@@ -10,6 +10,7 @@
 ## 📋 Problem Statement
 
 Currently, when users load a transcript from the library, they can see the transcript text but cannot:
+
 1. View the original video
 2. Play the video alongside the transcript
 3. Use timestamp-based navigation
@@ -31,6 +32,7 @@ The `handleLoadTranscript` function (App.tsx:152) is just a TODO placeholder.
 ## 🏗️ Architecture Options
 
 ### Option 1: Client-Side Video Storage (IndexedDB)
+
 **Store video blob in browser's IndexedDB**
 
 ```typescript
@@ -45,18 +47,20 @@ interface TranscriptData {
     videoFormat: string
     // ...
   }
-  videoBlob?: Blob  // NEW: Store actual video file
+  videoBlob?: Blob // NEW: Store actual video file
   videoUrl?: string // NEW: Object URL for playback
 }
 ```
 
 **Pros**:
+
 - ✅ Works completely offline
 - ✅ No backend changes needed initially
 - ✅ Fast access
 - ✅ Privacy-first (video never leaves device)
 
 **Cons**:
+
 - ⚠️ Browser storage limits (50MB-200MB typical)
 - ⚠️ Large videos may not fit
 - ⚠️ Lost if browser data cleared
@@ -65,6 +69,7 @@ interface TranscriptData {
 ---
 
 ### Option 2: Server-Side Video Storage (PostgreSQL BYTEA or File Storage)
+
 **Store video on backend server**
 
 ```typescript
@@ -76,17 +81,19 @@ export const videoFiles = pgTable('video_files', {
   fileName: varchar('file_name', { length: 255 }),
   fileSize: integer('file_size'),
   mimeType: varchar('mime_type', { length: 100 }),
-  uploadedAt: timestamp('uploaded_at').defaultNow()
+  uploadedAt: timestamp('uploaded_at').defaultNow(),
 })
 ```
 
 **Pros**:
+
 - ✅ Unlimited storage (server-controlled)
 - ✅ Cross-device access
 - ✅ Backup and restore
 - ✅ No browser limits
 
 **Cons**:
+
 - ⚠️ Requires backend changes
 - ⚠️ Upload time for large files
 - ⚠️ Storage costs
@@ -95,6 +102,7 @@ export const videoFiles = pgTable('video_files', {
 ---
 
 ### Option 3: Hybrid Approach (Recommended)
+
 **Use IndexedDB first, with optional server backup**
 
 ```typescript
@@ -110,20 +118,22 @@ interface TranscriptData {
     // ...
   }
   // Video storage (prioritize in order)
-  videoBlob?: Blob           // 1. Local blob (fastest)
-  videoObjectUrl?: string    // 2. Object URL (for playback)
-  videoServerUrl?: string    // 3. Server URL (fallback)
-  hasLocalVideo: boolean     // Flag to check if blob exists
-  hasServerVideo: boolean    // Flag to check if uploaded
+  videoBlob?: Blob // 1. Local blob (fastest)
+  videoObjectUrl?: string // 2. Object URL (for playback)
+  videoServerUrl?: string // 3. Server URL (fallback)
+  hasLocalVideo: boolean // Flag to check if blob exists
+  hasServerVideo: boolean // Flag to check if uploaded
 }
 ```
 
 **Storage Strategy**:
+
 1. **Small videos (<25MB)**: Store in IndexedDB
 2. **Large videos (>25MB)**: Store only on server (optional upload)
 3. **Always store**: Transcript data (small)
 
 **Pros**:
+
 - ✅ Best of both worlds
 - ✅ Fast for small videos
 - ✅ Scalable for large videos
@@ -171,7 +181,7 @@ async function saveTranscript(file: File, transcriptData: TranscriptData) {
       duration: metadata.duration,
       format: metadata.format,
       // ... other metadata
-    }
+    },
   }
 
   // Save to IndexedDB
@@ -239,6 +249,7 @@ export function VideoPreview({
 ## 📊 Data Flow Diagram
 
 ### Upload Flow (Existing)
+
 ```
 User uploads video
   ↓
@@ -254,6 +265,7 @@ Display transcript + video preview
 ```
 
 ### Load Flow (New)
+
 ```
 User clicks transcript in library
   ↓
@@ -271,15 +283,21 @@ Display transcript + video preview
 ## 🔄 State Management Changes
 
 ### Current State (App.tsx)
+
 ```typescript
 const [videoFile, setVideoFile] = useState<File | null>(null)
 const [videoMetadata, setVideoMetadata] = useState<VideoMetadata | null>(null)
-const [demoTranscript, setDemoTranscript] = useState<TranscriptData | null>(null)
+const [demoTranscript, setDemoTranscript] = useState<TranscriptData | null>(
+  null
+)
 ```
 
 ### NEW: Add Source Tracking
+
 ```typescript
-const [videoSource, setVideoSource] = useState<'upload' | 'loaded' | 'demo'>('upload')
+const [videoSource, setVideoSource] = useState<'upload' | 'loaded' | 'demo'>(
+  'upload'
+)
 
 // When uploading new video
 const handleVideoUpload = async (file: File) => {
@@ -307,6 +325,7 @@ const loadDemoTranscript = () => {
 ### Video Preview States
 
 **1. Newly Uploaded Video**
+
 ```
 ┌─────────────────────────────┐
 │  📹 Upload Video           │
@@ -317,6 +336,7 @@ const loadDemoTranscript = () => {
 ```
 
 **2. Loaded from Library**
+
 ```
 ┌─────────────────────────────┐
 │  📂 Loaded Video           │
@@ -329,6 +349,7 @@ const loadDemoTranscript = () => {
 ```
 
 **3. No Video Available (Transcript only)**
+
 ```
 ┌─────────────────────────────┐
 │  📄 Transcript Only        │
@@ -341,6 +362,7 @@ const loadDemoTranscript = () => {
 ### Processing Status Updates
 
 **When loading transcript:**
+
 ```
 ┌─────────────────────────────┐
 │  🔄 Processing Status      │
@@ -355,18 +377,21 @@ const loadDemoTranscript = () => {
 ## 🧪 Testing Requirements
 
 ### Unit Tests
+
 - [ ] TranscriptData with videoBlob serializes correctly
 - [ ] File reconstruction from Blob works
 - [ ] VideoMetadata is preserved
 - [ ] State updates correctly
 
 ### Integration Tests
+
 - [ ] Load transcript → Video appears in preview
 - [ ] Play loaded video → Playback works
 - [ ] Click timestamp → Seeks correctly
 - [ ] Remove loaded video → Clears state
 
 ### Edge Cases
+
 - [ ] Load transcript without video blob
 - [ ] Load very large video (>50MB)
 - [ ] Browser storage quota exceeded
@@ -437,9 +462,11 @@ const loadDemoTranscript = () => {
 ## 🚨 Potential Issues & Solutions
 
 ### Issue 1: IndexedDB Storage Limits
+
 **Problem**: Videos might exceed browser storage quota
 
 **Solution**:
+
 ```typescript
 async function checkStorageQuota(fileSize: number): Promise<boolean> {
   if ('storage' in navigator && 'estimate' in navigator.storage) {
@@ -458,9 +485,11 @@ if (!(await checkStorageQuota(file.size))) {
 ```
 
 ### Issue 2: Object URL Memory Leaks
+
 **Problem**: Creating Object URLs without revoking causes memory leaks
 
 **Solution**:
+
 ```typescript
 useEffect(() => {
   if (videoBlob) {
@@ -476,9 +505,11 @@ useEffect(() => {
 ```
 
 ### Issue 3: Missing Video After Storage
+
 **Problem**: Video blob lost if browser data cleared
 
 **Solution**:
+
 ```typescript
 const handleLoadTranscript = (loadedTranscript: TranscriptData) => {
   if (!loadedTranscript.videoBlob) {
@@ -494,6 +525,7 @@ const handleLoadTranscript = (loadedTranscript: TranscriptData) => {
 ## 🎯 Success Criteria
 
 **Feature is complete when:**
+
 - ✅ User can load transcript from library
 - ✅ Original video appears in preview
 - ✅ Video plays correctly

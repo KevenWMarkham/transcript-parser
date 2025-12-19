@@ -3,6 +3,7 @@
 ## Overview
 
 Transcript Parser is now configured as a Progressive Web App (PWA), enabling:
+
 - Offline functionality
 - Installable on desktop and mobile devices
 - Fast loading with service worker caching
@@ -88,15 +89,18 @@ manifest: {
 ### Caching Strategy
 
 **Static Assets** (Cache-First):
+
 - JavaScript, CSS, HTML
 - Images, fonts
 - Cached permanently for fast loading
 
 **Google Fonts** (Cache-First):
+
 - 1 year expiration
 - Reduces external requests
 
 **API Calls** (Network-First):
+
 - Gemini API requests
 - 5-minute cache as fallback
 - 10-second network timeout
@@ -106,11 +110,13 @@ manifest: {
 ### Option 1: Vercel (Recommended - Free)
 
 1. Install Vercel CLI:
+
    ```bash
    npm install -g vercel
    ```
 
 2. Deploy:
+
    ```bash
    vercel
    ```
@@ -118,6 +124,7 @@ manifest: {
 3. Follow prompts to deploy
 
 **Why Vercel?**
+
 - Zero configuration
 - Automatic HTTPS
 - Global CDN
@@ -127,6 +134,7 @@ manifest: {
 ### Option 2: Netlify (Alternative - Free)
 
 1. Install Netlify CLI:
+
    ```bash
    npm install -g netlify-cli
    ```
@@ -137,6 +145,7 @@ manifest: {
    ```
 
 **Why Netlify?**
+
 - Simple deployment
 - Great for static sites
 - Free SSL
@@ -156,6 +165,7 @@ manifest: {
    - Publish directory: `dist`
 
 **Why Cloudflare?**
+
 - Global edge network
 - Fastest performance
 - DDoS protection
@@ -197,6 +207,7 @@ VITE_GEMINI_API_KEY=your_production_key_here
 Run Lighthouse audit and ensure:
 
 ### Progressive Web App (Target: 90+)
+
 - ✅ Registers a service worker
 - ✅ Responds with 200 when offline
 - ✅ Has a web app manifest
@@ -208,6 +219,7 @@ Run Lighthouse audit and ensure:
 - ✅ Provides a valid apple-touch-icon
 
 ### Performance (Target: 90+)
+
 - ✅ First Contentful Paint < 1.8s
 - ✅ Largest Contentful Paint < 2.5s
 - ✅ Total Blocking Time < 200ms
@@ -224,17 +236,18 @@ npm install @sentry/react
 
 ```typescript
 // src/main.tsx
-import * as Sentry from "@sentry/react";
+import * as Sentry from '@sentry/react'
 
 Sentry.init({
-  dsn: "your-sentry-dsn",
+  dsn: 'your-sentry-dsn',
   environment: import.meta.env.MODE,
-});
+})
 ```
 
 ### Add Analytics (Optional)
 
 For privacy-friendly analytics:
+
 - **Plausible Analytics** (recommended)
 - **Simple Analytics**
 - **Fathom Analytics**
@@ -246,6 +259,7 @@ Avoid Google Analytics for privacy concerns.
 ### Service Worker Not Updating
 
 Clear cache and hard reload:
+
 - Chrome: `Ctrl+Shift+R` (Windows) or `Cmd+Shift+R` (Mac)
 - Or: DevTools → Application → Service Workers → "Update on reload"
 

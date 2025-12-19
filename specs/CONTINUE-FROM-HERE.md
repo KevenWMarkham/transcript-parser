@@ -190,7 +190,6 @@ Follow the code example in `SESSION-START-PROMPT.md` → Phase 3
 
 ```tsx
 import { motion } from 'framer-motion'
-
 ;<motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
   {/* content */}
 </motion.div>

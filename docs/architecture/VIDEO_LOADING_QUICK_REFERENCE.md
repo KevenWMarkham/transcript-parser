@@ -9,6 +9,7 @@ Allow users to **click a transcript in the library** → **see the original vide
 ## 🔄 Current vs Desired Flow
 
 ### Current Flow (Working)
+
 ```
 Upload Video → Transcribe → Save Transcript → View Transcript
                                     ↓
@@ -16,6 +17,7 @@ Upload Video → Transcribe → Save Transcript → View Transcript
 ```
 
 ### Desired Flow (New)
+
 ```
 Upload Video → Transcribe → Save Transcript + Video → View Transcript
                                          ↓
@@ -29,31 +31,34 @@ Load from Library → Restore Video → View Transcript + Video
 ## 📋 3 Implementation Approaches
 
 ### Approach 1: IndexedDB (Easiest) ⭐ RECOMMENDED
+
 **Store video in browser**
 
-| Pros | Cons |
-|------|------|
-| ✅ Works offline | ⚠️ 50-200MB limit |
+| Pros                  | Cons                     |
+| --------------------- | ------------------------ |
+| ✅ Works offline      | ⚠️ 50-200MB limit        |
 | ✅ No backend changes | ⚠️ Lost if cache cleared |
-| ✅ Fast (2 days) | ⚠️ No cross-device |
+| ✅ Fast (2 days)      | ⚠️ No cross-device       |
 
 ### Approach 2: Server Storage
+
 **Upload video to PostgreSQL/File System**
 
-| Pros | Cons |
-|------|------|
+| Pros                 | Cons                   |
+| -------------------- | ---------------------- |
 | ✅ Unlimited storage | ⚠️ Backend work needed |
-| ✅ Cross-device | ⚠️ Upload time |
-| ✅ Permanent | ⚠️ Storage costs |
+| ✅ Cross-device      | ⚠️ Upload time         |
+| ✅ Permanent         | ⚠️ Storage costs       |
 
 ### Approach 3: Hybrid
+
 **Small videos in IndexedDB, large on server**
 
-| Pros | Cons |
-|------|------|
-| ✅ Best of both | ⚠️ More complex |
+| Pros                     | Cons               |
+| ------------------------ | ------------------ |
+| ✅ Best of both          | ⚠️ More complex    |
 | ✅ Fast for small videos | ⚠️ Longer dev time |
-| ✅ Scalable | ⚠️ Two code paths |
+| ✅ Scalable              | ⚠️ Two code paths  |
 
 ---
 
@@ -68,8 +73,10 @@ export interface TranscriptData {
   id: string
   entries: TranscriptEntry[]
   speakers: Speaker[]
-  metadata: { /* ... */ }
-  videoBlob?: Blob  // ← ADD THIS LINE
+  metadata: {
+    /* ... */
+  }
+  videoBlob?: Blob // ← ADD THIS LINE
 }
 ```
 
@@ -84,7 +91,7 @@ setTranscript(transcriptData)
 // AFTER (new):
 const transcriptWithVideo: TranscriptData = {
   ...transcriptData,
-  videoBlob: file  // Save the original file as a Blob
+  videoBlob: file, // Save the original file as a Blob
 }
 setTranscript(transcriptWithVideo)
 ```
@@ -116,7 +123,7 @@ const handleLoadTranscript = (loadedTranscript: TranscriptData) => {
     setVideoFile(videoFile)
     setVideoMetadata({
       duration: loadedTranscript.metadata.duration,
-      format: loadedTranscript.metadata.videoFormat
+      format: loadedTranscript.metadata.videoFormat,
     })
   }
 
@@ -179,9 +186,11 @@ const handleLoadTranscript = (loadedTranscript: TranscriptData) => {
 ## ⚠️ Important Gotchas
 
 ### 1. Storage Quota
+
 **Problem**: Videos might exceed browser storage
 
 **Quick Check**:
+
 ```typescript
 async function canStoreVideo(fileSize: number): Promise<boolean> {
   const estimate = await navigator.storage.estimate()
@@ -191,22 +200,26 @@ async function canStoreVideo(fileSize: number): Promise<boolean> {
 ```
 
 ### 2. Memory Leaks
+
 **Problem**: Object URLs not cleaned up
 
 **Solution**:
+
 ```typescript
 useEffect(() => {
   if (videoBlob) {
     const url = URL.createObjectURL(videoBlob)
-    return () => URL.revokeObjectURL(url)  // ← Cleanup!
+    return () => URL.revokeObjectURL(url) // ← Cleanup!
   }
 }, [videoBlob])
 ```
 
 ### 3. Missing Videos
+
 **Problem**: What if video blob doesn't exist?
 
 **Solution**:
+
 ```typescript
 if (!loadedTranscript.videoBlob) {
   // Show message: "Video not available"
@@ -219,11 +232,13 @@ if (!loadedTranscript.videoBlob) {
 ## 🧪 Test Cases
 
 ### Basic Functionality
+
 - [ ] Upload video → Save → Load → Video plays ✅
 - [ ] Upload video → Clear cache → Load → Handle gracefully ✅
 - [ ] Load transcript without video → Show message ✅
 
 ### Edge Cases
+
 - [ ] Video > 50MB → Warn before saving ✅
 - [ ] Storage quota full → Show error ✅
 - [ ] Corrupted video blob → Handle error ✅
@@ -233,7 +248,7 @@ if (!loadedTranscript.videoBlob) {
 ## 📊 Storage Size Guide
 
 | Video Length | File Size (MP4) | IndexedDB? |
-|--------------|-----------------|------------|
+| ------------ | --------------- | ---------- |
 | 10 seconds   | ~2MB            | ✅ Yes     |
 | 30 seconds   | ~5MB            | ✅ Yes     |
 | 1 minute     | ~10MB           | ✅ Yes     |
@@ -247,12 +262,14 @@ if (!loadedTranscript.videoBlob) {
 ## 🔧 Debugging Tips
 
 ### Check if video is saved:
+
 ```typescript
 console.log('Video blob size:', loadedTranscript.videoBlob?.size)
 console.log('Has video:', !!loadedTranscript.videoBlob)
 ```
 
 ### Check storage usage:
+
 ```typescript
 const estimate = await navigator.storage.estimate()
 console.log('Used:', estimate.usage)
@@ -261,6 +278,7 @@ console.log('Available:', estimate.quota - estimate.usage)
 ```
 
 ### Inspect IndexedDB:
+
 1. Open DevTools → Application tab
 2. Click "IndexedDB"
 3. Find your database
@@ -272,27 +290,22 @@ console.log('Available:', estimate.quota - estimate.usage)
 ## 📝 Implementation Order
 
 **Day 1** (Core functionality)
+
 1. ✅ Update TranscriptData type
 2. ✅ Save videoBlob with transcript
 3. ✅ Implement handleLoadTranscript
 4. ✅ Test basic flow
 
-**Day 2** (Polish & edge cases)
-5. ✅ Add storage quota checking
-6. ✅ Handle missing videos
-7. ✅ Update UI components
-8. ✅ Add loading states
+**Day 2** (Polish & edge cases) 5. ✅ Add storage quota checking 6. ✅ Handle missing videos 7. ✅ Update UI components 8. ✅ Add loading states
 
-**Day 3** (Optional - Server backup)
-9. ⭐ Backend upload endpoint
-10. ⭐ Download on load
-11. ⭐ Progress indicators
+**Day 3** (Optional - Server backup) 9. ⭐ Backend upload endpoint 10. ⭐ Download on load 11. ⭐ Progress indicators
 
 ---
 
 ## 🎯 Success Checklist
 
 **Feature is working when:**
+
 - [x] User uploads video
 - [x] Transcript is generated
 - [x] Video is saved with transcript

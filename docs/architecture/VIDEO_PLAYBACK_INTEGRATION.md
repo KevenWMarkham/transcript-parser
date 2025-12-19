@@ -17,12 +17,14 @@
 ## ✅ What Already Exists
 
 ### Components Ready to Use
+
 - ✅ **VideoPlayerModal** - Full-featured video player with keyboard shortcuts
 - ✅ **VideoPreview** - Shows video thumbnail and metadata
 - ✅ **TranscriptList** - Displays transcript entries
 - ✅ **Video file state** - Already stored in `App.tsx`
 
 ### What's Missing
+
 - ❌ No "Play Video" button
 - ❌ Transcript entries don't link to video timestamps
 - ❌ No way to open VideoPlayerModal
@@ -35,6 +37,7 @@
 ### Step 1: Add Video Player State to App.tsx
 
 **Current State**:
+
 ```typescript
 // App.tsx (line 35)
 const [videoFile, setVideoFile] = useState<File | null>(null)
@@ -42,6 +45,7 @@ const [videoMetadata, setVideoMetadata] = useState<VideoMetadata | null>(null)
 ```
 
 **Add**:
+
 ```typescript
 // NEW: Video player modal state
 const [isVideoPlayerOpen, setIsVideoPlayerOpen] = useState(false)
@@ -62,6 +66,7 @@ useEffect(() => {
 **Current**: VideoPreview only shows metadata
 
 **Add** (VideoPreview.tsx):
+
 ```typescript
 interface VideoPreviewProps {
   file: File
@@ -88,6 +93,7 @@ interface VideoPreviewProps {
 ### Step 3: Integrate VideoPlayerModal in App.tsx
 
 **Add to App.tsx render** (after line 303):
+
 ```typescript
 {/* Video Player Modal */}
 {videoFile && videoObjectUrl && (
@@ -102,6 +108,7 @@ interface VideoPreviewProps {
 ```
 
 **Update VideoPreview usage** (line 268):
+
 ```typescript
 <VideoPreview
   file={videoFile}
@@ -114,10 +121,12 @@ interface VideoPreviewProps {
 ### Step 4: Add Timestamp Navigation (Click-to-Seek)
 
 **Option A: Modal Video Player** (Current approach)
+
 - User clicks transcript entry
 - Opens video modal at that timestamp
 
 **Option B: Inline Video Player** (More complex)
+
 - Video player always visible next to transcript
 - Real-time sync as video plays
 
@@ -145,6 +154,7 @@ const handleSeekToTimestamp = (timestamp: number) => {
 ```
 
 **Update VideoPlayerModal** to accept initial time:
+
 ```typescript
 interface VideoPlayerModalProps {
   isOpen: boolean
@@ -152,7 +162,7 @@ interface VideoPlayerModalProps {
   videoFile: File
   videoUrl: string
   fileName: string
-  initialTime?: number  // ← NEW
+  initialTime?: number // ← NEW
 }
 
 // In useEffect:
@@ -209,6 +219,7 @@ interface TranscriptListProps {
 ## 🎨 UI/UX Flow
 
 ### User Journey 1: Play Full Video
+
 ```
 1. User uploads video
    ↓
@@ -222,6 +233,7 @@ interface TranscriptListProps {
 ```
 
 ### User Journey 2: Jump to Timestamp
+
 ```
 1. User reads transcript
    ↓
@@ -233,6 +245,7 @@ interface TranscriptListProps {
 ```
 
 ### User Journey 3: Keyboard Navigation
+
 ```
 1. Video is playing in modal
    ↓
@@ -270,6 +283,7 @@ App.tsx (State Management)
 ## 🔧 Implementation Checklist
 
 ### Phase 1: Basic Video Playback (30 min)
+
 - [ ] Add `isVideoPlayerOpen` state to App.tsx
 - [ ] Add `videoObjectUrl` state with cleanup
 - [ ] Add `onPlayVideo` prop to VideoPreview
@@ -278,6 +292,7 @@ App.tsx (State Management)
 - [ ] Test: Click "Play Video" → Modal opens → Video plays
 
 ### Phase 2: Timestamp Navigation (1 hour)
+
 - [ ] Add `seekToTime` state to App.tsx
 - [ ] Add `handleSeekToTimestamp` function
 - [ ] Add `initialTime` prop to VideoPlayerModal
@@ -287,6 +302,7 @@ App.tsx (State Management)
 - [ ] Test: Should compile but not functional yet
 
 ### Phase 3: Clickable Transcript Entries (1 hour)
+
 - [ ] Add `onSeekToTimestamp` prop to TranscriptList
 - [ ] Add `hasVideo` prop to TranscriptList
 - [ ] Make timestamp badges clickable
@@ -295,6 +311,7 @@ App.tsx (State Management)
 - [ ] Test: Click timestamp → Video opens at that time
 
 ### Phase 4: Polish & UX (30 min)
+
 - [ ] Add loading state for video
 - [ ] Add tooltip "Click to play at this timestamp"
 - [ ] Style active/playing entry differently
@@ -307,6 +324,7 @@ App.tsx (State Management)
 ## 🚨 What NOT to Change (Avoid Breaking)
 
 ### ❌ Don't Touch These
+
 - `useTranscription` hook - Transcription logic
 - `GeminiClient` - AI integration
 - `AudioExtractor` / `FFmpegExtractor` - Audio processing
@@ -314,6 +332,7 @@ App.tsx (State Management)
 - Database schema - Backend integration
 
 ### ✅ Safe to Modify
+
 - `App.tsx` - Add state and handlers
 - `VideoPreview.tsx` - Add play button
 - `VideoPlayerModal.tsx` - Add initialTime prop
@@ -326,6 +345,7 @@ App.tsx (State Management)
 ## 🧪 Testing Strategy
 
 ### Manual Tests
+
 1. **Upload video** → Should work as before
 2. **Click "Play Video"** → Modal opens, video plays
 3. **Click timestamp** → Video jumps to that time
@@ -335,6 +355,7 @@ App.tsx (State Management)
 7. **Upload new video** → Old video cleaned up
 
 ### Edge Cases
+
 - [ ] Upload video without clicking play → Should not break
 - [ ] Click timestamp before video upload → Handle gracefully
 - [ ] Click timestamp for demo transcript (no video) → No action
@@ -342,6 +363,7 @@ App.tsx (State Management)
 - [ ] Open modal twice → No memory leaks
 
 ### Regression Tests
+
 - [ ] Transcription still works
 - [ ] Export still works
 - [ ] Search/filter still works
@@ -353,6 +375,7 @@ App.tsx (State Management)
 ## 💡 Code Snippets (Copy-Paste Ready)
 
 ### 1. App.tsx - Add State (after line 52)
+
 ```typescript
 // Video player state
 const [isVideoPlayerOpen, setIsVideoPlayerOpen] = useState(false)
@@ -384,6 +407,7 @@ const handleVideoPlayerClose = useCallback(() => {
 ```
 
 ### 2. App.tsx - Update VideoPreview (line ~268)
+
 ```typescript
 <VideoPreview
   file={videoFile}
@@ -394,6 +418,7 @@ const handleVideoPlayerClose = useCallback(() => {
 ```
 
 ### 3. App.tsx - Add VideoPlayerModal (after line 303)
+
 ```typescript
 {/* Video Player Modal */}
 {videoFile && videoObjectUrl && (
@@ -409,6 +434,7 @@ const handleVideoPlayerClose = useCallback(() => {
 ```
 
 ### 4. App.tsx - Update TranscriptView (line ~288)
+
 ```typescript
 <TranscriptView
   transcript={demoTranscript || transcript}
@@ -419,6 +445,7 @@ const handleVideoPlayerClose = useCallback(() => {
 ```
 
 ### 5. VideoPreview.tsx - Add Play Button
+
 ```typescript
 // Update interface
 interface VideoPreviewProps {
@@ -462,6 +489,7 @@ interface VideoPreviewProps {
 ## 🎯 Success Criteria
 
 **Feature complete when:**
+
 - ✅ "Play Video" button appears in VideoPreview
 - ✅ Clicking button opens video in modal
 - ✅ Video plays correctly
