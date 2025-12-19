@@ -5,11 +5,13 @@ Desktop version of the Transcript Parser built with Electron.
 ## Development
 
 ### Run in Development Mode
+
 ```bash
 npm run electron:dev
 ```
 
 This will:
+
 1. Start the Vite dev server
 2. Wait for it to be ready
 3. Launch Electron pointing to the dev server
@@ -17,31 +19,41 @@ This will:
 ### Build Standalone Executables
 
 #### Windows
+
 ```bash
 npm run electron:build:win
 ```
+
 Generates:
+
 - `release/Transcript Parser-Setup-1.0.0.exe` - Installer
 - `release/Transcript Parser-Portable-1.0.0.exe` - Portable version
 
 #### macOS
+
 ```bash
 npm run electron:build:mac
 ```
+
 Generates:
+
 - `release/Transcript Parser-1.0.0.dmg` - DMG installer
 - `release/Transcript Parser-1.0.0-mac.zip` - ZIP archive
 
 #### Linux
+
 ```bash
 npm run electron:build:linux
 ```
+
 Generates:
+
 - `release/Transcript Parser-1.0.0.AppImage` - AppImage
 - `release/Transcript Parser-1.0.0.deb` - Debian package
 - `release/Transcript Parser-1.0.0.rpm` - RPM package
 
 #### All Platforms
+
 ```bash
 npm run electron:build
 ```
@@ -49,6 +61,7 @@ npm run electron:build
 ## Features
 
 ### Native Desktop Features
+
 - ✅ Native file picker for video selection
 - ✅ Drag and drop video files
 - ✅ System tray integration
@@ -59,6 +72,7 @@ npm run electron:build
 - ✅ Auto-updates (when published to GitHub Releases)
 
 ### Keyboard Shortcuts
+
 - `Ctrl/Cmd + O` - Open video file
 - `Ctrl/Cmd + Q` - Quit application
 - `Ctrl/Cmd + R` - Reload
@@ -68,12 +82,14 @@ npm run electron:build
 ## Distribution
 
 ### GitHub Releases (Recommended)
+
 1. Build all platforms: `npm run electron:build`
 2. Create a new GitHub Release
 3. Upload the executables from the `release/` folder
 4. Users can download and install
 
 ### File Sizes
+
 - Windows Installer: ~150MB
 - macOS DMG: ~150MB
 - Linux AppImage: ~150MB
@@ -88,14 +104,17 @@ npm run electron:build
 ## Troubleshooting
 
 ### Windows
+
 - If SmartScreen blocks the app, click "More info" → "Run anyway"
 - For production, you should code-sign the executable
 
 ### macOS
+
 - If "app is damaged" message appears, run: `xattr -cr "/Applications/Transcript Parser.app"`
 - For production, you need an Apple Developer certificate
 
 ### Linux
+
 - Make AppImage executable: `chmod +x Transcript-Parser-1.0.0.AppImage`
 - Run: `./Transcript-Parser-1.0.0.AppImage`
 

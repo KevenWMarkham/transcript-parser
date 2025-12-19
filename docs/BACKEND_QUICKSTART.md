@@ -24,11 +24,13 @@
 ### 2. Start PostgreSQL
 
 **Using Docker (easiest):**
+
 ```bash
 docker run --name transcript-postgres -e POSTGRES_DB=transcript_parser -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:15-alpine
 ```
 
 **OR use existing PostgreSQL and create database:**
+
 ```bash
 createdb transcript_parser
 ```
@@ -41,6 +43,7 @@ copy .env.example .env
 ```
 
 **Edit `.env` file** - Add your Gemini API key:
+
 ```env
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/transcript_parser
 JWT_SECRET=change-this-to-random-string-minimum-32-chars
@@ -63,6 +66,7 @@ npm run dev
 ```
 
 You should see:
+
 ```
 🚀 Server running on port 3000
 💾 Database: Connected
@@ -83,6 +87,7 @@ copy .env.example .env
 ```
 
 File should contain:
+
 ```env
 VITE_API_URL=http://localhost:3000/api
 ```
@@ -103,18 +108,22 @@ npm run dev
 ## Troubleshooting
 
 **Database won't connect?**
+
 - Check PostgreSQL is running: `docker ps` or check service
 - Verify DATABASE_URL in `.env`
 
 **FFmpeg error?**
+
 - Run `ffmpeg -version` to verify installation
 - Ensure FFmpeg is in your PATH
 
 **Gemini API error?**
+
 - Verify API key in `.env` is correct
 - Check quota at https://makersuite.google.com
 
 **Port 3000 in use?**
+
 - Change `PORT=3001` in server `.env`
 - Update frontend `.env`: `VITE_API_URL=http://localhost:3001/api`
 

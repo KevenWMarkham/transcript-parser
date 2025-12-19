@@ -7,6 +7,7 @@ All Electron code is written and configured. You just need to build the `.exe` f
 ## 🔨 Build the Windows .EXE
 
 Run this command:
+
 ```bash
 npm run electron:build:win
 ```
@@ -18,6 +19,7 @@ The build might fail with `zip: not a valid zip file`. This is a temporary netwo
 **Solutions:**
 
 1. **Clear cache and retry:**
+
    ```bash
    npx electron-builder install-app-deps
    npm run electron:build:win
@@ -43,6 +45,7 @@ This launches the app in development mode with hot reload.
 ## 📦 After Build Succeeds
 
 You'll find in the `release/` folder:
+
 - `Transcript Parser-Setup-1.0.0.exe` - Full installer
 - `Transcript Parser-Portable-1.0.0.exe` - Portable version
 
@@ -51,6 +54,7 @@ Double-click to install and use!
 ## 🚀 Share Your App
 
 Once built, share the `.exe` file:
+
 - Upload to GitHub Releases
 - Share via Google Drive
 - Email directly

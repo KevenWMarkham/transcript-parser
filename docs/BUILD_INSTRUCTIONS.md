@@ -15,6 +15,7 @@ ENOENT: no such file or directory, rename 'electron.exe' -> 'Transcript Parser.e
 The easiest solution is to build on a native x64 Windows machine:
 
 1. **On an x64 Windows computer**, clone the repo:
+
    ```bash
    git clone https://github.com/KevenWMarkham/transcript-parser
    cd transcript-parser
@@ -75,6 +76,7 @@ This works perfectly on ARM64 Windows and lets you test all desktop features.
 **For you right now**: Use GitHub Actions (Option 2)
 
 Benefits:
+
 - ✅ Builds on x64 servers (no ARM issues)
 - ✅ Completely automated
 - ✅ Builds for Windows, macOS, AND Linux
@@ -87,6 +89,7 @@ I can set this up in about 5 minutes if you'd like!
 ## 📝 Technical Details
 
 **Why this happens:**
+
 - You're on Windows ARM64
 - electron-builder uses `app-builder.exe` (ARM64 version on your machine)
 - app-builder ARM64 has bugs extracting x64 Electron binaries
@@ -94,6 +97,7 @@ I can set this up in about 5 minutes if you'd like!
 - Build fails when trying to rename non-existent file
 
 **Your options:**
+
 1. Build on x64 machine
 2. Use GitHub Actions (x64 cloud servers)
 3. Use WSL2 + Wine
