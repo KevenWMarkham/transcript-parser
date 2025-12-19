@@ -20,7 +20,11 @@
       "Bash(explorer.exe \"Transcript Parser v1.0.0 - Production Build\")",
       "Bash(npm run dev:*)",
       "Bash($null)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(npm run build:windows:*)",
+      "Bash(npm run)",
+      "Bash(npm run electron:build:win:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []

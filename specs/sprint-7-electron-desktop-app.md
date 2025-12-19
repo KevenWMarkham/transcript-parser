@@ -1,9 +1,11 @@
 # Sprint 7: Electron Desktop Application
 
 ## Overview
+
 Package the transcript parser web application as a native desktop application using Electron, allowing users to download and run it as a standalone .exe (Windows), .dmg (macOS), or .AppImage (Linux) file.
 
 ## Goals
+
 - Create an Electron wrapper around the existing React/Vite application
 - Support Windows, macOS, and Linux builds
 - Maintain all PWA features (offline support, IndexedDB storage)
@@ -13,6 +15,7 @@ Package the transcript parser web application as a native desktop application us
 - Package and distribute via GitHub Releases
 
 ## Technical Stack
+
 - **Electron**: Desktop application framework
 - **electron-builder**: Build and package tool
 - **electron-updater**: Auto-update functionality
@@ -21,6 +24,7 @@ Package the transcript parser web application as a native desktop application us
 ## Features
 
 ### Core Features
+
 1. **Native Desktop App**
    - Window management (minimize, maximize, close)
    - Native menu bar
@@ -52,6 +56,7 @@ Package the transcript parser web application as a native desktop application us
 ## Implementation Plan
 
 ### Phase 1: Electron Setup (1-2 hours)
+
 - [ ] Install Electron dependencies
 - [ ] Create Electron main process (electron/main.js)
 - [ ] Configure Electron with Vite
@@ -59,6 +64,7 @@ Package the transcript parser web application as a native desktop application us
 - [ ] Create build scripts for development
 
 ### Phase 2: Native Integration (2-3 hours)
+
 - [ ] Implement native file picker
 - [ ] Add drag-and-drop support
 - [ ] Create native menu bar
@@ -67,6 +73,7 @@ Package the transcript parser web application as a native desktop application us
 - [ ] Add keyboard shortcuts
 
 ### Phase 3: Build & Package (1-2 hours)
+
 - [ ] Configure electron-builder
 - [ ] Set up code signing (optional)
 - [ ] Create application icons (icns, ico, png)
@@ -75,12 +82,14 @@ Package the transcript parser web application as a native desktop application us
 - [ ] Configure Linux AppImage
 
 ### Phase 4: Auto-Updates (1 hour)
+
 - [ ] Implement electron-updater
 - [ ] Configure update server (GitHub Releases)
 - [ ] Add update notification UI
 - [ ] Test update flow
 
 ### Phase 5: Distribution (1 hour)
+
 - [ ] Set up GitHub Actions for builds
 - [ ] Create release workflow
 - [ ] Generate installers for all platforms
@@ -88,6 +97,7 @@ Package the transcript parser web application as a native desktop application us
 - [ ] Add installation instructions
 
 ## File Structure
+
 ```
 transcript-parser/
 ├── electron/
@@ -105,6 +115,7 @@ transcript-parser/
 ```
 
 ## Dependencies to Add
+
 ```json
 {
   "devDependencies": {
@@ -118,6 +129,7 @@ transcript-parser/
 ```
 
 ## NPM Scripts
+
 ```json
 {
   "scripts": {
@@ -134,6 +146,7 @@ transcript-parser/
 ## Benefits
 
 ### For Users
+
 - No browser required
 - Native desktop experience
 - Faster startup times
@@ -143,6 +156,7 @@ transcript-parser/
 - Professional application feel
 
 ### For Distribution
+
 - Single executable download
 - Easy installation
 - Cross-platform support
@@ -150,6 +164,7 @@ transcript-parser/
 - Professional branding
 
 ## Security Considerations
+
 - Context isolation enabled
 - Node integration disabled in renderer
 - Preload script for secure IPC
@@ -157,6 +172,7 @@ transcript-parser/
 - Signed executables (Windows/macOS)
 
 ## Testing Checklist
+
 - [ ] Test on Windows 10/11
 - [ ] Test on macOS (Intel & Apple Silicon)
 - [ ] Test on Ubuntu/Linux
@@ -169,6 +185,7 @@ transcript-parser/
 - [ ] Check for memory leaks
 
 ## Distribution Platforms
+
 1. **GitHub Releases** (Free)
    - Host .exe, .dmg, .AppImage files
    - Auto-update support
@@ -188,11 +205,13 @@ transcript-parser/
    - Automatic updates
 
 ## Estimated Timeline
+
 - **Total Time**: 6-9 hours
 - **Complexity**: Medium
 - **Dependencies**: None (can start immediately)
 
 ## Success Metrics
+
 - [ ] Successfully build .exe for Windows
 - [ ] Successfully build .dmg for macOS
 - [ ] Successfully build .AppImage for Linux
@@ -203,6 +222,7 @@ transcript-parser/
 - [ ] Startup time < 3 seconds
 
 ## Future Enhancements
+
 - Windows/macOS system integration (Quick Look, etc.)
 - Global keyboard shortcuts
 - Menu bar app mode (macOS)
@@ -211,6 +231,7 @@ transcript-parser/
 - Plugin system for custom exporters
 
 ## Notes
+
 - Electron adds ~100MB to app size (acceptable for desktop apps)
 - Can reuse 100% of existing React/Vite code
 - PWA and desktop app can coexist
