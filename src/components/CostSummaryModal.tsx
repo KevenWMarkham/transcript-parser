@@ -1,4 +1,11 @@
-import { X, TrendingUp, DollarSign, Activity, BarChart3 } from 'lucide-react'
+import {
+  X,
+  TrendingUp,
+  DollarSign,
+  Activity,
+  BarChart3,
+  Calendar,
+} from 'lucide-react'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -14,9 +21,20 @@ interface CostSummaryModalProps {
     byModel: Record<string, { tokens: number; cost: number; count: number }>
     byOperation: Record<string, { tokens: number; cost: number; count: number }>
   }
+  monthlyStats?: Record<
+    string,
+    { tokens: number; cost: number; operations: number }
+  >
+  currentMonthStats?: { tokens: number; cost: number; operations: number }
 }
 
-export function CostSummaryModal({ isOpen, onClose, stats }: CostSummaryModalProps) {
+export function CostSummaryModal({
+  isOpen,
+  onClose,
+  stats,
+  monthlyStats,
+  currentMonthStats,
+}: CostSummaryModalProps) {
   const avgCost = stats.operations > 0 ? stats.totalCost / stats.operations : 0
 
   const formatTokens = (tokens: number) => {
@@ -29,6 +47,17 @@ export function CostSummaryModal({ isOpen, onClose, stats }: CostSummaryModalPro
   const formatCost = (cost: number) => {
     return `$${cost.toFixed(3)}m`
   }
+
+  const formatMonthLabel = (monthKey: string) => {
+    const [year, month] = monthKey.split('-')
+    const date = new Date(parseInt(year), parseInt(month) - 1)
+    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+  }
+
+  // Sort monthly stats by date (newest first)
+  const sortedMonthlyStats = monthlyStats
+    ? Object.entries(monthlyStats).sort(([a], [b]) => b.localeCompare(a))
+    : []
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -44,8 +73,12 @@ export function CostSummaryModal({ isOpen, onClose, stats }: CostSummaryModalPro
                 </div>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-slate-800">Token Usage & Cost Summary</h2>
-                <p className="text-sm text-slate-600">Real-time API usage tracking</p>
+                <h2 className="text-2xl font-bold text-slate-800">
+                  Token Usage & Cost Summary
+                </h2>
+                <p className="text-sm text-slate-600">
+                  Real-time API usage tracking
+                </p>
               </div>
             </div>
             <Button
@@ -73,9 +106,13 @@ export function CostSummaryModal({ isOpen, onClose, stats }: CostSummaryModalPro
                   <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center shadow-md">
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
-                  <span className="text-sm font-medium text-slate-600">Total Tokens</span>
+                  <span className="text-sm font-medium text-slate-600">
+                    Total Tokens
+                  </span>
                 </div>
-                <p className="text-3xl font-bold text-slate-800">{formatTokens(stats.totalTokens)}</p>
+                <p className="text-3xl font-bold text-slate-800">
+                  {formatTokens(stats.totalTokens)}
+                </p>
               </Card>
             </motion.div>
 
@@ -89,9 +126,13 @@ export function CostSummaryModal({ isOpen, onClose, stats }: CostSummaryModalPro
                   <div className="w-10 h-10 rounded-xl bg-purple-500 flex items-center justify-center shadow-md">
                     <DollarSign className="w-5 h-5 text-white" />
                   </div>
-                  <span className="text-sm font-medium text-slate-600">Total Cost</span>
+                  <span className="text-sm font-medium text-slate-600">
+                    Total Cost
+                  </span>
                 </div>
-                <p className="text-3xl font-bold text-slate-800">{formatCost(stats.totalCost)}</p>
+                <p className="text-3xl font-bold text-slate-800">
+                  {formatCost(stats.totalCost)}
+                </p>
               </Card>
             </motion.div>
 
@@ -105,9 +146,13 @@ export function CostSummaryModal({ isOpen, onClose, stats }: CostSummaryModalPro
                   <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center shadow-md">
                     <Activity className="w-5 h-5 text-white" />
                   </div>
-                  <span className="text-sm font-medium text-slate-600">Operations</span>
+                  <span className="text-sm font-medium text-slate-600">
+                    Operations
+                  </span>
                 </div>
-                <p className="text-3xl font-bold text-slate-800">{stats.operations}</p>
+                <p className="text-3xl font-bold text-slate-800">
+                  {stats.operations}
+                </p>
               </Card>
             </motion.div>
 
@@ -121,9 +166,13 @@ export function CostSummaryModal({ isOpen, onClose, stats }: CostSummaryModalPro
                   <div className="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center shadow-md">
                     <DollarSign className="w-5 h-5 text-white" />
                   </div>
-                  <span className="text-sm font-medium text-slate-600">Avg Cost</span>
+                  <span className="text-sm font-medium text-slate-600">
+                    Avg Cost
+                  </span>
                 </div>
-                <p className="text-3xl font-bold text-slate-800">{formatCost(avgCost)}</p>
+                <p className="text-3xl font-bold text-slate-800">
+                  {formatCost(avgCost)}
+                </p>
               </Card>
             </motion.div>
           </div>
@@ -135,7 +184,9 @@ export function CostSummaryModal({ isOpen, onClose, stats }: CostSummaryModalPro
             transition={{ delay: 0.3 }}
           >
             <Card className="p-5">
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">By Model</h3>
+              <h3 className="text-lg font-semibold text-slate-800 mb-4">
+                By Model
+              </h3>
               <div className="space-y-3">
                 {Object.entries(stats.byModel).map(([model, data]) => (
                   <div
@@ -149,8 +200,12 @@ export function CostSummaryModal({ isOpen, onClose, stats }: CostSummaryModalPro
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-slate-800">{formatTokens(data.tokens)}</p>
-                      <p className="text-sm text-slate-600">{formatCost(data.cost)}</p>
+                      <p className="font-semibold text-slate-800">
+                        {formatTokens(data.tokens)}
+                      </p>
+                      <p className="text-sm text-slate-600">
+                        {formatCost(data.cost)}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -165,7 +220,9 @@ export function CostSummaryModal({ isOpen, onClose, stats }: CostSummaryModalPro
             transition={{ delay: 0.35 }}
           >
             <Card className="p-5">
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">By Operation</h3>
+              <h3 className="text-lg font-semibold text-slate-800 mb-4">
+                By Operation
+              </h3>
               <div className="space-y-3">
                 {Object.entries(stats.byOperation).map(([operation, data]) => (
                   <div
@@ -175,18 +232,108 @@ export function CostSummaryModal({ isOpen, onClose, stats }: CostSummaryModalPro
                     <div>
                       <p className="font-medium text-slate-800">{operation}</p>
                       <p className="text-sm text-slate-600">
-                        {data.count} {data.count === 1 ? 'operation' : 'operations'}
+                        {data.count}{' '}
+                        {data.count === 1 ? 'operation' : 'operations'}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-slate-800">{formatTokens(data.tokens)}</p>
-                      <p className="text-sm text-slate-600">{formatCost(data.cost)}</p>
+                      <p className="font-semibold text-slate-800">
+                        {formatTokens(data.tokens)}
+                      </p>
+                      <p className="text-sm text-slate-600">
+                        {formatCost(data.cost)}
+                      </p>
                     </div>
                   </div>
                 ))}
               </div>
             </Card>
           </motion.div>
+
+          {/* Current Month Billing */}
+          {currentMonthStats && currentMonthStats.operations > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <Card className="p-5 bg-gradient-to-br from-amber-50 to-amber-100/50 border-amber-200/50">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center shadow-md">
+                    <Calendar className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-slate-800">
+                    Current Month (
+                    {formatMonthLabel(
+                      `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`
+                    )}
+                    )
+                  </h3>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="text-center p-3 rounded-xl bg-white/60 border border-amber-200">
+                    <p className="text-sm text-slate-600 mb-1">Tokens</p>
+                    <p className="text-xl font-bold text-slate-800">
+                      {formatTokens(currentMonthStats.tokens)}
+                    </p>
+                  </div>
+                  <div className="text-center p-3 rounded-xl bg-white/60 border border-amber-200">
+                    <p className="text-sm text-slate-600 mb-1">Cost</p>
+                    <p className="text-xl font-bold text-slate-800">
+                      {formatCost(currentMonthStats.cost)}
+                    </p>
+                  </div>
+                  <div className="text-center p-3 rounded-xl bg-white/60 border border-amber-200">
+                    <p className="text-sm text-slate-600 mb-1">Operations</p>
+                    <p className="text-xl font-bold text-slate-800">
+                      {currentMonthStats.operations}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          )}
+
+          {/* Monthly Billing Breakdown */}
+          {sortedMonthlyStats.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45 }}
+            >
+              <Card className="p-5">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">
+                  Monthly Billing History
+                </h3>
+                <div className="space-y-3 max-h-[300px] overflow-y-auto">
+                  {sortedMonthlyStats.map(([monthKey, data]) => (
+                    <div
+                      key={monthKey}
+                      className="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-colors"
+                    >
+                      <div>
+                        <p className="font-medium text-slate-800">
+                          {formatMonthLabel(monthKey)}
+                        </p>
+                        <p className="text-sm text-slate-600">
+                          {data.operations}{' '}
+                          {data.operations === 1 ? 'operation' : 'operations'}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-slate-800">
+                          {formatCost(data.cost)}
+                        </p>
+                        <p className="text-sm text-slate-600">
+                          {formatTokens(data.tokens)} tokens
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </motion.div>
+          )}
         </div>
 
         {/* Footer */}

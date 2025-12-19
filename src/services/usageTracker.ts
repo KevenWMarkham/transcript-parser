@@ -15,7 +15,7 @@ export interface UsageRecord extends UsageMetrics {
   userId: number
   model: string
   operation: string
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
   createdAt: Date
 }
 
@@ -24,12 +24,12 @@ export interface UsageRecord extends UsageMetrics {
 const GEMINI_PRICING = {
   'gemini-2.5-flash': {
     input: 0.075 / 1_000_000, // $0.075 per 1M input tokens
-    output: 0.30 / 1_000_000, // $0.30 per 1M output tokens
+    output: 0.3 / 1_000_000, // $0.30 per 1M output tokens
     cachedInput: 0.01875 / 1_000_000, // $0.01875 per 1M cached tokens (75% discount)
   },
   'gemini-1.5-flash': {
     input: 0.075 / 1_000_000,
-    output: 0.30 / 1_000_000,
+    output: 0.3 / 1_000_000,
   },
   'gemini-1.5-pro': {
     input: 1.25 / 1_000_000, // $1.25 per 1M input tokens
@@ -52,9 +52,10 @@ export function calculateCost(
     return 0
   }
 
-  const inputCost = usedCache && 'cachedInput' in pricing
-    ? inputTokens * pricing.cachedInput
-    : inputTokens * pricing.input
+  const inputCost =
+    usedCache && 'cachedInput' in pricing
+      ? inputTokens * pricing.cachedInput
+      : inputTokens * pricing.input
 
   const outputCost = outputTokens * pricing.output
 
@@ -62,15 +63,62 @@ export function calculateCost(
 }
 
 /**
- * Usage tracker class for tracking LLM usage in-memory and persisting to DB
+ * Usage tracker class for tracking LLM usage in-memory and persisting to localStorage
  */
 export class UsageTracker {
   private usageRecords: Map<number, UsageRecord[]> = new Map()
+  private readonly STORAGE_KEY = 'usage_records'
+
+  constructor() {
+    this.loadFromStorage()
+  }
+
+  /**
+   * Load usage records from localStorage
+   */
+  private loadFromStorage(): void {
+    try {
+      const stored = localStorage.getItem(this.STORAGE_KEY)
+      if (stored) {
+        const data = JSON.parse(stored)
+        this.usageRecords = new Map(
+          Object.entries(data).map(([userId, records]) => [
+            Number(userId),
+            (records as UsageRecord[]).map(r => ({
+              ...r,
+              createdAt: new Date(r.createdAt),
+            })),
+          ])
+        )
+      }
+    } catch (error) {
+      console.error('Failed to load usage records from localStorage:', error)
+    }
+  }
+
+  /**
+   * Save usage records to localStorage
+   */
+  private saveToStorage(): void {
+    try {
+      const data = Object.fromEntries(
+        Array.from(this.usageRecords.entries()).map(([userId, records]) => [
+          userId.toString(),
+          records,
+        ])
+      )
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data))
+    } catch (error) {
+      console.error('Failed to save usage records to localStorage:', error)
+    }
+  }
 
   /**
    * Track a usage event
    */
-  track(record: Omit<UsageRecord, 'id' | 'createdAt' | 'estimatedCost'>): UsageMetrics {
+  track(
+    record: Omit<UsageRecord, 'id' | 'createdAt' | 'estimatedCost'>
+  ): UsageMetrics {
     const estimatedCost = calculateCost(
       record.model,
       record.inputTokens,
@@ -89,8 +137,8 @@ export class UsageTracker {
     userRecords.push(fullRecord)
     this.usageRecords.set(record.userId, userRecords)
 
-    // TODO: Persist to database via API
-    // In a real app, you would call an API endpoint here to persist to DB
+    // Persist to localStorage
+    this.saveToStorage()
 
     return {
       inputTokens: record.inputTokens,
@@ -116,8 +164,14 @@ export class UsageTracker {
       totalTokens: 0,
       totalCost: 0,
       operations: records.length,
-      byModel: {} as Record<string, { tokens: number; cost: number; count: number }>,
-      byOperation: {} as Record<string, { tokens: number; cost: number; count: number }>,
+      byModel: {} as Record<
+        string,
+        { tokens: number; cost: number; count: number }
+      >,
+      byOperation: {} as Record<
+        string,
+        { tokens: number; cost: number; count: number }
+      >,
     }
 
     for (const record of records) {
@@ -156,6 +210,48 @@ export class UsageTracker {
    */
   clearUserRecords(userId: number): void {
     this.usageRecords.delete(userId)
+  }
+
+  /**
+   * Get monthly usage breakdown for a user
+   */
+  getMonthlyUsage(
+    userId: number
+  ): Record<string, { tokens: number; cost: number; operations: number }> {
+    const records = this.usageRecords.get(userId) || []
+    const monthlyStats: Record<
+      string,
+      { tokens: number; cost: number; operations: number }
+    > = {}
+
+    for (const record of records) {
+      // Format: "2024-12" (YYYY-MM)
+      const monthKey = `${record.createdAt.getFullYear()}-${String(record.createdAt.getMonth() + 1).padStart(2, '0')}`
+
+      if (!monthlyStats[monthKey]) {
+        monthlyStats[monthKey] = { tokens: 0, cost: 0, operations: 0 }
+      }
+
+      monthlyStats[monthKey].tokens += record.totalTokens
+      monthlyStats[monthKey].cost += record.estimatedCost
+      monthlyStats[monthKey].operations++
+    }
+
+    return monthlyStats
+  }
+
+  /**
+   * Get current month usage for a user (for monthly billing)
+   */
+  getCurrentMonthUsage(userId: number): {
+    tokens: number
+    cost: number
+    operations: number
+  } {
+    const now = new Date()
+    const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+    const monthlyStats = this.getMonthlyUsage(userId)
+    return monthlyStats[currentMonth] || { tokens: 0, cost: 0, operations: 0 }
   }
 
   /**

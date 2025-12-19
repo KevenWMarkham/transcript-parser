@@ -354,6 +354,12 @@ function App() {
             stats={usageTracker.getUserUsage(
               apiClient.getCurrentUser()?.id || 1
             )}
+            monthlyStats={usageTracker.getMonthlyUsage(
+              apiClient.getCurrentUser()?.id || 1
+            )}
+            currentMonthStats={usageTracker.getCurrentMonthUsage(
+              apiClient.getCurrentUser()?.id || 1
+            )}
           />
         )}
 

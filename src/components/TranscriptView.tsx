@@ -1,9 +1,7 @@
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { FileText, Download, Users } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
+import { FileText, Download, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { TranscriptList } from '@/components/TranscriptList'
 import { SpeakerAnalytics } from '@/components/SpeakerAnalytics'
 import { TranscriptSearch } from '@/components/TranscriptSearch'
@@ -14,32 +12,45 @@ import {
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts'
 import { ExportDialog } from '@/components/ExportDialog'
 import { TranscriptListSkeleton } from '@/components/TranscriptListSkeleton'
+import { SpeakerNameSuggestions } from '@/components/SpeakerNameSuggestions'
 import { useKeyboardNavigation } from '@/hooks/useKeyboardNavigation'
 import { useEditHistory } from '@/hooks/useEditHistory'
 import { useToast } from '@/components/ui/toast'
-import { formatTimestamp } from '@/utils/fileUtils'
 import { countMatches } from '@/utils/textHighlight'
 import { performanceMonitor } from '@/utils/performance'
-import type { TranscriptData, TranscriptEntry } from '@/types/transcript'
+import {
+  SpeakerNameDetectionService,
+  type DetectedSpeakerName,
+} from '@/services/speakerNameDetection'
+import type { TranscriptData } from '@/types/transcript'
 
 interface TranscriptViewProps {
   transcript?: TranscriptData | null
-  onExport?: () => void
   isLoading?: boolean
 }
 
 export function TranscriptView({
   transcript,
-  onExport,
   isLoading = false,
 }: TranscriptViewProps) {
   const hasTranscript = !!(transcript && transcript.entries.length > 0)
   const { addToast } = useToast()
-  const { addEdit, canUndo, canRedo, undo, redo } = useEditHistory()
+  const { addEdit } = useEditHistory()
 
   // Export dialog state
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false)
   const [editedEntries, setEditedEntries] = useState<Set<string>>(new Set())
+
+  // Speaker names state (for renaming)
+  const [customSpeakerNames, setCustomSpeakerNames] = useState<
+    Record<number, string>
+  >({})
+
+  // AI name detection state
+  const [nameSuggestions, setNameSuggestions] = useState<DetectedSpeakerName[]>(
+    []
+  )
+  const [isDetectingNames, setIsDetectingNames] = useState(false)
 
   // Search and filter state
   const [searchQuery, setSearchQuery] = useState('')
@@ -57,7 +68,7 @@ export function TranscriptView({
       console.log('[TranscriptView] Transcript loaded:', {
         entriesCount: transcript.entries.length,
         duration: transcript.metadata.duration,
-        firstEntry: transcript.entries[0]
+        firstEntry: transcript.entries[0],
       })
 
       setFilters(prev => ({
@@ -120,11 +131,17 @@ export function TranscriptView({
       timeFiltered: timeFilteredEntries.length,
       finalFiltered: result.length,
       timeRange: filters.timeRange,
-      searchQuery: normalizedSearchQuery
+      searchQuery: normalizedSearchQuery,
     })
 
     return result
-  }, [timeFilteredEntries, normalizedSearchQuery, transcript?.entries.length, speakerFilteredEntries.length, filters.timeRange])
+  }, [
+    timeFilteredEntries,
+    normalizedSearchQuery,
+    transcript?.entries.length,
+    speakerFilteredEntries.length,
+    filters.timeRange,
+  ])
 
   // Count search results
   const searchResultCount = useMemo(() => {
@@ -170,7 +187,11 @@ export function TranscriptView({
   }
 
   const handleEntryEdit = useCallback(
-    (entryId: string, field: 'text' | 'startTime' | 'endTime', value: string | number) => {
+    (
+      entryId: string,
+      field: 'text' | 'startTime' | 'endTime',
+      value: string | number
+    ) => {
       // Find the original entry to get old value
       const entry = transcript?.entries.find(e => e.id === entryId)
       if (!entry) return
@@ -197,6 +218,71 @@ export function TranscriptView({
     [transcript, addEdit, addToast]
   )
 
+  const handleSpeakerRename = useCallback(
+    (speakerId: number, newName: string) => {
+      setCustomSpeakerNames(prev => ({
+        ...prev,
+        [speakerId]: newName,
+      }))
+      addToast(`Speaker renamed to "${newName}"`, 'success')
+    },
+    [addToast]
+  )
+
+  // Auto-detect speaker names when transcript loads
+  const handleDetectNames = useCallback(async () => {
+    if (!transcript || transcript.entries.length === 0) return
+
+    setIsDetectingNames(true)
+    try {
+      const detector = new SpeakerNameDetectionService()
+      const suggestions = await detector.detectSpeakerNames(
+        transcript.entries,
+        transcript.speakers
+      )
+
+      if (suggestions.length > 0) {
+        setNameSuggestions(suggestions)
+        addToast(
+          `Found ${suggestions.length} possible speaker name${suggestions.length !== 1 ? 's' : ''}`,
+          'success'
+        )
+      } else {
+        addToast('No speaker introductions detected', 'info')
+      }
+    } catch (error) {
+      console.error('Name detection failed:', error)
+      addToast('Failed to detect speaker names', 'error')
+    } finally {
+      setIsDetectingNames(false)
+    }
+  }, [transcript, addToast])
+
+  const handleAcceptSuggestion = useCallback(
+    (speakerId: number, name: string) => {
+      handleSpeakerRename(speakerId, name)
+      setNameSuggestions(prev => prev.filter(s => s.speakerId !== speakerId))
+    },
+    [handleSpeakerRename]
+  )
+
+  const handleRejectSuggestion = useCallback((speakerId: number) => {
+    setNameSuggestions(prev => prev.filter(s => s.speakerId !== speakerId))
+  }, [])
+
+  const handleDismissAllSuggestions = useCallback(() => {
+    setNameSuggestions([])
+  }, [])
+
+  // Create speakers list with custom names
+  const speakersWithCustomNames = useMemo(() => {
+    if (!transcript) return []
+    return transcript.speakers.map(speaker => ({
+      ...speaker,
+      name: customSpeakerNames[speaker.id] || speaker.name,
+    }))
+  }, [transcript, customSpeakerNames])
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -218,8 +304,23 @@ export function TranscriptView({
           <div className="flex items-center gap-3">
             {hasTranscript && (
               <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDetectNames}
+                  disabled={isDetectingNames}
+                  className="rounded-2xl gap-2 bg-gradient-to-r from-purple-50 to-pink-50 hover:from-purple-100 hover:to-pink-100 border-purple-200"
+                >
+                  <Sparkles className="w-4 h-4 text-purple-600" />
+                  {isDetectingNames ? 'Detecting...' : 'Detect Names'}
+                </Button>
                 <KeyboardShortcuts />
-                <Button variant="outline" size="sm" onClick={handleExportClick} className="rounded-2xl gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportClick}
+                  className="rounded-2xl gap-2"
+                >
                   <Download className="w-4 h-4" />
                   Export
                 </Button>
@@ -254,6 +355,19 @@ export function TranscriptView({
           <div className="flex flex-col lg:flex-row gap-6 flex-1 overflow-hidden">
             {/* Main transcript area */}
             <div className="flex-1 flex flex-col min-w-0">
+              {/* AI Name Suggestions */}
+              {nameSuggestions.length > 0 && (
+                <div className="mb-6">
+                  <SpeakerNameSuggestions
+                    suggestions={nameSuggestions}
+                    speakers={speakersWithCustomNames}
+                    onAccept={handleAcceptSuggestion}
+                    onReject={handleRejectSuggestion}
+                    onDismissAll={handleDismissAllSuggestions}
+                  />
+                </div>
+              )}
+
               {/* Search Bar */}
               <div className="mb-6">
                 <TranscriptSearch
@@ -265,7 +379,7 @@ export function TranscriptView({
               {/* Filters */}
               <div className="mb-6">
                 <TranscriptFilters
-                  speakers={transcript.speakers}
+                  speakers={speakersWithCustomNames}
                   maxDuration={transcript.metadata.duration}
                   filters={filters}
                   onFiltersChange={setFilters}
@@ -297,7 +411,7 @@ export function TranscriptView({
               ) : (
                 <TranscriptList
                   entries={filteredEntries}
-                  speakers={transcript.speakers}
+                  speakers={speakersWithCustomNames}
                   searchQuery={searchQuery}
                   selectedIndex={selectedIndex}
                   onEntryEdit={handleEntryEdit}
@@ -311,7 +425,8 @@ export function TranscriptView({
             <div className="w-full lg:w-80 flex-shrink-0">
               <SpeakerAnalytics
                 entries={filteredEntries}
-                speakers={transcript.speakers}
+                speakers={speakersWithCustomNames}
+                onSpeakerRename={handleSpeakerRename}
               />
             </div>
           </div>

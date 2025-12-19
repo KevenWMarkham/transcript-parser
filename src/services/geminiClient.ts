@@ -4,6 +4,8 @@
  */
 
 import { GoogleGenAI } from '@google/genai'
+import { usageTracker } from '@/services/usageTracker'
+import { apiClient } from '@/services/apiClient'
 import type {
   TranscriptData,
   TranscriptEntry,
@@ -191,6 +193,26 @@ Return ONLY a JSON array with this exact structure (no markdown, no code blocks,
           'Empty response from Gemini API',
           'EMPTY_RESPONSE'
         )
+      }
+
+      // Track usage and cost
+      const usageMetadata = response.usageMetadata
+      if (usageMetadata) {
+        const currentUser = apiClient.getCurrentUser()
+        if (currentUser) {
+          usageTracker.track({
+            userId: currentUser.id || 1,
+            model: this.model,
+            operation: 'Video Transcription',
+            inputTokens: usageMetadata.promptTokenCount || 0,
+            outputTokens: usageMetadata.candidatesTokenCount || 0,
+            totalTokens: usageMetadata.totalTokenCount || 0,
+            metadata: {
+              fileSize: `${(audioBlob.size / 1024 / 1024).toFixed(2)} MB`,
+              audioType: audioBlob.type,
+            },
+          })
+        }
       }
 
       // Parse response

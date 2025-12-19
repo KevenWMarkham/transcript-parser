@@ -11,6 +11,7 @@ import type { TranscriptEntry as TranscriptEntryType } from '@/types/transcript'
 interface TranscriptEntryProps {
   entry: TranscriptEntryType
   speakerColor: string
+  speakerName?: string
   searchQuery?: string
   isEdited?: boolean
   onEdit?: (
@@ -24,6 +25,7 @@ interface TranscriptEntryProps {
 export const TranscriptEntry = memo(function TranscriptEntry({
   entry,
   speakerColor,
+  speakerName,
   searchQuery,
   isEdited = false,
   onEdit,
@@ -70,16 +72,6 @@ export const TranscriptEntry = memo(function TranscriptEntry({
       setIsEditing(true)
     }
   }
-  const getSpeakerColorClasses = (color: string) => {
-    const colorMap: Record<string, string> = {
-      blue: 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border-blue-200 dark:border-blue-800',
-      emerald:
-        'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
-      purple:
-        'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border-purple-200 dark:border-purple-800',
-    }
-    return colorMap[color] || colorMap.blue
-  }
 
   const getDotColorClasses = (color: string) => {
     const colorMap: Record<string, string> = {
@@ -100,7 +92,7 @@ export const TranscriptEntry = memo(function TranscriptEntry({
           <span
             className={`w-2 h-2 rounded-full mr-2 ${getDotColorClasses(speakerColor)}`}
           ></span>
-          {entry.speaker}
+          {speakerName || entry.speaker}
         </span>
 
         {isEditing ? (
@@ -200,22 +192,20 @@ export const TranscriptEntry = memo(function TranscriptEntry({
         />
       ) : (
         <p className="text-slate-700 leading-relaxed">
-          {searchQuery ? (
-            highlightText(entry.text, searchQuery).map((part, index) =>
-              part.highlight ? (
-                <mark
-                  key={index}
-                  className="bg-yellow-200 dark:bg-yellow-900 dark:text-yellow-100 px-0.5 rounded"
-                >
-                  {part.text}
-                </mark>
-              ) : (
-                <span key={index}>{part.text}</span>
+          {searchQuery
+            ? highlightText(entry.text, searchQuery).map((part, index) =>
+                part.highlight ? (
+                  <mark
+                    key={index}
+                    className="bg-yellow-200 dark:bg-yellow-900 dark:text-yellow-100 px-0.5 rounded"
+                  >
+                    {part.text}
+                  </mark>
+                ) : (
+                  <span key={index}>{part.text}</span>
+                )
               )
-            )
-          ) : (
-            entry.text
-          )}
+            : entry.text}
         </p>
       )}
 

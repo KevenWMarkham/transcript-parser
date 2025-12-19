@@ -10,7 +10,11 @@ interface TranscriptListProps {
   selectedIndex?: number
   onEntryClick?: (entry: TranscriptEntry) => void
   searchQuery?: string
-  onEntryEdit?: (entryId: string, field: 'text' | 'startTime' | 'endTime', value: string | number) => void
+  onEntryEdit?: (
+    entryId: string,
+    field: 'text' | 'startTime' | 'endTime',
+    value: string | number
+  ) => void
   editedEntries?: Set<string>
   enableEditing?: boolean
 }
@@ -36,20 +40,31 @@ export function TranscriptList({
     overscan: 5, // Number of items to render outside visible area for smooth scrolling
   })
 
-  // Memoize speaker color map for performance
-  const speakerColorMap = useMemo(() => {
-    const map = new Map<number, string>()
+  // Memoize speaker maps for performance
+  const speakerMaps = useMemo(() => {
+    const colorMap = new Map<number, string>()
+    const nameMap = new Map<number, string>()
     speakers.forEach(speaker => {
-      map.set(speaker.id, speaker.color)
+      colorMap.set(speaker.id, speaker.color)
+      nameMap.set(speaker.id, speaker.name)
     })
-    return map
+    return { colorMap, nameMap }
   }, [speakers])
 
   const getSpeakerColor = useCallback(
     (speakerNumber: number): string => {
-      return speakerColorMap.get(speakerNumber) || 'blue'
+      return speakerMaps.colorMap.get(speakerNumber) || 'blue'
     },
-    [speakerColorMap]
+    [speakerMaps]
+  )
+
+  const getSpeakerName = useCallback(
+    (speakerNumber: number): string => {
+      return (
+        speakerMaps.nameMap.get(speakerNumber) || `Speaker ${speakerNumber}`
+      )
+    },
+    [speakerMaps]
   )
 
   // Auto-scroll to selected entry
@@ -104,6 +119,7 @@ export function TranscriptList({
               <TranscriptEntryComponent
                 entry={entry}
                 speakerColor={getSpeakerColor(entry.speakerNumber)}
+                speakerName={getSpeakerName(entry.speakerNumber)}
                 searchQuery={searchQuery}
                 isEdited={editedEntries?.has(entry.id)}
                 onEdit={onEntryEdit}
