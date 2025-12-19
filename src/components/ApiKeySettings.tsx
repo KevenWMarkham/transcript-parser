@@ -22,6 +22,7 @@ export interface ApiKeyConfig {
   ownKey?: string
   paidBalance?: number
   accessCode?: string
+  paidModeUnlocked?: boolean
 }
 
 interface ApiKeySettingsProps {
@@ -54,6 +55,9 @@ const VALID_CODES = [
   },
 ]
 
+// Special code to unlock paid mode (credit card purchases)
+const PAID_MODE_UNLOCK_CODE = '999-0000-999'
+
 // Option 3: Load additional codes from environment variable
 // Set VITE_VALID_ACCESS_CODES=123-4567-890,999-8888-777,555-1234-999 in .env
 const getValidCodesFromEnv = (): string[] => {
@@ -82,6 +86,13 @@ export function ApiKeySettings({
   const [paidBalance, setPaidBalance] = useState(
     currentConfig?.paidBalance || 0
   )
+  const [paidModeUnlocked, setPaidModeUnlocked] = useState(
+    currentConfig?.paidModeUnlocked || false
+  )
+  const [unlockCode, setUnlockCode] = useState('')
+  const [unlockStatus, setUnlockStatus] = useState<
+    'idle' | 'valid' | 'invalid'
+  >('idle')
 
   useEffect(() => {
     if (currentConfig) {
@@ -89,6 +100,7 @@ export function ApiKeySettings({
       setApiKey(currentConfig.ownKey || '')
       setAccessCode(currentConfig.accessCode || '')
       setPaidBalance(currentConfig.paidBalance || 0)
+      setPaidModeUnlocked(currentConfig.paidModeUnlocked || false)
     }
   }, [currentConfig])
 
@@ -107,6 +119,22 @@ export function ApiKeySettings({
     } else {
       return `${limited.slice(0, 3)}-${limited.slice(3, 7)}-${limited.slice(7)}`
     }
+  }
+
+  const validateUnlockCode = (): boolean => {
+    if (!unlockCode || unlockCode.trim().length === 0) {
+      setUnlockStatus('invalid')
+      return false
+    }
+
+    if (unlockCode === PAID_MODE_UNLOCK_CODE) {
+      setUnlockStatus('valid')
+      setPaidModeUnlocked(true)
+      return true
+    }
+
+    setUnlockStatus('invalid')
+    return false
   }
 
   const validateAccessCode = (): boolean => {
@@ -270,6 +298,7 @@ export function ApiKeySettings({
       ownKey: mode === 'own' ? apiKey : undefined,
       paidBalance: mode === 'paid' ? paidBalance : undefined,
       accessCode: mode === 'code' ? accessCode : undefined,
+      paidModeUnlocked: paidModeUnlocked,
     }
 
     // Save to localStorage
@@ -287,6 +316,7 @@ export function ApiKeySettings({
     const config: ApiKeyConfig = {
       mode: 'paid',
       paidBalance: newBalance,
+      paidModeUnlocked: paidModeUnlocked,
     }
     localStorage.setItem(API_KEY_STORAGE_KEY, JSON.stringify(config))
     onSave(config)
@@ -392,27 +422,47 @@ export function ApiKeySettings({
 
               {/* Paid Service Option */}
               <button
-                onClick={() => setMode('paid')}
-                className={`p-4 border-2 rounded-lg text-left transition-all ${
-                  mode === 'paid'
-                    ? 'border-emerald-500 bg-emerald-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                onClick={() => paidModeUnlocked && setMode('paid')}
+                disabled={!paidModeUnlocked}
+                className={`p-4 border-2 rounded-lg text-left transition-all relative ${
+                  !paidModeUnlocked
+                    ? 'border-gray-300 bg-gray-100 opacity-50 cursor-not-allowed'
+                    : mode === 'paid'
+                      ? 'border-emerald-500 bg-emerald-50'
+                      : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
+                {!paidModeUnlocked && (
+                  <div className="absolute top-2 right-2 bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-medium">
+                    🔒 Locked
+                  </div>
+                )}
                 <div className="flex items-start gap-3">
                   <div
-                    className={`mt-1 ${mode === 'paid' ? 'text-emerald-600' : 'text-gray-400'}`}
+                    className={`mt-1 ${
+                      !paidModeUnlocked
+                        ? 'text-gray-400'
+                        : mode === 'paid'
+                          ? 'text-emerald-600'
+                          : 'text-gray-400'
+                    }`}
                   >
                     <CreditCard className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900">
+                    <h3
+                      className={`font-semibold ${!paidModeUnlocked ? 'text-gray-500' : 'text-gray-900'}`}
+                    >
                       Use Our Service
                     </h3>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p
+                      className={`text-sm mt-1 ${!paidModeUnlocked ? 'text-gray-400' : 'text-gray-600'}`}
+                    >
                       Pay-as-you-go pricing
                     </p>
-                    <ul className="text-xs text-gray-500 mt-2 space-y-1">
+                    <ul
+                      className={`text-xs mt-2 space-y-1 ${!paidModeUnlocked ? 'text-gray-400' : 'text-gray-500'}`}
+                    >
                       <li>• No API key needed</li>
                       <li>• Monthly billing</li>
                       <li>• Cost tracking</li>
@@ -422,6 +472,70 @@ export function ApiKeySettings({
               </button>
             </div>
           </div>
+
+          {/* Unlock Paid Mode Section */}
+          {!paidModeUnlocked && (
+            <div className="space-y-3 p-4 bg-amber-50 rounded-lg border border-amber-200">
+              <div className="flex items-start gap-3">
+                <div className="text-amber-600">
+                  <AlertCircle className="w-5 h-5" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-sm font-medium text-gray-900">
+                    Unlock Paid Service Mode
+                  </h4>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Enter the unlock code to enable credit card purchases and
+                    paid service features.
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label
+                  htmlFor="unlockCode"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Unlock Code
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    id="unlockCode"
+                    type="text"
+                    value={unlockCode}
+                    onChange={e => {
+                      setUnlockCode(formatAccessCode(e.target.value))
+                      setUnlockStatus('idle')
+                    }}
+                    placeholder="999-0000-999"
+                    maxLength={12}
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent font-mono text-lg tracking-wider"
+                  />
+                  <Button
+                    onClick={validateUnlockCode}
+                    className="bg-amber-600 hover:bg-amber-700 text-white"
+                  >
+                    Unlock
+                  </Button>
+                </div>
+                {unlockStatus === 'valid' && (
+                  <div className="flex items-center gap-2 text-sm text-emerald-600">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>
+                      Paid mode unlocked! You can now select "Use Our Service".
+                    </span>
+                  </div>
+                )}
+                {unlockStatus === 'invalid' && (
+                  <div className="flex items-center gap-2 text-sm text-red-600">
+                    <AlertCircle className="w-4 h-4" />
+                    <span>
+                      Invalid unlock code. Please contact support for access.
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Own API Key Configuration */}
           {mode === 'own' && (

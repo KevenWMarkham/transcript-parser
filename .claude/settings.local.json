@@ -19,7 +19,8 @@
       "Bash(wait)",
       "Bash(explorer.exe \"Transcript Parser v1.0.0 - Production Build\")",
       "Bash(npm run dev:*)",
-      "Bash($null)"
+      "Bash($null)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []
