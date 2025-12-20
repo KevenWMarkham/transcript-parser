@@ -20,6 +20,7 @@ An advanced desktop application that converts video/audio files into searchable,
 - 💰 **Cost Tracking** - Real-time token usage and monthly billing breakdown
 - 📤 **Multiple Export Formats** - TXT, JSON, SRT, VTT formats
 - 🖥️ **Cross-Platform** - Available for Windows, macOS, and Linux
+- 📱 **Progressive Web App (PWA)** - Install on iOS, Android, and tablets via Vercel deployment
 - ⚡ **High Performance** - Virtual scrolling handles 10,000+ entries smoothly
 
 ## 📸 Screenshots
@@ -30,11 +31,25 @@ An advanced desktop application that converts video/audio files into searchable,
 
 ### For End Users
 
+**Desktop Applications:**
+
 Download the latest release for your platform:
 
 - **Windows**: [Transcript Parser-Setup-1.0.0.exe](https://github.com/KevenWMarkham/transcript-parser/releases)
+  - See [Windows Defender Installation Guide](docs/windows-defender-installation.md) for help with security warnings
 - **macOS**: [Transcript Parser-1.0.0.dmg](https://github.com/KevenWMarkham/transcript-parser/releases)
 - **Linux**: [Transcript Parser-1.0.0.AppImage](https://github.com/KevenWMarkham/transcript-parser/releases)
+
+**Progressive Web App (PWA):**
+
+Access Transcript Parser on any device via our Vercel deployment:
+
+- **Web App**: [https://transcript-parser.vercel.app](https://transcript-parser.vercel.app) _(link to be updated)_
+- **iOS**: Visit the web app in Safari → Tap Share → "Add to Home Screen"
+- **Android**: Visit the web app in Chrome → Tap menu → "Install app" or "Add to Home Screen"
+- **Tablets**: Full responsive support for iPad, Android tablets, and more
+
+The PWA provides the same features as the desktop app with the convenience of installation directly from your browser.
 
 See the [User Manual](docs/user-manual.md) for detailed usage instructions.
 
@@ -601,6 +616,14 @@ If any hook fails, the commit will be rejected. Fix the issues and try again.
 - **Commitizen**: Interactive commit message tool
 - **Commitlint**: Commit message validation
 - **lint-staged**: Run linters on staged files only
+
+### Progressive Web App (PWA)
+
+- **vite-plugin-pwa**: PWA plugin for Vite
+- **Service Workers**: Offline support and caching
+- **Web App Manifest**: Install to home screen capability
+- **Vercel**: Cloud deployment platform for mobile/tablet access
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
 
 ## Tailwind CSS & shadcn/ui
 
@@ -1243,6 +1266,43 @@ Output files in `dist/`:
 
 - `Transcript Parser-X.X.X.AppImage` - AppImage
 - `transcript-parser_X.X.X_amd64.deb` - Debian package
+
+### Deploying to Vercel (PWA)
+
+The application is configured as a Progressive Web App and can be deployed to Vercel for mobile and tablet access:
+
+**Deploy via Vercel CLI:**
+
+```bash
+# Install Vercel CLI (if not already installed)
+npm install -g vercel
+
+# Deploy to production
+vercel --prod
+```
+
+**Deploy via GitHub:**
+
+1. Push your code to GitHub
+2. Visit [vercel.com](https://vercel.com) and sign in
+3. Import your repository
+4. Vercel will automatically detect the Vite configuration
+5. Deploy with default settings
+
+**PWA Features:**
+
+- **Offline Support**: Service worker caches assets for offline use
+- **Install Prompt**: Users can install the app to their home screen
+- **Mobile Optimized**: Fully responsive design for all screen sizes
+- **Push Notifications**: (Future feature)
+
+**Accessing on Mobile Devices:**
+
+- **iOS (Safari)**: Tap Share → "Add to Home Screen"
+- **Android (Chrome)**: Tap menu (⋮) → "Install app"
+- **Tablets**: Works on iPad, Android tablets, and Surface devices
+
+The PWA provides the same features as the desktop application with the convenience of running in any modern browser.
 
 ### Build Configuration
 
