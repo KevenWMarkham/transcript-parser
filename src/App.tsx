@@ -339,7 +339,12 @@ function App() {
 
           {/* Right Column - Transcript */}
           <div className="lg:col-span-2">
-            <TranscriptView transcript={demoTranscript || transcript} />
+            <TranscriptView
+              transcript={demoTranscript || transcript}
+              onShowCostSummary={
+                isAuthenticated ? () => setShowCostSummary(true) : undefined
+              }
+            />
           </div>
         </div>
 

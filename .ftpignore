@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+server/node_modules/
+
+# Source files (only deploy built files)
+src/
+server/
+tests/
+specs/
+docs/
+
+# Git
+.git/
+.github/
+.gitignore
+
+# Config files
+tsconfig.json
+tsconfig.server.json
+vite.config.ts
+tailwind.config.ts
+postcss.config.js
+eslint.config.js
+playwright.config.ts
+jest.config.js
+drizzle.config.ts
+
+# Package files
+package.json
+package-lock.json
+
+# Documentation
+*.md
+LICENSE
+
+# Environment files
+.env
+.env.*
+
+# Build tools
+electron/
+docker-compose.yml
+Dockerfile
+
+# Test files
+*.spec.ts
+*.test.ts
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Other
+.husky/
+.commitlintrc.json
+.prettierrc
+.prettierignore
+.ftpignore

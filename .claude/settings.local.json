@@ -24,7 +24,9 @@
       "Bash(npm run build:windows:*)",
       "Bash(npm run)",
       "Bash(npm run electron:build:win:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(git push:*)",
+      "Bash(git mv:*)"
     ],
     "deny": [],
     "ask": []

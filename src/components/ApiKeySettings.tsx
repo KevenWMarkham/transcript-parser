@@ -785,6 +785,9 @@ export function loadApiConfig(): ApiKeyConfig | null {
   return null
 }
 
+// Hardcoded API key for beta/access code mode (production builds)
+const BETA_API_KEY = 'AIzaSyB8DYs1TQdd6FmzEsFhKHdBRaquSyD2cdY'
+
 // Helper function to get the current API key
 export function getCurrentApiKey(): string | null {
   const config = loadApiConfig()
@@ -792,9 +795,9 @@ export function getCurrentApiKey(): string | null {
     return config.ownKey
   }
   if (config?.mode === 'code' && config.accessCode) {
-    // In code mode, use the developer's API key from environment
-    return import.meta.env.VITE_GEMINI_API_KEY || null
+    // In code mode, use environment key (dev) or hardcoded beta key (production)
+    return import.meta.env.VITE_GEMINI_API_KEY || BETA_API_KEY
   }
-  // Fall back to environment variable
-  return import.meta.env.VITE_GEMINI_API_KEY || null
+  // Fall back to environment variable or hardcoded beta key
+  return import.meta.env.VITE_GEMINI_API_KEY || BETA_API_KEY
 }

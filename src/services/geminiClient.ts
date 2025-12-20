@@ -52,6 +52,9 @@ export class GeminiInvalidAudioError extends GeminiError {
   }
 }
 
+// Hardcoded API key for beta/access code mode (production builds)
+const BETA_API_KEY = 'AIzaSyB8DYs1TQdd6FmzEsFhKHdBRaquSyD2cdY'
+
 export class GeminiClient {
   private ai: GoogleGenAI
   private model: string
@@ -61,7 +64,7 @@ export class GeminiClient {
   private readonly RETRY_DELAY = 1000 // ms
 
   constructor(options?: TranscriptionOptions) {
-    // Priority: 1) options.apiKey, 2) localStorage config, 3) env variable
+    // Priority: 1) options.apiKey, 2) localStorage config, 3) env variable, 4) hardcoded beta key
     let apiKey = options?.apiKey
 
     if (!apiKey) {
@@ -73,8 +76,8 @@ export class GeminiClient {
           if (config.mode === 'own' && config.ownKey) {
             apiKey = config.ownKey
           } else if (config.mode === 'code' && config.accessCode) {
-            // In code mode, use developer's API key from environment
-            apiKey = import.meta.env.VITE_GEMINI_API_KEY
+            // In code mode, use environment key (dev) or hardcoded beta key (production)
+            apiKey = import.meta.env.VITE_GEMINI_API_KEY || BETA_API_KEY
           }
         }
       } catch (error) {
@@ -82,9 +85,9 @@ export class GeminiClient {
       }
     }
 
-    // Fall back to environment variable
+    // Fall back to environment variable or hardcoded beta key
     if (!apiKey) {
-      apiKey = import.meta.env.VITE_GEMINI_API_KEY
+      apiKey = import.meta.env.VITE_GEMINI_API_KEY || BETA_API_KEY
     }
 
     if (!apiKey) {

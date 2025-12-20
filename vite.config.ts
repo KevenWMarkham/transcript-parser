@@ -5,7 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: './', // Use relative paths for Electron compatibility
+  base: process.env.VITE_BASE_PATH || '/transcript-parser/', // Use subdirectory path for production, overridable for Electron
   plugins: [
     react(),
     VitePWA({
@@ -19,8 +19,8 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
-        scope: '/',
-        start_url: '/',
+        scope: '/transcript-parser/',
+        start_url: '/transcript-parser/',
         icons: [
           {
             src: 'pwa-192x192.png',

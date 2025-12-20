@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { FileText, Download, Sparkles } from 'lucide-react'
+import { FileText, Download, Sparkles, DollarSign } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { TranscriptList } from '@/components/TranscriptList'
 import { SpeakerAnalytics } from '@/components/SpeakerAnalytics'
@@ -27,11 +27,13 @@ import type { TranscriptData } from '@/types/transcript'
 interface TranscriptViewProps {
   transcript?: TranscriptData | null
   isLoading?: boolean
+  onShowCostSummary?: () => void
 }
 
 export function TranscriptView({
   transcript,
   isLoading = false,
+  onShowCostSummary,
 }: TranscriptViewProps) {
   const hasTranscript = !!(transcript && transcript.entries.length > 0)
   const { addToast } = useToast()
@@ -109,7 +111,7 @@ export function TranscriptView({
     const result = speakerFilteredEntries.filter(
       entry =>
         entry.startTime >= filters.timeRange.start &&
-        entry.endTime <= filters.timeRange.end
+        entry.startTime < filters.timeRange.end
     )
     end()
     return result
@@ -314,6 +316,17 @@ export function TranscriptView({
                   <Sparkles className="w-4 h-4 text-purple-600" />
                   {isDetectingNames ? 'Detecting...' : 'Detect Names'}
                 </Button>
+                {onShowCostSummary && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={onShowCostSummary}
+                    className="rounded-2xl gap-2 bg-gradient-to-r from-emerald-50 to-blue-50 hover:from-emerald-100 hover:to-blue-100 border-emerald-200"
+                  >
+                    <DollarSign className="w-4 h-4 text-emerald-600" />
+                    Cost
+                  </Button>
+                )}
                 <KeyboardShortcuts />
                 <Button
                   variant="outline"
