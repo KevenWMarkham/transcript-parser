@@ -38,6 +38,8 @@
 
 ### Installation
 
+#### For End Users
+
 #### Windows
 
 1. Download `Transcript Parser-Setup-1.0.0.exe` from the releases
@@ -48,6 +50,13 @@
 
 - Download `Transcript Parser-Portable-1.0.0.exe`
 - Run directly without installation (no admin rights required)
+
+#### For Developers
+
+If you want to build the application from source:
+
+1. See [Installation Guide](docs/installation-guide.md) for complete setup instructions
+2. See [dev.md](dev.md) for development workflow and project structure
 
 ### First Launch
 

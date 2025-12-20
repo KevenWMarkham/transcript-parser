@@ -1,16 +1,22 @@
 # Transcript Parser - Development Setup
 
+> **New to this project?** If you're setting up a fresh machine from scratch, see the comprehensive [Installation Guide](docs/installation-guide.md) for step-by-step instructions on installing all prerequisites (Node.js, Git, Python, etc.) and getting the project running.
+
 ## Prerequisites
 
-- **Node.js** (v18 or higher)
+This guide assumes you already have the following installed:
+
+- **Node.js** (v18 or higher) - [Download](https://nodejs.org/)
 - **npm** (comes with Node.js)
-- **Git** (for version control and Husky git hooks)
+- **Git** (for version control and Husky git hooks) - [Download](https://git-scm.com/)
 - **Google Gemini API Key** (for transcription functionality)
   - Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
   - Create a `.env` file in the project root:
     ```bash
     VITE_GEMINI_API_KEY=your_api_key_here
     ```
+
+If you need help installing these prerequisites, see [docs/installation-guide.md](docs/installation-guide.md).
 
 ## Complete Dependencies List
 
