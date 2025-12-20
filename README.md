@@ -82,6 +82,9 @@ Visit `http://localhost:5173` to see the app running.
 - 🛠️ [Installation Guide](docs/installation-guide.md) - Step-by-step setup for developers
 - 🌐 [User Manual (HTML)](docs/manual.html) - Interactive HTML version with navigation
 - 📋 [Development Guide](#development-setup) - See below for detailed development documentation
+- ☁️ [Cloud Deployment Guide](specs/sprints/sprint-11/CLOUD_DEPLOYMENT_OPTIONS.md) - Deploy to Vercel, Netlify, AWS, Azure, or Firebase
+- 🖥️ [Hostinger Deployment Guide](specs/sprints/sprint-11/SPRINT_11_HOSTINGER_DEPLOYMENT.md) - Deploy to Hostinger with DNS migration
+- 🪟 [Windows Installation Guide](docs/windows-defender-installation.md) - Handle Windows Defender warnings
 
 ## 📋 Table of Contents
 
@@ -1368,10 +1371,19 @@ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH RE
 
 ### Version 1.1 (Q1 2025)
 
+- [x] Cloud deployment options (Vercel, Netlify, AWS, Azure, Firebase, Hostinger)
+- [x] Domain setup guide (SmartHavenAI.com)
 - [ ] Batch processing multiple files
 - [ ] Cloud sync for transcripts
 - [ ] Custom vocabulary/terminology support
 - [ ] Additional language support
+
+### Version 1.2 (Q1 2025)
+
+- [ ] CI/CD pipeline with GitHub Actions
+- [ ] Automated testing on deployment
+- [ ] Performance monitoring and analytics
+- [ ] SEO optimization and meta tags
 
 ### Version 2.0 (Q2 2025)
 
@@ -1379,6 +1391,7 @@ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH RE
 - [ ] AI summarization
 - [ ] Translation support
 - [ ] Mobile app (React Native)
+- [ ] Backend API with database persistence
 
 ---
 
