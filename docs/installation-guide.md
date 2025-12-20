@@ -763,7 +763,7 @@ npm run build
 
 ### For Development
 
-1. Read [dev.md](../dev.md) for detailed development guide
+1. Read the [README](../README.md) for detailed development guide
 2. Explore the demo mode to understand features
 3. Review code in `src/` directory
 4. Check [manual.html](manual.html) for user documentation

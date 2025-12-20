@@ -1,711 +1,1327 @@
-# Transcript Parser - User Manual
+# Transcript Parser
 
-## Table of Contents
+**AI-Powered Video Transcription with Speaker Diarization**
 
-1. [Overview](#overview)
-2. [Getting Started](#getting-started)
-3. [Core Features](#core-features)
-4. [Authentication & API Configuration](#authentication--api-configuration)
-5. [Video Processing](#video-processing)
-6. [Transcript Management](#transcript-management)
-7. [AI-Powered Features](#ai-powered-features)
-8. [Cost Tracking & Billing](#cost-tracking--billing)
-9. [Export Options](#export-options)
-10. [Keyboard Shortcuts](#keyboard-shortcuts)
-11. [Advanced Features](#advanced-features)
-12. [Troubleshooting](#troubleshooting)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/KevenWMarkham/transcript-parser)
+[![License](https://img.shields.io/badge/license-ISC-green.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue.svg)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18.3-61dafb.svg)](https://reactjs.org/)
+[![Electron](https://img.shields.io/badge/Electron-39.2-47848f.svg)](https://www.electronjs.org/)
 
----
+An advanced desktop application that converts video/audio files into searchable, editable transcripts with intelligent speaker identification. Built with Electron, React, TypeScript, and Google Gemini AI.
 
-## Overview
+## ✨ Features
 
-**Transcript Parser** is an advanced AI-powered desktop application that converts video/audio files into searchable, editable transcripts with speaker diarization. Built with Electron, React, and Google Gemini AI, it provides professional-grade transcription with intelligent speaker identification and comprehensive editing capabilities.
+- 🎤 **AI-Powered Transcription** - Uses Google Gemini 2.5 Flash for accurate speech-to-text
+- 👥 **Speaker Diarization** - Automatically identifies and separates different speakers
+- 🤖 **AI Name Detection** - Intelligently detects speaker names from introductions
+- ✏️ **Real-Time Editing** - Edit transcripts with full undo/redo support
+- 🔍 **Advanced Search** - Search across transcripts with highlighting
+- 💰 **Cost Tracking** - Real-time token usage and monthly billing breakdown
+- 📤 **Multiple Export Formats** - TXT, JSON, SRT, VTT formats
+- 🖥️ **Cross-Platform** - Available for Windows, macOS, and Linux
+- ⚡ **High Performance** - Virtual scrolling handles 10,000+ entries smoothly
 
-### Key Capabilities
+## 📸 Screenshots
 
-- **AI-Powered Transcription**: Uses Google Gemini 2.5 Flash for accurate speech-to-text
-- **Speaker Diarization**: Automatically identifies and separates different speakers
-- **AI Name Detection**: Intelligently detects speaker names from introductions
-- **Real-Time Editing**: Edit transcripts with full undo/redo support
-- **Advanced Search**: Search across transcripts with highlighting
-- **Cost Tracking**: Real-time token usage and monthly billing breakdown
-- **Multiple Export Formats**: TXT, JSON, SRT, VTT formats
-- **Cross-Platform**: Available for Windows, macOS, and Linux
+[Add screenshots here]
 
----
+## 🚀 Quick Start
 
-## Getting Started
+### For End Users
 
-### Installation
+Download the latest release for your platform:
 
-#### For End Users
+- **Windows**: [Transcript Parser-Setup-1.0.0.exe](https://github.com/KevenWMarkham/transcript-parser/releases)
+- **macOS**: [Transcript Parser-1.0.0.dmg](https://github.com/KevenWMarkham/transcript-parser/releases)
+- **Linux**: [Transcript Parser-1.0.0.AppImage](https://github.com/KevenWMarkham/transcript-parser/releases)
 
-#### Windows
+See the [User Manual](docs/user-manual.md) for detailed usage instructions.
 
-1. Download `Transcript Parser-Setup-1.0.0.exe` from the releases
-2. Run the installer and follow the setup wizard
-3. Launch **Transcript Parser** from Start Menu
+### For Developers
 
-#### Portable Version
+> **New to this project?** If you're setting up a fresh machine from scratch, see the comprehensive [Installation Guide](docs/installation-guide.md) for step-by-step instructions on installing all prerequisites (Node.js, Git, Python, etc.) and getting the project running.
 
-- Download `Transcript Parser-Portable-1.0.0.exe`
-- Run directly without installation (no admin rights required)
+**Quick Setup:**
 
-#### For Developers
+```bash
+# Clone the repository
+git clone https://github.com/KevenWMarkham/transcript-parser.git
+cd transcript-parser
 
-If you want to build the application from source:
+# Install dependencies
+npm install
 
-1. See [Installation Guide](docs/installation-guide.md) for complete setup instructions
-2. See [dev.md](dev.md) for development workflow and project structure
+# Create .env file with your Google Gemini API key
+echo "VITE_GEMINI_API_KEY=your_api_key_here" > .env
 
-### First Launch
-
-1. **Set up API Access**
-   - Click the settings icon (⚙️) in the top-right
-   - Choose your API configuration method
-   - Enter credentials as needed
-
-2. **Load Your First Video**
-   - Click "Choose Video File" or drag & drop a video
-   - Supported formats: MP4, AVI, MOV, WebM, MP3, WAV
-   - Maximum file size: 2GB recommended
-
----
-
-## Core Features
-
-### 1. Video/Audio Upload
-
-**Upload Methods:**
-
-- **Click Button**: Click "Choose Video File" button
-- **Drag & Drop**: Drag video/audio files directly into the upload area
-- **Recent Files**: Access recently processed files from history
-
-**Supported Formats:**
-
-- Video: `.mp4`, `.avi`, `.mov`, `.webm`
-- Audio: `.mp3`, `.wav`, `.m4a`, `.flac`
-
-**Processing:**
-
-- File size: Up to 2GB (recommended)
-- Conversion: Automatically converts to WebM/Opus for optimal processing
-- Progress: Real-time progress bar with percentage and status updates
-
-### 2. Automatic Transcription
-
-**How It Works:**
-
-1. Upload your media file
-2. Click "Start Transcription"
-3. AI processes audio and generates transcript
-4. Speakers are automatically identified and separated
-
-**Transcription Features:**
-
-- **Automatic Speaker Detection**: Identifies unique speakers
-- **Timestamps**: Precise start/end times for each segment
-- **Confidence Scores**: Quality indicators for each segment
-- **Real-Time Updates**: See transcript build as processing completes
-
----
-
-## Authentication & API Configuration
-
-### Configuration Modes
-
-#### 1. Own API Key (Recommended)
-
-**Best for**: Individual users, full control
-
-1. Click Settings (⚙️) → "API Configuration"
-2. Select "Use Own API Key"
-3. Get API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
-4. Paste key and click "Save"
-
-**Advantages:**
-
-- Full cost control
-- No access codes needed
-- Direct billing through Google
-
-#### 2. Access Code
-
-**Best for**: Shared access, organizations
-
-1. Select "Use Access Code"
-2. Enter 10-digit code: `XXX-XXXX-XXX`
-3. Developer's API key is used automatically
-
-**Access Code Validation:**
-
-- Format: 3-4-3 digits
-- Example: `123-4567-890`
-- Contact admin for codes
-
-#### 3. Paid Service (Future)
-
-**Coming soon**: Pay-as-you-go with monthly billing
-
----
-
-## Video Processing
-
-### Video Player Features
-
-**Playback Controls:**
-
-- ▶️ Play/Pause: Click video or press `Space`
-- ⏩ Fast Forward: Press `→` or `L`
-- ⏪ Rewind: Press `←` or `J`
-- 🔇 Mute/Unmute: Press `M`
-- 📽️ Fullscreen: Press `F`
-
-**Transcript Sync:**
-
-- **Click Entry**: Jump to timestamp in video
-- **Auto-Highlight**: Current speaking segment highlighted
-- **Seek Bar**: Visual timeline with segment markers
-
-**Advanced Controls:**
-
-- Playback speed: 0.25x to 2x
-- Volume control: 0% to 100%
-- Frame-by-frame navigation
-
----
-
-## Transcript Management
-
-### Viewing Transcripts
-
-**Layout:**
-
-- **Left Panel**: Speaker analytics and statistics
-- **Center Panel**: Transcript entries with search
-- **Right Panel**: (Optional) Video player
-
-**Entry Information:**
-
-- Speaker name/color
-- Start and end timestamps
-- Confidence percentage
-- Full text content
-
-### Editing Transcripts
-
-**Enable Editing:**
-
-- Toggle edit mode in top toolbar
-- Double-click any entry to edit
-- Modify text, start time, or end time
-
-**Edit Operations:**
-
-1. **Text Editing**:
-   - Double-click entry text
-   - Make changes in textarea
-   - Click "Save" or press `Enter`
-
-2. **Timestamp Editing**:
-   - Click edit icon
-   - Modify start/end times (in seconds)
-   - Format: Decimal (e.g., 12.5)
-
-3. **Undo/Redo**:
-   - Undo: `Ctrl+Z` (Windows) / `Cmd+Z` (Mac)
-   - Redo: `Ctrl+Shift+Z` / `Cmd+Shift+Z`
-
-**Visual Indicators:**
-
-- 🔄 **Edited Badge**: Shows modified entries
-- ✓ **Save Confirmation**: Visual feedback on save
-- ❌ **Cancel Option**: Discard changes
-
-### Speaker Management
-
-**Rename Speakers:**
-
-1. Find speaker in left panel
-2. Click edit icon (✏️) next to speaker name
-3. Type new name
-4. Press `Enter` or click ✓
-5. Name updates across all entries
-
-**Speaker Colors:**
-
-- Blue, Emerald, Purple, Orange, Pink, Cyan
-- Automatically assigned
-- Consistent throughout transcript
-
----
-
-## AI-Powered Features
-
-### AI Speaker Name Detection
-
-**Automatic Detection:**
-
-1. Click "Detect Names" button (✨ Sparkles icon)
-2. AI analyzes first 30 entries of each speaker
-3. Looks for self-introduction patterns
-4. Returns suggestions with confidence levels
-
-**Detection Patterns:**
-
-- "My name is [name]"
-- "I'm [name]"
-- "This is [name]"
-- "Hi, I'm [name]"
-- "[name] here"
-
-**Confidence Levels:**
-
-- **High**: Clear, unambiguous introduction (e.g., "My name is John Smith")
-- **Medium**: Less formal introduction (e.g., "I'm Sarah")
-- **Low**: Ambiguous or indirect reference
-
-**Review Suggestions:**
-
-- **Evidence Quote**: See exact text where name was detected
-- **Accept**: Applies name to all speaker entries
-- **Reject**: Dismisses suggestion
-- **Dismiss All**: Remove all suggestions
-
-### Search & Filter
-
-**Text Search:**
-
-1. Type query in search box
-2. Live results with match count
-3. Highlighting in transcript entries
-4. Case-insensitive matching
-
-**Filters:**
-
-- **Speaker Filter**: Show only specific speakers
-- **Time Range**: Filter by start/end timestamps
-- **Confidence**: (Future) Filter by confidence score
-
-**Combined Filters:**
-
-- Search + Speaker: Find text from specific speaker
-- Search + Time: Find text in time range
-- All filters stack together
-
----
-
-## Cost Tracking & Billing
-
-### Real-Time Cost Tracking
-
-**What's Tracked:**
-
-- Input tokens (prompt + audio analysis)
-- Output tokens (generated transcript)
-- Total tokens per operation
-- Estimated cost in USD
-
-**Cost Calculation:**
-
-- Gemini 2.5 Flash: $0.075/1M input, $0.30/1M output
-- Real-time updates from API responses
-- Persists across sessions (localStorage)
-
-### Viewing Cost Summary
-
-1. Click "Cost Summary" button (💰)
-2. See overview cards:
-   - Total Tokens Used
-   - Total Cost (USD)
-   - Total Operations
-   - Average Cost per Operation
-
-### Monthly Billing Breakdown
-
-**Current Month Card:**
-
-- Tokens used this month
-- Current month cost
-- Operations count
-- Highlighted in amber/gold
-
-**Historical Billing:**
-
-- All past months sorted newest first
-- Monthly totals: tokens, cost, operations
-- Format: "December 2024"
-
-**Usage by Category:**
-
-- **By Model**: Gemini 2.5 Flash, 1.5 Flash, etc.
-- **By Operation**: Video Transcription, Name Detection
-
----
-
-## Export Options
-
-### Export Formats
-
-#### 1. Plain Text (.txt)
-
-- Speaker labels
-- Timestamps in `[HH:MM:SS]` format
-- Clean, readable format
-- Best for: Documentation, notes
-
-**Example:**
-
-```
-[00:00:05] Speaker 1: Hello everyone, welcome to the meeting.
-[00:00:12] Speaker 2: Thanks for having me.
+# Start development server
+npm run dev
 ```
 
-#### 2. JSON (.json)
+Visit `http://localhost:5173` to see the app running.
 
-- Complete structured data
-- All metadata preserved
-- Speakers, timestamps, confidence
-- Best for: Developers, data analysis
+## 📚 Documentation
 
-**Example:**
+- 📖 [User Manual](docs/user-manual.md) - Complete guide for end users
+- 🛠️ [Installation Guide](docs/installation-guide.md) - Step-by-step setup for developers
+- 🌐 [User Manual (HTML)](docs/manual.html) - Interactive HTML version with navigation
+- 📋 [Development Guide](#development-setup) - See below for detailed development documentation
+
+## 📋 Table of Contents
+
+- [Features](#-features)
+- [Quick Start](#-quick-start)
+- [Documentation](#-documentation)
+- [Development Setup](#️-development-setup)
+  - [Prerequisites](#prerequisites)
+  - [Quick Start Guide](#quick-start-guide)
+  - [Project Structure](#project-structure)
+  - [Available Scripts](#available-scripts)
+- [Tech Stack](#-tech-stack)
+- [Sprint Features](#-sprint-features--implementation-status)
+- [Contributing](#-contributing)
+- [Testing](#-testing)
+- [Building](#-building)
+- [License](#-license)
+
+## 🛠️ Tech Stack
+
+### Core Framework & Build Tools
+
+- **React 18.3** - UI library
+- **TypeScript 5.6** - Type-safe JavaScript
+- **Vite 6** - Fast build tool and dev server with HMR
+- **Electron 39.2** - Desktop application framework
+
+### UI & Styling
+
+- **Tailwind CSS 4** - Utility-first CSS framework
+- **shadcn/ui** - High-quality, accessible component library
+- **Lucide React** - Icon library
+- **@tanstack/react-virtual** - Virtual scrolling for large lists
+- **Framer Motion** - Animation library
+
+### AI & Transcription
+
+- **Google Gemini API 2.5 Flash** - AI-powered speech-to-text with speaker diarization
+- **FFmpeg.wasm** - Browser-based video/audio processing
+
+### Backend & Database
+
+- **Drizzle ORM** - TypeScript ORM for SQL databases
+- **PostgreSQL** - Database (optional)
+- **Express** - Backend API server
+
+### Testing & Quality
+
+- **Jest** - Testing framework
+- **React Testing Library** - Component testing
+- **Playwright** - End-to-end testing
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **Husky** - Git hooks for pre-commit checks
+
+---
+
+## 🏗️ Development Setup
+
+### Prerequisites
+
+This guide assumes you already have the following installed:
+
+- **Node.js** (v18 or higher) - [Download](https://nodejs.org/)
+- **npm** (comes with Node.js)
+- **Git** (for version control and Husky git hooks) - [Download](https://git-scm.com/)
+- **Google Gemini API Key** (for transcription functionality)
+  - Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+  - Create a `.env` file in the project root:
+    ```bash
+    VITE_GEMINI_API_KEY=your_api_key_here
+    ```
+
+If you need help installing these prerequisites, see [docs/installation-guide.md](docs/installation-guide.md).
+
+## Complete Dependencies List
+
+### Production Dependencies
 
 ```json
 {
-  "entries": [{
-    "id": "1",
-    "speaker": "Speaker 1",
-    "speakerNumber": 1,
-    "startTime": 0.0,
-    "endTime": 5.2,
-    "text": "Hello everyone",
-    "confidence": 0.95
-  }],
-  "speakers": [...],
-  "metadata": {...}
+  "@ffmpeg/ffmpeg": "^0.12.15", // Browser-based video processing
+  "@ffmpeg/util": "^0.12.2", // FFmpeg utilities
+  "@google/genai": "^1.34.0", // Google Gemini API SDK
+  "@radix-ui/react-dialog": "^1.1.15", // Accessible dialog component
+  "@radix-ui/react-progress": "^1.1.8", // Progress bar component
+  "@radix-ui/react-slot": "^1.2.4", // Composition primitive
+  "@tanstack/react-virtual": "^3.13.13", // Virtual scrolling (Sprint 4)
+  "bcrypt": "^6.0.0", // Password hashing
+  "class-variance-authority": "^0.7.1", // CSS class variant management
+  "clsx": "^2.1.1", // Conditional class names
+  "cors": "^2.8.5", // CORS middleware for Express
+  "dotenv": "^17.2.3", // Environment variables
+  "drizzle-orm": "^0.45.1", // TypeScript ORM
+  "express": "^5.2.1", // Backend server (Sprint 3)
+  "jsonwebtoken": "^9.0.3", // JWT authentication
+  "lucide-react": "^0.561.0", // Icon library
+  "pg": "^8.16.3", // PostgreSQL client
+  "react": "^18.3.1", // React library
+  "react-dom": "^18.3.1", // React DOM renderer
+  "tailwind-merge": "^3.4.0" // Tailwind class merging utility
 }
 ```
 
-#### 3. SubRip (.srt)
+### Development Dependencies
 
-- Standard subtitle format
-- Numbered sequences
-- Timestamp format: `HH:MM:SS,mmm`
-- Best for: Video subtitles, YouTube
+```json
+{
+  "@commitlint/cli": "^20.2.0", // Commit message linting
+  "@commitlint/config-conventional": "^20.2.0", // Conventional commits config
+  "@eslint/js": "^9.17.0", // ESLint core
+  "@playwright/test": "^1.57.0", // E2E testing framework
+  "@tailwindcss/postcss": "^4.1.18", // Tailwind PostCSS plugin
+  "@testing-library/jest-dom": "^6.9.1", // Jest DOM matchers
+  "@testing-library/react": "^16.3.1", // React testing utilities
+  "@testing-library/user-event": "^14.6.1", // User event simulation
+  "@types/bcrypt": "^6.0.0", // TypeScript types
+  "@types/cors": "^2.8.19", // TypeScript types
+  "@types/express": "^5.0.6", // TypeScript types
+  "@types/jest": "^30.0.0", // TypeScript types
+  "@types/jsonwebtoken": "^9.0.10", // TypeScript types
+  "@types/node": "^25.0.3", // Node.js types
+  "@types/react": "^18.3.18", // React types
+  "@types/react-dom": "^18.3.5", // React DOM types
+  "@vitejs/plugin-react": "^4.3.4", // Vite React plugin
+  "autoprefixer": "^10.4.23", // PostCSS autoprefixer
+  "commitizen": "^4.3.1", // Interactive commits
+  "cz-conventional-changelog": "^3.3.0", // Commitizen adapter
+  "drizzle-kit": "^0.31.8", // Drizzle ORM CLI
+  "eslint": "^9.17.0", // ESLint linter
+  "eslint-config-prettier": "^10.1.8", // Prettier ESLint config
+  "eslint-plugin-prettier": "^5.5.4", // Prettier ESLint plugin
+  "eslint-plugin-react-hooks": "^5.0.0", // React Hooks linting
+  "eslint-plugin-react-refresh": "^0.4.16", // React Refresh linting
+  "globals": "^15.13.0", // Global variables
+  "husky": "^9.1.7", // Git hooks
+  "identity-obj-proxy": "^3.0.0", // CSS module mocking
+  "jest": "^30.2.0", // Testing framework
+  "jest-environment-jsdom": "^30.2.0", // JSDOM test environment
+  "lint-staged": "^16.2.7", // Staged file linting
+  "msw": "^2.12.4", // Mock Service Worker
+  "nodemon": "^3.1.11", // Dev server auto-restart
+  "postcss": "^8.5.6", // CSS processing
+  "prettier": "^3.7.4", // Code formatter
+  "tailwindcss": "^4.1.18", // Tailwind CSS
+  "ts-jest": "^29.4.6", // Jest TypeScript support
+  "tsx": "^4.21.0", // TypeScript execution
+  "typescript": "~5.6.2", // TypeScript compiler
+  "typescript-eslint": "^8.18.2", // TypeScript ESLint
+  "undici": "^7.16.0", // HTTP client
+  "vite": "^6.0.5", // Build tool
+  "whatwg-fetch": "^3.6.20" // Fetch polyfill
+}
+```
 
-**Example:**
+## Quick Start Guide
+
+### 1. Clone and Install
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd transcript-parser
+
+# Install dependencies
+npm install
+
+# This will also run Husky setup automatically (prepare script)
+```
+
+### 2. Configure Environment Variables
+
+Create a `.env` file in the project root:
+
+```bash
+# Google Gemini API Key (Required for transcription)
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
+
+# Optional: Database configuration
+DATABASE_URL=postgresql://user:password@localhost:5432/transcript_db
+```
+
+**Get your Gemini API key**:
+
+1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Sign in with your Google account
+3. Create a new API key
+4. Copy and paste into `.env` file
+
+### 3. Install Playwright Browsers (for E2E tests)
+
+```bash
+npx playwright install
+```
+
+### 4. Start Development Server
+
+```bash
+npm run dev
+```
+
+The app will be available at `http://localhost:5173` (or next available port).
+
+### 5. Try the Demo
+
+1. Open `http://localhost:5173` in your browser
+2. Click the **"🎬 Load Sprint 4 Demo (60 Entries)"** button
+3. Explore the features:
+   - Smooth virtual scrolling through 60 transcript entries
+   - Speaker summary panel with analytics
+   - Color-coded speaker badges
+   - Export functionality
+
+---
+
+## Setup Tasks (Detailed)
+
+### 1. Install Dependencies
+
+After running `npm install`, you'll have all required dependencies:
+
+**Core Framework** (5 packages):
+
+- React 18.3.1
+- TypeScript 5.6.2
+- Vite 6.0.5
+- Tailwind CSS 4.1.18
+- shadcn/ui components
+
+**AI & Media Processing** (3 packages):
+
+- Google Gemini API SDK 1.34.0
+- FFmpeg.wasm 0.12.15 (browser-based video processing)
+- FFmpeg utilities 0.12.2
+
+**Backend** (6 packages):
+
+- Express 5.2.1 (backend server)
+- Drizzle ORM 0.45.1 (database toolkit)
+- PostgreSQL client 8.16.3
+- bcrypt 6.0.0 (password hashing)
+- JWT 9.0.3 (authentication)
+- CORS 2.8.5
+
+**UI Components** (6 packages):
+
+- Radix UI Dialog, Progress, Slot
+- Lucide React icons
+- @tanstack/react-virtual 3.13.13 (virtualization - Sprint 4)
+
+**Testing** (8 packages):
+
+- Jest 30.2.0
+- React Testing Library 16.3.1
+- Playwright 1.57.0 (E2E)
+- Mock Service Worker 2.12.4
+
+**Code Quality** (7 packages):
+
+- ESLint 9 with TypeScript support
+- Prettier 3.7.4
+- Husky 9.1.7 (git hooks)
+- Commitizen & Commitlint (conventional commits)
+- lint-staged 16.2.7
+
+### 2. Start Development Server
+
+```bash
+npm run dev
+```
+
+This starts the Vite development server with Hot Module Replacement (HMR).
+The app will be available at `http://localhost:5173` (or the next available port).
+
+### 3. Build for Production
+
+```bash
+npm run build
+```
+
+This command:
+
+1. Runs TypeScript compiler (`tsc -b`) to check types
+2. Creates an optimized production build in the `dist` folder
+
+### 4. Preview Production Build
+
+```bash
+npm run preview
+```
+
+Locally preview the production build before deploying.
+
+### 5. Run Tests
+
+```bash
+npm test
+```
+
+Runs Jest test suite. For watch mode or coverage:
+
+```bash
+npm run test:watch      # Watch mode for development
+npm run test:coverage   # Generate coverage report
+```
+
+### 6. Run Linter
+
+```bash
+npm run lint
+```
+
+Runs ESLint to check for code quality issues and enforce coding standards.
+
+```bash
+npm run lint:fix        # Auto-fix linting issues
+```
+
+### 7. Format Code
+
+```bash
+npm run format
+```
+
+Formats all code using Prettier. To check formatting without changing files:
+
+```bash
+npm run format:check
+```
+
+### 8. Database Operations (Drizzle ORM)
+
+```bash
+npm run db:generate     # Generate SQL migrations from schema
+npm run db:push         # Push schema changes directly to DB
+npm run db:studio       # Open Drizzle Studio (visual DB editor)
+```
+
+## Project Structure
 
 ```
-1
-00:00:00,000 --> 00:00:05,200
-Speaker 1: Hello everyone
-
-2
-00:00:05,200 --> 00:00:12,000
-Speaker 2: Thanks for having me
+transcript-parser/
+├── .husky/                 # Git hooks configuration
+│   ├── pre-commit          # Pre-commit hook (runs lint-staged)
+│   └── commit-msg          # Commit-msg hook (validates commit format)
+├── src/
+│   ├── components/         # React components
+│   │   ├── ui/             # shadcn/ui components (button, card, badge, etc.)
+│   │   ├── Header.tsx      # App header with title
+│   │   ├── UploadVideo.tsx # Video upload with drag-and-drop (Sprint 1)
+│   │   ├── VideoPreview.tsx # Video preview with metadata (Sprint 1)
+│   │   ├── ProcessingStatus.tsx # Processing state indicator
+│   │   ├── TranscriptView.tsx # Main transcript container (Sprint 4)
+│   │   ├── TranscriptList.tsx # Virtualized list (Sprint 4)
+│   │   ├── TranscriptEntry.tsx # Individual entry (optimized)
+│   │   ├── SpeakerSummary.tsx # Speaker analytics panel (Sprint 4)
+│   │   ├── Login.tsx       # Authentication component
+│   │   ├── Register.tsx    # User registration
+│   │   └── TranscriptLibrary.tsx # Saved transcripts
+│   ├── hooks/              # Custom React hooks
+│   │   ├── useTranscription.ts # Transcription state management
+│   │   └── useStreamingTranscript.ts # Real-time updates (Sprint 4)
+│   ├── services/           # API clients and services
+│   │   ├── geminiClient.ts # Google Gemini API integration (Sprint 3)
+│   │   └── apiClient.ts    # Backend API client
+│   ├── utils/              # Utility functions
+│   │   ├── fileUtils.ts    # Video validation & metadata (Sprint 1)
+│   │   ├── exportUtils.ts  # Transcript export functionality
+│   │   ├── speakerStats.ts # Speaker statistics calculations (Sprint 4)
+│   │   ├── speakerColors.ts # Centralized color management (Sprint 4)
+│   │   └── performanceBenchmark.ts # Performance monitoring (Sprint 4)
+│   ├── types/              # TypeScript type definitions
+│   │   └── transcript.ts   # Transcript data models
+│   ├── data/               # Demo and test data
+│   │   └── largeTranscriptDemo.ts # 60-entry demo (Sprint 4)
+│   ├── lib/                # Third-party utilities
+│   │   └── utils.ts        # cn() for class merging
+│   ├── db/                 # Database layer
+│   │   ├── schema.ts       # Drizzle ORM schema definitions
+│   │   └── index.ts        # Database connection setup
+│   ├── App.tsx             # Main application component
+│   ├── App.test.tsx        # App component tests
+│   ├── main.tsx            # Application entry point
+│   └── index.css           # Global styles with Tailwind
+├── tests/
+│   └── e2e/                # End-to-end tests
+│       └── transcript-viewer.spec.ts # Transcript viewer E2E (Sprint 4)
+├── specs/                  # Project specifications
+│   ├── sprints/            # Sprint planning documents
+│   │   ├── sprint-3/       # Backend infrastructure (Sprint 3)
+│   │   ├── sprint-4/       # Enhanced viewer (Sprint 4)
+│   │   └── sprint-5/       # Advanced features (Sprint 5)
+│   └── architecture/       # Architecture documentation
+├── server/                 # Backend server (Sprint 3)
+│   ├── src/
+│   │   ├── index.ts        # Express server entry
+│   │   ├── routes/         # API routes
+│   │   └── services/       # Backend services
+│   └── package.json        # Server dependencies
+├── drizzle/                # Generated migrations (auto-created)
+├── public/                 # Static assets
+├── playwright.config.ts    # Playwright E2E configuration
+├── vite.config.ts          # Vite configuration
+├── tailwind.config.js      # Tailwind CSS configuration
+├── jest.config.ts          # Jest testing configuration
+├── commitlint.config.js    # Commit message linting rules
+├── tsconfig.json           # TypeScript base config
+├── package.json            # Project dependencies and scripts
+└── dev.md                  # This file - development guide
 ```
 
-#### 4. WebVTT (.vtt)
+## Development Workflow
 
-- Web video text tracks
-- HTML5 compatible
-- Metadata support
-- Best for: Web players, accessibility
+1. Make changes to files in the `src/` directory
+2. The dev server will automatically reload with your changes (HMR)
+3. TypeScript will provide type checking in your editor
+4. Write tests for new components and features
+5. Run `npm test` to ensure tests pass
+6. Run `npm run lint` periodically to catch code quality issues
+7. Run `npm run format` to format your code
+8. Stage your changes with `git add`
+9. Commit using `npm run commit` (recommended) or `git commit`
 
-**Example:**
+## Committing Code
+
+This project enforces **Conventional Commits** to maintain clean git history.
+
+### Option 1: Using Commitizen (Recommended)
+
+```bash
+git add .
+npm run commit
+```
+
+This launches an interactive prompt that guides you through creating a properly formatted commit message.
+
+### Option 2: Manual Commit
+
+```bash
+git add .
+git commit -m "type(scope): subject"
+```
+
+#### Commit Message Format
 
 ```
-WEBVTT
+<type>(<optional scope>): <subject>
 
-00:00:00.000 --> 00:00:05.200
-<v Speaker 1>Hello everyone
+<optional body>
 
-00:00:05.200 --> 00:00:12.000
-<v Speaker 2>Thanks for having me
+<optional footer>
 ```
 
-### Export Process
+#### Allowed Types
 
-1. Click "Export" button (📥)
-2. Select format from dropdown
-3. Choose save location
-4. File is generated and downloaded
+- **feat**: A new feature
+- **fix**: A bug fix
+- **docs**: Documentation only changes
+- **style**: Code style changes (formatting, missing semi-colons, etc)
+- **refactor**: Code change that neither fixes a bug nor adds a feature
+- **perf**: Performance improvements
+- **test**: Adding or updating tests
+- **chore**: Changes to build process or auxiliary tools
+- **ci**: CI/CD changes
+- **build**: Changes affecting build system or dependencies
+- **revert**: Reverts a previous commit
+
+#### Examples
+
+```bash
+git commit -m "feat(auth): add user login functionality"
+git commit -m "fix(api): resolve null pointer in user endpoint"
+git commit -m "docs: update README with installation steps"
+git commit -m "test(utils): add unit tests for date formatter"
+```
+
+### Automated Checks on Commit
+
+When you commit, Husky runs these hooks automatically:
+
+1. **Pre-commit Hook** (`.husky/pre-commit`):
+   - Runs `lint-staged`
+   - Lints and auto-fixes TypeScript/TSX files with ESLint
+   - Formats all staged files with Prettier
+   - Only processes staged files for faster commits
+
+2. **Commit-msg Hook** (`.husky/commit-msg`):
+   - Validates commit message format
+   - Ensures message follows Conventional Commits standard
+   - Rejects commits with invalid format
+
+If any hook fails, the commit will be rejected. Fix the issues and try again.
+
+## Tech Stack
+
+### Core Framework & Build Tools
+
+- **React 18.3**: UI library
+- **TypeScript 5.6**: Type-safe JavaScript
+- **Vite 6**: Fast build tool and dev server with HMR
+
+### UI & Styling
+
+- **Tailwind CSS 3**: Utility-first CSS framework
+- **shadcn/ui**: High-quality, accessible component library
+- **Lucide React**: Icon library
+- **@tanstack/react-virtual 3.13**: Virtual scrolling for large lists (Sprint 4)
+
+### AI & Transcription
+
+- **Google Gemini API**: AI-powered speech-to-text with speaker diarization
+- **FFmpeg.wasm**: Browser-based video/audio processing (Sprint 3)
+
+### Backend & Database
+
+- **Drizzle ORM 0.45**: TypeScript ORM for SQL databases
+- **Better SQLite3**: SQLite database driver
+- **Express 4.21**: Backend API server (Sprint 3)
+
+### Testing
+
+- **Jest 30**: Testing framework
+- **React Testing Library**: Component testing
+- **Playwright 1.49**: End-to-end testing
+- **@testing-library/user-event**: User interaction simulation
+
+### Code Quality & DevOps
+
+- **ESLint 9**: Code linting and quality
+- **Prettier 3**: Code formatting
+- **Husky 9**: Git hooks for pre-commit checks
+- **Commitizen**: Interactive commit message tool
+- **Commitlint**: Commit message validation
+- **lint-staged**: Run linters on staged files only
+
+## Tailwind CSS & shadcn/ui
+
+This project uses Tailwind CSS for styling and shadcn/ui for pre-built, customizable components.
+
+### Tailwind CSS
+
+Tailwind CSS is configured and ready to use. Style your components using utility classes:
+
+```tsx
+<div className="flex items-center justify-center p-4 bg-background">
+  <h1 className="text-4xl font-bold text-foreground">Hello World</h1>
+</div>
+```
+
+**Configuration files:**
+
+- [tailwind.config.js](tailwind.config.js) - Tailwind configuration
+- [postcss.config.js](postcss.config.js) - PostCSS configuration
+- [src/index.css](src/index.css) - Global styles with Tailwind directives
+
+**Theme customization:**
+The project uses CSS variables for theming (light/dark mode support). Customize colors in [src/index.css](src/index.css).
+
+### shadcn/ui Components
+
+shadcn/ui components are pre-configured and ready to use. Components are added to your project (not installed as dependencies).
+
+**Adding new components:**
+
+You can manually add components or use the CLI (if available):
+
+```bash
+# Example: manually create components in src/components/ui/
+# See https://ui.shadcn.com for component code
+```
+
+**Available components:**
+
+- Button - [src/components/ui/button.tsx](src/components/ui/button.tsx)
+
+**Using components:**
+
+```tsx
+import { Button } from '@/components/ui/button'
+
+function MyComponent() {
+  return (
+    <div>
+      <Button variant="default">Click me</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="ghost">Ghost</Button>
+    </div>
+  )
+}
+```
+
+**Path aliases:**
+The project uses `@/*` aliases for imports:
+
+- `@/components` → `src/components`
+- `@/lib` → `src/lib`
+
+**Utility function:**
+
+- [src/lib/utils.ts](src/lib/utils.ts) - `cn()` function for merging Tailwind classes
+
+### Adding More Components
+
+Visit [ui.shadcn.com](https://ui.shadcn.com) and copy component code into `src/components/ui/`.
+
+Popular components to add:
+
+- Card, Dialog, Dropdown Menu, Input, Label, Select, Textarea, Toast, etc.
+
+## Drizzle ORM
+
+Drizzle ORM is configured for SQLite by default. To use it:
+
+### 1. Define Your Schema
+
+Edit [src/db/schema.ts](src/db/schema.ts) to define your database tables:
+
+```typescript
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+
+export const users = sqliteTable('users', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  email: text('email').notNull().unique(),
+})
+```
+
+### 2. Set Up Database Connection
+
+Uncomment and configure the database driver in [src/db/index.ts](src/db/index.ts):
+
+```typescript
+import Database from 'better-sqlite3'
+import { drizzle } from 'drizzle-orm/better-sqlite3'
+import * as schema from './schema'
+
+const sqlite = new Database('sqlite.db')
+export const db = drizzle(sqlite, { schema })
+```
+
+Note: Install the driver first: `npm install better-sqlite3`
+
+### 3. Generate Migrations
+
+```bash
+npm run db:generate     # Creates migration files in drizzle/
+```
+
+### 4. Push Changes to Database
+
+```bash
+npm run db:push         # Applies schema directly (dev mode)
+```
+
+### 5. Visual Database Editor
+
+```bash
+npm run db:studio       # Opens Drizzle Studio at localhost
+```
+
+### Switching Databases
+
+- **PostgreSQL**: Change `dialect` to `'postgresql'` in [drizzle.config.ts](drizzle.config.ts)
+- **MySQL**: Change `dialect` to `'mysql'` in [drizzle.config.ts](drizzle.config.ts)
+
+See the [Drizzle ORM docs](https://orm.drizzle.team/docs/overview) for more information.
+
+## Testing
+
+Tests are written using Jest and React Testing Library:
+
+- Test files should be named `*.test.tsx` or `*.test.ts`
+- Place tests next to the components they test
+- Use `@testing-library/react` for component testing
+- Use `@testing-library/user-event` for simulating user interactions
+- Example test: [src/App.test.tsx](src/App.test.tsx)
+
+## Code Quality
+
+### ESLint
+
+- Configured with TypeScript support
+- React Hooks rules enforced
+- Prettier integration to avoid conflicts
+- Auto-fix available with `npm run lint:fix`
+
+### Prettier
+
+- Configured in [.prettierrc](.prettierrc)
+- Settings: single quotes, no semicolons, 2-space tabs
+- Auto-format with `npm run format`
+
+## Sprint Features & Implementation Status
+
+### ✅ Sprint 1: Foundation & Video Upload (Complete)
+
+**Goal**: Deliver a fully functional video upload component with validation and preview.
+
+**Features Implemented**:
+
+- ✅ Drag-and-drop video upload with visual feedback
+- ✅ File validation (type, size, format)
+  - Supported formats: MP4, MOV, AVI, WebM
+  - Max file size: 2GB
+  - Clear error messages for invalid files
+- ✅ Video preview with HTML5 player
+- ✅ Metadata extraction (duration, dimensions, format, size)
+- ✅ Remove/clear functionality
+
+**Key Components**:
+
+- [UploadVideo.tsx](src/components/UploadVideo.tsx) - Upload zone with drag-and-drop
+- [VideoPreview.tsx](src/components/VideoPreview.tsx) - Video player with metadata
+- [fileUtils.ts](src/utils/fileUtils.ts) - Validation and metadata extraction
+
+**Test Coverage**: 80%+ for upload functionality
 
 ---
 
-## Keyboard Shortcuts
+### ✅ Sprint 3: Backend Infrastructure & FFmpeg Integration (Complete)
 
-### Global Shortcuts
+**Goal**: Implement backend server with audio extraction and Gemini API integration.
 
-| Shortcut               | Action               |
-| ---------------------- | -------------------- |
-| `Ctrl/Cmd + O`         | Open video file      |
-| `Ctrl/Cmd + S`         | Save transcript      |
-| `Ctrl/Cmd + E`         | Export transcript    |
-| `Ctrl/Cmd + F`         | Focus search box     |
-| `Ctrl/Cmd + Z`         | Undo edit            |
-| `Ctrl/Cmd + Shift + Z` | Redo edit            |
-| `Escape`               | Clear search/filters |
+**Features Implemented**:
 
-### Video Player Shortcuts
+- ✅ Express backend server (Port 3001)
+- ✅ FFmpeg.wasm browser-based video processing
+- ✅ Audio extraction from video files
+- ✅ Google Gemini API integration
+  - Speech-to-text transcription
+  - Speaker diarization (automatic speaker identification)
+  - Confidence scoring
+- ✅ Codec support verification (AAC, Opus, MP3)
+- ✅ Background audio processing with status updates
 
-| Shortcut   | Action            |
-| ---------- | ----------------- |
-| `Space`    | Play/Pause        |
-| `→` or `L` | Skip forward 5s   |
-| `←` or `J` | Skip backward 5s  |
-| `↑`        | Volume up         |
-| `↓`        | Volume down       |
-| `M`        | Mute/Unmute       |
-| `F`        | Toggle fullscreen |
-| `0-9`      | Jump to 0%-90%    |
+**Key Components**:
 
-### Transcript Navigation
+- [geminiClient.ts](src/services/geminiClient.ts) - Gemini API client
+- `server/` - Express backend with FFmpeg integration
+- [useTranscription.ts](src/hooks/useTranscription.ts) - Transcription state management
+- [ProcessingStatus.tsx](src/components/ProcessingStatus.tsx) - Processing indicator
 
-| Shortcut           | Action                  |
-| ------------------ | ----------------------- |
-| `↑/↓`              | Navigate entries        |
-| `Enter`            | Play entry timestamp    |
-| `Double-Click`     | Edit entry (if enabled) |
-| `Ctrl/Cmd + Click` | Multi-select            |
+**Technical Achievements**:
+
+- Browser-based audio extraction (no server upload required)
+- Multi-codec support with automatic detection
+- Real-time processing status updates
 
 ---
 
-## Advanced Features
+### ✅ Sprint 4: Enhanced Transcript Viewer (Complete)
 
-### Speaker Analytics
+**Goal**: Enhance transcript viewer with virtualization, speaker analytics, and performance optimizations.
 
-**Statistics Displayed:**
+**Features Implemented**:
 
-- Total speaking time per speaker
-- Percentage of total conversation
-- Number of segments
-- Average segment duration
+#### 1. Virtualized Scrolling
 
-**Visual Indicators:**
+- ✅ TanStack React Virtual integration
+- ✅ Smooth scrolling through 1000+ entries
+- ✅ 60 FPS performance
+- ✅ Only ~20 DOM nodes rendered at any time
 
-- Progress bars for speaking time
-- Color-coded speakers
-- Segment count badges
+**Implementation**:
 
-### Transcript History
+- [TranscriptList.tsx](src/components/TranscriptList.tsx) - Virtual scrolling component
+  - 600px viewport height
+  - 120px estimated entry size
+  - 5-item overscan for smooth scrolling
 
-- Recently processed files
-- Quick reload previous transcripts
-- Automatic save on process
-- Indexed for fast search
+#### 2. Speaker Summary Panel
 
-### Performance Optimization
+- ✅ Speaker analytics with accurate statistics
+- ✅ Segment count (times each speaker spoke)
+- ✅ Total speaking duration
+- ✅ Percentage of total time
+- ✅ Responsive two-column layout
 
-**Virtual Scrolling:**
+**Implementation**:
 
-- Handles 10,000+ entries smoothly
-- Only renders visible entries
-- Smooth 60fps scrolling
+- [SpeakerSummary.tsx](src/components/SpeakerSummary.tsx) - Analytics panel
+- [speakerStats.ts](src/utils/speakerStats.ts) - Statistics calculations
+- Desktop (≥1024px): Side-by-side layout with 320px sidebar
+- Mobile (<1024px): Stacked layout
 
-**Progressive Loading:**
+#### 3. Real-time Updates Infrastructure
 
-- Entries load as transcription completes
-- No waiting for full completion
-- Real-time updates
+- ✅ Streaming transcript hook for future enhancements
+- ✅ Callback system for entry-by-entry updates
+- ✅ Foundation ready for true streaming
 
----
+**Implementation**:
 
-## Troubleshooting
+- [useStreamingTranscript.ts](src/hooks/useStreamingTranscript.ts) - Real-time hook
+- Updated [geminiClient.ts](src/services/geminiClient.ts) with `onEntryComplete` callback
 
-### Common Issues
+#### 4. Performance Optimizations
 
-#### 1. "API Key Invalid" Error
+- ✅ React.memo for TranscriptEntry components
+- ✅ useMemo for speaker statistics
+- ✅ useCallback for stable function references
+- ✅ Centralized color management
+- ✅ Performance monitoring utilities
 
-**Solution:**
+**Implementation**:
 
-- Verify API key is correct
-- Check key has Gemini API access enabled
-- Regenerate key from Google AI Studio
-- Ensure billing is enabled on Google Cloud
+- [speakerColors.ts](src/utils/speakerColors.ts) - Centralized color palette
+  - 6 colors: blue, emerald, purple, orange, pink, cyan
+  - Consistent across all UI components
+- [performanceBenchmark.ts](src/utils/performanceBenchmark.ts) - Performance monitoring
+  - Render time tracking
+  - FPS monitoring
+  - Memory usage analysis
 
-#### 2. Transcription Fails
+#### 5. Demo & Testing
 
-**Possible Causes:**
+- ✅ 60-entry demo transcript (5:25 minute meeting simulation)
+- ✅ One-click demo button in UI
+- ✅ Comprehensive unit tests
+- ✅ E2E tests with Playwright
 
-- File too large (>2GB)
-- Unsupported format
-- Poor audio quality
-- API quota exceeded
+**Implementation**:
 
-**Solutions:**
+- [largeTranscriptDemo.ts](src/data/largeTranscriptDemo.ts) - Demo data
+- [TranscriptList.test.tsx](src/components/TranscriptList.test.tsx) - Unit tests
+- [SpeakerSummary.test.tsx](src/components/SpeakerSummary.test.tsx) - Unit tests
+- [useStreamingTranscript.test.ts](src/hooks/useStreamingTranscript.test.ts) - Hook tests
+- [transcript-viewer.spec.ts](tests/e2e/transcript-viewer.spec.ts) - E2E tests
 
-- Compress video/audio file
-- Convert to supported format (MP4, WebM)
-- Improve audio quality
-- Check API quota limits
+**Performance Benchmarks**:
 
-#### 3. Video Won't Play
+- ✅ Initial render: < 100ms
+- ✅ Scrolling: 60 FPS
+- ✅ Virtual items: ~15-20 rendered at any time for 1000 entries
+- ✅ No memory leaks
 
-**Solutions:**
+**Documentation**:
 
-- Update Electron app to latest version
-- Check video codec compatibility
-- Convert video to WebM format
-- Verify file isn't corrupted
-
-#### 4. Slow Performance
-
-**Solutions:**
-
-- Close unnecessary background apps
-- Process smaller files
-- Enable hardware acceleration
-- Increase available RAM
-
-#### 5. Export Fails
-
-**Solutions:**
-
-- Check disk space
-- Verify write permissions
-- Choose different save location
-- Check file name validity
-
-### Getting Help
-
-**Support Channels:**
-
-- GitHub Issues: [Report bugs](https://github.com/KevenWMarkham/transcript-parser/issues)
-- Documentation: Check implementation guides in `docs/implementation/`
-- Community: (Future) Discord/Slack channels
-
-**Before Reporting:**
-
-1. Check this manual
-2. Review error messages
-3. Check console logs (`Ctrl+Shift+I` in app)
-4. Note steps to reproduce
-5. Include system info (OS, version)
+- [Sprint 4 Execution Prompt](specs/sprints/sprint-4/Execution-Prompt.md)
+- [Sprint 4 Implementation Summary](specs/sprints/sprint-4/Implementation-Summary.md)
 
 ---
 
-## Technical Requirements
+### 🔄 Sprint 5: Advanced Features (Planned)
 
-**Minimum System Requirements:**
+**Goal**: Enhance user experience with search/filter, keyboard navigation, editing, and advanced export.
 
-- **OS**: Windows 10+, macOS 10.13+, Ubuntu 18.04+
-- **RAM**: 4GB (8GB recommended)
-- **Disk**: 500MB for app + space for videos
-- **Internet**: Required for transcription API calls
+**Planned Features**:
 
-**Recommended:**
+- 🔜 Search with text highlighting
+- 🔜 Filter by speaker, time range, confidence
+- 🔜 Keyboard navigation (arrow keys, shortcuts)
+- 🔜 Inline transcript editing with undo/redo
+- 🔜 Advanced export formats (SRT, WebVTT, JSON, CSV)
+- 🔜 Accessibility improvements (WCAG 2.1 AA)
+- 🔜 Animations and transitions
 
-- **RAM**: 8GB+ for large files
-- **CPU**: Multi-core processor for faster processing
-- **SSD**: For better video loading performance
-- **Bandwidth**: Stable connection for API calls
+**Documentation**:
 
----
-
-## Privacy & Security
-
-**Data Handling:**
-
-- **Local Processing**: Videos stay on your device
-- **API Transmission**: Only audio data sent to Google
-- **No Storage**: Google doesn't store your audio
-- **Encryption**: HTTPS for all API calls
-
-**API Key Security:**
-
-- Keys stored in localStorage (encrypted)
-- Never transmitted except to Google
-- Rotatable at any time
-- Access codes don't expose developer keys
-
-**Best Practices:**
-
-- Don't share API keys
-- Rotate keys periodically
-- Use access codes for teams
-- Review cost usage regularly
+- [Sprint 5 Execution Prompt](specs/sprints/sprint-5/Execution-Prompt.md)
 
 ---
 
-## Updates & Changelog
+## Application Architecture
 
-**Current Version**: 1.0.0
+### Component Hierarchy
 
-**Recent Features:**
+```
+App
+├── Header
+├── Auth Flow (Login/Register)
+├── TranscriptLibrary (saved transcripts)
+└── Main Content
+    ├── Left Column
+    │   ├── UploadVideo (drag-and-drop)
+    │   ├── VideoPreview (player + metadata)
+    │   └── ProcessingStatus (transcription progress)
+    └── Right Column
+        └── TranscriptView
+            ├── Header (title + export)
+            ├── Desktop Layout (≥1024px)
+            │   ├── Main Content (flex-1)
+            │   │   ├── Speaker Badges
+            │   │   └── TranscriptList (virtualized)
+            │   │       └── TranscriptEntry (memoized)
+            │   └── SpeakerSummary Sidebar (320px)
+            └── Mobile Layout (<1024px)
+                ├── SpeakerSummary (stacked)
+                └── Main Content
+```
 
-- ✨ AI-powered speaker name detection
-- 📊 Monthly billing breakdown
-- 💰 Real-time cost tracking
-- 🎨 Enhanced UI with speaker colors
-- ⌨️ Keyboard shortcuts
-- 📝 Inline transcript editing
-- 🔍 Advanced search and filters
+### Data Flow
 
-**Coming Soon:**
+```
+1. User uploads video → UploadVideo → VideoPreview
+2. Auto-start transcription → useTranscription hook
+3. Extract audio → FFmpeg (browser-based)
+4. Send to Gemini API → geminiClient
+5. Receive transcript → TranscriptData
+6. Display → TranscriptView → TranscriptList (virtualized)
+7. Calculate stats → SpeakerSummary
+8. Export → exportUtils (plain text, future: SRT, VTT, JSON)
+```
 
-- Cloud sync for transcripts
-- Team collaboration features
-- Custom vocabulary/terminology
-- Batch processing multiple files
-- AI summarization
-- Translation support
+### Key Hooks
 
----
+- **useTranscription**: Manages transcription state (idle, uploading, processing, completed, error)
+- **useStreamingTranscript**: Foundation for real-time entry updates (future enhancement)
 
-## FAQ
+### Performance Patterns
 
-**Q: How accurate is the transcription?**
-A: Accuracy depends on audio quality. Gemini 2.5 Flash provides 85-95% accuracy for clear audio with minimal background noise.
-
-**Q: Can I edit the transcript?**
-A: Yes! Enable edit mode and double-click any entry to modify text or timestamps.
-
-**Q: What languages are supported?**
-A: Currently supports English. Additional languages coming soon via Gemini multilingual models.
-
-**Q: How much does transcription cost?**
-A: Cost varies by audio length. Typical 1-hour meeting: ~$0.05-$0.15. Check Cost Summary for exact usage.
-
-**Q: Can I process multiple files at once?**
-A: Not currently. Batch processing is planned for a future release.
-
-**Q: Is my data private?**
-A: Yes. Videos never leave your device. Only audio is temporarily sent to Google's Gemini API (not stored).
-
-**Q: Can I use this offline?**
-A: No. Internet connection required for AI transcription. Local playback and editing work offline.
-
-**Q: How long does transcription take?**
-A: Typically 1-3 minutes per hour of audio, depending on network speed and API response time.
-
----
-
-## License & Credits
-
-**License**: MIT License
-**Developer**: Keven W. Markham
-**AI Model**: Google Gemini 2.5 Flash
-**Framework**: Electron + React + TypeScript
-**UI Library**: shadcn/ui + Tailwind CSS
-
-**Third-Party Licenses:**
-
-- React (MIT)
-- Electron (MIT)
-- Google Generative AI SDK (Apache 2.0)
-- Lucide Icons (ISC)
+| Pattern           | Usage                         | Benefit                                   |
+| ----------------- | ----------------------------- | ----------------------------------------- |
+| React.memo        | TranscriptEntry               | Prevents re-renders for unchanged entries |
+| useMemo           | Speaker stats, color maps     | Avoids expensive recalculations           |
+| useCallback       | Event handlers, color getter  | Stable function references                |
+| Virtual Scrolling | TranscriptList                | Renders only visible items                |
+| Debouncing        | Planned for search (Sprint 5) | Reduces excessive re-renders              |
 
 ---
 
-## Contact & Support
+## Demo Mode
 
-**GitHub**: [transcript-parser](https://github.com/KevenWMarkham/transcript-parser)
-**Issues**: [Report bugs or request features](https://github.com/KevenWMarkham/transcript-parser/issues)
-**Email**: (Contact info)
-**Documentation**: See `docs/` folder for technical guides
+The application includes a **Sprint 4 Demo Button** for quickly showcasing features:
+
+**How to Use**:
+
+1. Start the dev server: `npm run dev`
+2. Open the app in browser (usually `http://localhost:5173`)
+3. Click the **"🎬 Load Sprint 4 Demo (60 Entries)"** button
+4. Explore:
+   - Smooth scrolling through 60 transcript entries
+   - Speaker summary with 3 speakers and accurate statistics
+   - Color-coded speaker badges
+   - Responsive layout (resize window to see mobile/desktop views)
+   - Export functionality
+
+**Demo Data**:
+
+- 60 entries simulating a 5:25 minute team meeting
+- 3 speakers: Alice (Product Manager), Bob (Engineer), Carol (Designer)
+- Realistic conversation about Sprint 4 planning
+- Perfect for demonstrating virtualization performance
+
+---
+
+## Next Steps
+
+### For New Developers
+
+- Read [Sprint 1 Docs](specs/sprints/Sprint-01-Foundation-Upload.md) to understand upload flow
+- Read [Sprint 4 Implementation Summary](specs/sprints/sprint-4/Implementation-Summary.md) for transcript viewer
+- Explore the demo mode to see features in action
+- Review [Full Stack Architecture](specs/architecture/FULL_STACK_ARCHITECTURE.md)
+
+### For Continuing Development
+
+- Check [Sprint 5 Execution Prompt](specs/sprints/sprint-5/Execution-Prompt.md) for next features
+- Set up your database schema in [src/db/schema.ts](src/db/schema.ts)
+- Add new components with corresponding test files
+- Use `npm run commit` for creating conventional commits
+- Maintain test coverage ≥ 80%
+
+### For Configuration
+
+- Update [index.html](index.html) to change page title or metadata
+- Configure [vite.config.ts](vite.config.ts) for additional build options
+- Customize [.prettierrc](.prettierrc) for preferred code style
+- Add more ESLint rules in [eslint.config.js](eslint.config.js) as needed
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how to get started:
+
+### Development Workflow
+
+1. **Fork the repository** and clone your fork
+2. **Create a new branch** for your feature:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. **Make your changes** and write tests
+4. **Run tests** to ensure everything works:
+   ```bash
+   npm test
+   npm run lint
+   ```
+5. **Commit your changes** using conventional commits:
+   ```bash
+   npm run commit
+   ```
+6. **Push to your fork** and create a Pull Request
+
+### Commit Message Format
+
+This project follows [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+<type>(<scope>): <subject>
+
+<optional body>
+
+<optional footer>
+```
+
+**Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, `build`, `revert`
+
+**Examples**:
+
+```bash
+feat(transcription): add support for multiple languages
+fix(ui): resolve speaker color consistency issue
+docs: update installation guide with macOS steps
+test(hooks): add tests for useTranscription hook
+```
+
+### Code Style
+
+- Follow the existing code style
+- Use TypeScript for all new code
+- Write meaningful variable and function names
+- Add JSDoc comments for public APIs
+- Ensure all tests pass before submitting PR
+- Maintain test coverage ≥ 80%
+
+### Pull Request Guidelines
+
+- Keep PRs focused on a single feature or fix
+- Update documentation if you change functionality
+- Add tests for new features
+- Ensure all CI checks pass
+- Reference related issues in PR description
+
+---
+
+## 🧪 Testing
+
+### Running Tests
+
+```bash
+# Run all unit tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage report
+npm run test:coverage
+
+# Run E2E tests
+npm run test:e2e
+
+# Run E2E tests with UI
+npm run test:e2e:ui
+
+# Run E2E tests in headed mode (see browser)
+npm run test:e2e:headed
+```
+
+### Test Structure
+
+```
+transcript-parser/
+├── src/
+│   ├── components/
+│   │   ├── Component.tsx
+│   │   └── Component.test.tsx        # Component tests
+│   ├── hooks/
+│   │   ├── useHook.ts
+│   │   └── useHook.test.ts           # Hook tests
+│   └── utils/
+│       ├── utility.ts
+│       └── utility.test.ts           # Utility tests
+└── tests/
+    └── e2e/
+        └── feature.spec.ts            # E2E tests
+```
+
+### Writing Tests
+
+**Component Tests** (React Testing Library):
+
+```typescript
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { MyComponent } from './MyComponent'
+
+describe('MyComponent', () => {
+  it('renders correctly', () => {
+    render(<MyComponent />)
+    expect(screen.getByText('Hello')).toBeInTheDocument()
+  })
+
+  it('handles user interaction', async () => {
+    render(<MyComponent />)
+    await userEvent.click(screen.getByRole('button'))
+    expect(screen.getByText('Clicked')).toBeInTheDocument()
+  })
+})
+```
+
+**E2E Tests** (Playwright):
+
+```typescript
+import { test, expect } from '@playwright/test'
+
+test('transcription workflow', async ({ page }) => {
+  await page.goto('http://localhost:5173')
+  await page.click('text=Choose Video File')
+  // ... more test steps
+})
+```
+
+---
+
+## 🏗️ Building
+
+### Development Build
+
+```bash
+# Start dev server (web)
+npm run dev
+
+# Start Electron dev mode (desktop)
+npm run electron:dev
+```
+
+### Production Build
+
+```bash
+# Build for web
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+### Desktop Application Builds
+
+#### Windows
+
+```bash
+# Build installer and portable exe
+npm run electron:build:win
+```
+
+Output files in `dist/`:
+
+- `Transcript Parser Setup X.X.X.exe` - NSIS installer
+- `Transcript Parser X.X.X.exe` - Portable executable
+
+#### macOS
+
+```bash
+# Build DMG and app
+npm run electron:build:mac
+```
+
+Output files in `dist/`:
+
+- `Transcript Parser-X.X.X.dmg` - DMG installer
+- `Transcript Parser.app` - Application bundle
+
+#### Linux
+
+```bash
+# Build AppImage and deb
+npm run electron:build:linux
+```
+
+Output files in `dist/`:
+
+- `Transcript Parser-X.X.X.AppImage` - AppImage
+- `transcript-parser_X.X.X_amd64.deb` - Debian package
+
+### Build Configuration
+
+Electron Builder is configured in `package.json` under the `"build"` field:
+
+```json
+{
+  "build": {
+    "appId": "com.transcript-parser.app",
+    "productName": "Transcript Parser",
+    "directories": {
+      "output": "dist"
+    },
+    "files": ["dist/**/*", "electron/**/*", "package.json"],
+    "win": {
+      "target": ["nsis", "portable"]
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"]
+    }
+  }
+}
+```
+
+---
+
+## 📄 License
+
+This project is licensed under the **ISC License**.
+
+**Copyright © 2024 Keven W. Markham**
+
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+---
+
+## 🙏 Acknowledgments
+
+- **Google Gemini AI** - For providing the powerful speech-to-text API with speaker diarization
+- **Electron** - For enabling cross-platform desktop application development
+- **React Team** - For the amazing UI library
+- **shadcn/ui** - For the beautiful, accessible component library
+- **Tailwind CSS** - For the utility-first CSS framework
+- **All Contributors** - Thank you for your contributions to this project
+
+---
+
+## 📞 Contact & Support
+
+- **GitHub**: [KevenWMarkham/transcript-parser](https://github.com/KevenWMarkham/transcript-parser)
+- **Issues**: [Report bugs or request features](https://github.com/KevenWMarkham/transcript-parser/issues)
+- **Email**: kevenm2012@gmail.com
+- **Documentation**: See `docs/` folder for comprehensive guides
+
+---
+
+## 🗺️ Roadmap
+
+### Version 1.1 (Q1 2025)
+
+- [ ] Batch processing multiple files
+- [ ] Cloud sync for transcripts
+- [ ] Custom vocabulary/terminology support
+- [ ] Additional language support
+
+### Version 2.0 (Q2 2025)
+
+- [ ] Team collaboration features
+- [ ] AI summarization
+- [ ] Translation support
+- [ ] Mobile app (React Native)
 
 ---
 
 _Last Updated: December 19, 2024 • Version 1.0.0_
+
+**⭐ If you find this project helpful, please consider giving it a star on GitHub!**
