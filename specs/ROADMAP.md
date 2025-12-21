@@ -1,21 +1,26 @@
 # Transcript Parser - Complete Product Roadmap
 
-**Last Updated**: December 20, 2024
+**Last Updated**: December 21, 2024
 **Project Vision**: Multi-module, persona-driven decision intelligence platform
-**Current Status**: Monorepo transformation in progress
+**Current Status**: Monorepo Sprint 01 - Unit Testing Phase
 
 ---
 
 ## 📊 Overall Project Status
 
 ### Completion Summary
+
 - **Original MVP Progress**: ~65% (13 of 20 weeks)
-- **Monorepo Foundation**: Phase 1 - In Progress
-- **Modules Ready**: 0 of 5 planned
+- **Monorepo Foundation**: Sprint 01 - 85% Complete (Implementation ✅, Testing ⏳)
+- **Modules Ready**: 0 of 5 planned (SDK infrastructure ready)
 
 ### Architecture Evolution
+
 - **Phase 1 (Completed)**: Single-app transcript parser ✅
 - **Phase 2 (In Progress)**: Monorepo transformation with snap-in modules ⏳
+  - Package extraction: ✅ 8/8 packages complete
+  - Unit testing: ⏳ In progress
+  - E2E testing: ⏳ Pending
 - **Phase 3 (Planned)**: Multi-module persona-driven platform
 
 ---
@@ -41,9 +46,11 @@ Transform decision-making for life's major choices through AI-powered audio tran
 This epic represents the original single-application development before the monorepo transformation. All sprint documentation is organized in `epics/epic-00-original-mvp/sprints/`.
 
 ### Sprint 1: Foundation & Upload ✅ COMPLETED
+
 **Duration**: Weeks 1-2 | **Status**: Implemented | **Commit**: `c0dfce2`
 
 **Deliverables**:
+
 - [x] Video upload component with drag-and-drop
 - [x] File validation (type, size limits)
 - [x] Video preview functionality
@@ -53,9 +60,11 @@ This epic represents the original single-application development before the mono
 ---
 
 ### Sprint 2: AI Integration ✅ COMPLETED
+
 **Duration**: Weeks 3-4 | **Status**: Implemented with enhancements
 
 **Deliverables**:
+
 - [x] Google Gemini API integration
 - [x] Audio extraction (MediaRecorder)
 - [x] FFmpeg.wasm fallback for unsupported codecs
@@ -69,9 +78,11 @@ This epic represents the original single-application development before the mono
 ---
 
 ### Sprint 3: Backend Infrastructure ✅ COMPLETED
+
 **Duration**: Weeks 5-6 | **Status**: Implemented | **Commit**: `3df54a7`
 
 **Deliverables**:
+
 - [x] Docker PostgreSQL setup
 - [x] Node.js + Express backend
 - [x] Database schema with Drizzle ORM
@@ -81,6 +92,7 @@ This epic represents the original single-application development before the mono
 - [x] Frontend-backend integration
 
 **Database Schema**:
+
 - [x] users table (id, email, password, name)
 - [x] transcripts table (id, userId, title, videoUrl, audioUrl, status)
 - [x] transcript_entries table (id, transcriptId, speakerNumber, text, timestamps)
@@ -90,9 +102,11 @@ This epic represents the original single-application development before the mono
 ---
 
 ### Sprint 4: Transcript Viewer ✅ COMPLETED
+
 **Duration**: Weeks 7-8 | **Status**: Enhanced implementation | **Commit**: `bc636bf`
 
 **Deliverables**:
+
 - [x] Enhanced transcript viewer UI
 - [x] Virtual scrolling for performance (10,000+ entries)
 - [x] Speaker color coding (6 colors)
@@ -104,9 +118,11 @@ This epic represents the original single-application development before the mono
 ---
 
 ### Sprint 5: Export Functionality ⚠️ PARTIAL
+
 **Duration**: Weeks 9-10 | **Status**: Needs completion
 
 **Deliverables**:
+
 - [ ] JSON export with full metadata
 - [ ] SRT export (subtitle format)
 - [ ] VTT export (WebVTT format)
@@ -120,9 +136,11 @@ This epic represents the original single-application development before the mono
 ---
 
 ### Sprint 6: Premium UX Enhancements ✅ COMPLETED
+
 **Duration**: Weeks 11-12 | **Status**: Implemented | **Commit**: `1d185a5`
 
 **Deliverables**:
+
 - [x] Glassmorphism design system
 - [x] Premium UI components (shadcn/ui)
 - [x] Enhanced Framer Motion animations
@@ -135,9 +153,11 @@ This epic represents the original single-application development before the mono
 ---
 
 ### Sprint 7: Backend Integration ✅ COMPLETED
+
 **Duration**: Weeks 13-14 | **Status**: COMPLETED
 
 **Deliverables**:
+
 - [x] Complete Express.js REST API
 - [x] PostgreSQL database with Drizzle ORM
 - [x] Real Gemini AI transcription pipeline
@@ -148,6 +168,7 @@ This epic represents the original single-application development before the mono
 - [x] API endpoint documentation
 
 **API Endpoints**:
+
 - [x] `POST /api/auth/register` - Register new user
 - [x] `POST /api/auth/login` - Login user
 - [x] `GET /api/auth/me` - Get current user
@@ -160,9 +181,11 @@ This epic represents the original single-application development before the mono
 ---
 
 ### Sprint 7B: Speaker Management ❌ NOT STARTED
+
 **Duration**: TBD | **Status**: Pending (original Sprint 7 content)
 
 **Deliverables**:
+
 - [ ] Edit speaker names inline
 - [ ] Customize speaker colors with color picker
 - [ ] Update all entries when speaker name changes
@@ -173,9 +196,11 @@ This epic represents the original single-application development before the mono
 ---
 
 ### Sprint 8: Search & Filter UX ❌ NOT STARTED
+
 **Duration**: Weeks 15-16 | **Status**: Planned
 
 **Deliverables**:
+
 - [ ] Full-text search across transcripts
 - [ ] Filter by speaker (multi-select)
 - [ ] Filter by date/time range
@@ -187,9 +212,11 @@ This epic represents the original single-application development before the mono
 ---
 
 ### Sprint 9: PWA Features ❌ NOT STARTED
+
 **Duration**: Weeks 17-18 | **Status**: Planned
 
 **Deliverables**:
+
 - [ ] Service worker configuration
 - [ ] Web app manifest (icons, colors, theme)
 - [ ] Install prompts (Windows, Mac, iOS, Android)
@@ -204,9 +231,11 @@ This epic represents the original single-application development before the mono
 ---
 
 ### Sprint 10: Integration & Polish ❌ NOT STARTED
+
 **Duration**: Weeks 19-20 | **Status**: Planned
 
 **Deliverables**:
+
 - [ ] E2E test suite completion (Playwright)
 - [ ] Performance optimization (Lighthouse 90+)
 - [ ] Accessibility audit (WCAG 2.1 AA compliance)
@@ -222,43 +251,66 @@ This epic represents the original single-application development before the mono
 ### Epic 1: Monorepo Foundation 🏗️
 
 **Goal**: Establish scalable monorepo infrastructure for modular development
-**Timeline**: Sprint 1-2 (2 weeks) | **Status**: In Progress
+**Timeline**: Sprint 1-2 (2 weeks) | **Status**: Sprint 01 - 85% Complete
 
-#### Sprint 1: Monorepo Setup & Package Extraction
-**Duration**: 1 week
+#### Sprint 1: Monorepo Setup & Package Extraction ⏳ 85% COMPLETE
+
+**Duration**: 1 week | **Status**: Implementation Complete, Testing In Progress
 
 **Deliverables**:
+
 - [x] Set up Turborepo with pnpm workspaces
 - [x] Create Module SDK package with snap-in architecture
 - [x] Create shared TypeScript types package
 - [x] Install and configure pnpm (v9.0.0)
 - [x] Create folder structure (apps/, packages/, modules/)
-- [ ] Extract shared UI components to `packages/ui`
-  - [ ] shadcn/ui components (Button, Dialog, Card, etc.)
-  - [ ] Custom components (TranscriptList, VideoPreview, etc.)
-  - [ ] Framer Motion animations
-- [ ] Extract AI services to `packages/ai-services`
-  - [ ] Gemini client
-  - [ ] Transcription service
-  - [ ] Speaker name detection
-  - [ ] Usage tracking
-- [ ] Extract audio processing to `packages/audio-processing`
-  - [ ] Browser audio extractor
-  - [ ] FFmpeg.wasm extractor
-- [ ] Extract export utilities to `packages/export`
-  - [ ] TXT, SRT, VTT, JSON, CSV formats
-- [ ] Create database package with Drizzle schemas
+- [x] Extract shared UI components to `packages/ui` ✅
+  - [x] shadcn/ui components (11 components)
+  - [x] Custom components (26 main components)
+  - [x] Framer Motion animations
+  - [x] 5 custom hooks
+- [x] Extract AI services to `packages/ai-services` ✅
+  - [x] Gemini client
+  - [x] Transcription service
+  - [x] Speaker name detection
+  - [x] Usage tracking
+- [x] Extract audio processing to `packages/audio-processing` ✅
+  - [x] Browser audio extractor
+  - [x] FFmpeg.wasm extractor
+- [x] Extract export utilities to `packages/export` ✅
+  - [x] TXT, SRT, VTT, JSON, CSV formats
+- [x] Create database package with Drizzle schemas ✅
+- [x] Create config package for shared configurations ✅
+- [x] Configure Vitest workspace for monorepo testing ✅
+- [ ] Write unit tests for all packages (>80% coverage) ⏳ IN PROGRESS
+- [ ] Run E2E tests and verify functionality ⏳ PENDING
+
+**Packages Created** (8/8):
+
+1. ✅ @transcript-parser/types - TypeScript interfaces and types
+2. ✅ @transcript-parser/export - Export format utilities
+3. ✅ @transcript-parser/ai-services - Gemini AI integration
+4. ✅ @transcript-parser/audio-processing - FFmpeg audio extraction
+5. ✅ @transcript-parser/database - Drizzle ORM schemas
+6. ✅ @transcript-parser/ui - UI components and hooks
+7. ✅ @transcript-parser/config - Shared configurations
+8. ✅ @transcript-parser/module-sdk - Module framework
 
 **Acceptance Criteria**:
-- [ ] All packages build successfully with Turbo
-- [ ] No circular dependencies
-- [ ] Shared code is DRY (Don't Repeat Yourself)
-- [ ] TypeScript types are consistent across packages
+
+- [x] All packages build successfully
+- [x] No circular dependencies
+- [x] Shared code is DRY (Don't Repeat Yourself)
+- [x] TypeScript types are consistent across packages
+- [ ] Unit test coverage >80% for all packages ⏳ IN PROGRESS
+- [ ] All tests passing ⏳ IN PROGRESS
 
 #### Sprint 2: Core App Migration & Testing
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Migrate existing `src/` to `apps/core/src/`
 - [ ] Update all import paths to use workspace packages (`@transcript-parser/*`)
 - [ ] Configure Turbo build pipeline
@@ -268,6 +320,7 @@ This epic represents the original single-application development before the mono
 - [ ] Verify build caching with Turbo
 
 **Acceptance Criteria**:
+
 - [ ] Existing app functionality 100% intact
 - [ ] All tests passing
 - [ ] Build time improved with Turbo caching (target: 50% faster)
@@ -282,9 +335,11 @@ This epic represents the original single-application development before the mono
 **Timeline**: Sprint 3-4 (2 weeks) | **Status**: Planned
 
 #### Sprint 3: Profile Data Model & UI
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Design user profile database schema
   - [ ] User table (id, email, name, preferences JSON)
   - [ ] Module activation table (userId, moduleId, settings)
@@ -300,6 +355,7 @@ This epic represents the original single-application development before the mono
 - [ ] Implement profile persistence (PostgreSQL)
 
 **Acceptance Criteria**:
+
 - [ ] Users can create and edit profiles
 - [ ] Preferences persist across sessions and devices
 - [ ] Onboarding flow is intuitive (< 2 min to complete)
@@ -307,9 +363,11 @@ This epic represents the original single-application development before the mono
 - [ ] Responsive design (mobile, tablet, desktop)
 
 #### Sprint 4: Module Activation & Registry
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Implement ModuleRegistry system (dynamic loading)
 - [ ] Create module activation UI
   - [ ] Browse available modules (grid/list view)
@@ -321,6 +379,7 @@ This epic represents the original single-application development before the mono
 - [ ] Implement module permissions/licensing (future-proofing)
 
 **Acceptance Criteria**:
+
 - [ ] Modules can be activated/deactivated dynamically
 - [ ] Module registry loads all available modules
 - [ ] Settings specific to each module are saved
@@ -335,9 +394,11 @@ This epic represents the original single-application development before the mono
 **Timeline**: Sprint 5-7 (3 weeks) | **Status**: Planned
 
 #### Sprint 5: Real Estate Data Model & Capture
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Implement Real Estate module definition (from example)
   - [ ] All custom fields (address, price, beds, baths, sqft, etc.)
   - [ ] Templates (house viewing, apartment tour, commercial)
@@ -354,6 +415,7 @@ This epic represents the original single-application development before the mono
   - [ ] Sort by price, date, rating
 
 **Acceptance Criteria**:
+
 - [ ] Users can record property viewings
 - [ ] Custom fields capture all relevant data
 - [ ] Photos link to transcript timeline
@@ -361,9 +423,11 @@ This epic represents the original single-application development before the mono
 - [ ] GPS auto-detection works on mobile
 
 #### Sprint 6: Property Comparison & Analysis
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Build comparison table UI
   - [ ] Side-by-side property comparison (2-10 properties)
   - [ ] Customizable columns (show/hide fields)
@@ -387,6 +451,7 @@ This epic represents the original single-application development before the mono
   - [ ] High-pressure tactics
 
 **Acceptance Criteria**:
+
 - [ ] Comparison table shows 2+ properties side-by-side
 - [ ] AI extracts pros/cons with 80%+ accuracy
 - [ ] Decision confidence score is actionable (clear explanation)
@@ -394,9 +459,11 @@ This epic represents the original single-application development before the mono
 - [ ] Red flags are detected reliably
 
 #### Sprint 7: Real Estate Export & Polish
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Custom export: Property Comparison Spreadsheet (CSV/Excel)
   - [ ] All properties in rows
   - [ ] Custom fields in columns
@@ -417,6 +484,7 @@ This epic represents the original single-application development before the mono
 - [ ] Module documentation and user guide
 
 **Acceptance Criteria**:
+
 - [ ] Exports are professional and print-ready
 - [ ] Sharing links work across devices without login
 - [ ] Search finds properties quickly (< 500ms)
@@ -431,9 +499,11 @@ This epic represents the original single-application development before the mono
 **Timeline**: Sprint 8-10 (3 weeks) | **Status**: Planned
 
 #### Sprint 8: Comparison Engine
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Build generic comparison algorithm
   - [ ] Works across all modules (Real Estate, Vehicle, etc.)
   - [ ] Extracts structured data from transcripts using AI
@@ -454,6 +524,7 @@ This epic represents the original single-application development before the mono
   - [ ] Confidence score
 
 **Acceptance Criteria**:
+
 - [ ] Comparison works for any module without code changes
 - [ ] Data is normalized correctly (prices, dates, units)
 - [ ] Visualizations are clear and helpful
@@ -461,9 +532,11 @@ This epic represents the original single-application development before the mono
 - [ ] Performance is fast even with 50+ options
 
 #### Sprint 9: Insight Generation
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Implement executive summary generation
   - [ ] 2-3 sentence overview of transcript
   - [ ] Key takeaways (3-5 bullet points)
@@ -485,6 +558,7 @@ This epic represents the original single-application development before the mono
   - [ ] Track decision confidence
 
 **Acceptance Criteria**:
+
 - [ ] Summaries are concise and accurate (validated by users)
 - [ ] Questions are relevant and actionable
 - [ ] Action items are complete (who, what, when)
@@ -492,9 +566,11 @@ This epic represents the original single-application development before the mono
 - [ ] All features work reliably across different transcript types
 
 #### Sprint 10: Advanced Analytics
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Build analytics dashboard
   - [ ] Module usage over time (charts)
   - [ ] Decision patterns (what led to choices?)
@@ -515,6 +591,7 @@ This epic represents the original single-application development before the mono
   - [ ] Share insights with other users (anonymized)
 
 **Acceptance Criteria**:
+
 - [ ] Dashboard shows meaningful insights (not just vanity metrics)
 - [ ] Predictions are reasonably accurate (validated over time)
 - [ ] Sentiment trends are visualized clearly
@@ -529,9 +606,11 @@ This epic represents the original single-application development before the mono
 **Timeline**: Sprint 11-13 (3 weeks) | **Status**: Planned
 
 #### Sprint 11: Vehicle Data Model & Capture
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Create Vehicle module definition
   - [ ] Custom fields (VIN, make/model, year, mileage, price, etc.)
   - [ ] Templates (new car, used car, boat, RV, motorcycle)
@@ -553,15 +632,18 @@ This epic represents the original single-application development before the mono
   - [ ] Sort by date, rating, price
 
 **Acceptance Criteria**:
+
 - [ ] Same quality as Real Estate Sprint 5
 - [ ] VIN scanning works via camera
 - [ ] Voice notes integrate seamlessly
 - [ ] Vehicle library is intuitive
 
 #### Sprint 12: Vehicle Comparison & Total Cost Analysis
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Build vehicle comparison table
   - [ ] Side-by-side comparison (similar to Real Estate)
   - [ ] Vehicle-specific columns (MPG, safety rating, etc.)
@@ -584,15 +666,18 @@ This epic represents the original single-application development before the mono
   - [ ] Hidden fees detection
 
 **Acceptance Criteria**:
+
 - [ ] Comparison table includes TCO
 - [ ] TCO calculator is accurate (validated against real data)
 - [ ] Negotiation history helps users see progress
 - [ ] Deal score is actionable and clear
 
 #### Sprint 13: Vehicle-Specific Features
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Carfax/AutoCheck integration (API) - Future
 - [ ] KBB value lookup (API) - Future
 - [ ] Financing calculator
@@ -612,6 +697,7 @@ This epic represents the original single-application development before the mono
   - [ ] Best practices tips
 
 **Acceptance Criteria**:
+
 - [ ] Vehicle module feels complete and polished
 - [ ] Exports are vehicle-specific and useful
 - [ ] Documentation helps users get most value
@@ -625,9 +711,11 @@ This epic represents the original single-application development before the mono
 **Timeline**: Sprint 14-15 (2 weeks) | **Status**: Planned
 
 #### Sprint 14: Visual & Cognitive Accessibility
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Implement dyslexia support
   - [ ] OpenDyslexic font option
   - [ ] Increased letter spacing (1.5x)
@@ -659,6 +747,7 @@ This epic represents the original single-application development before the mono
   - [ ] Reset to defaults
 
 **Acceptance Criteria**:
+
 - [ ] Dyslexic users can read comfortably (user testing)
 - [ ] Text sizing works across all views
 - [ ] High contrast mode is WCAG AA compliant
@@ -666,9 +755,11 @@ This epic represents the original single-application development before the mono
 - [ ] Settings panel is easy to use
 
 #### Sprint 15: Screen Reader & Motor Accessibility
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Add comprehensive ARIA labels
   - [ ] All interactive elements labeled
   - [ ] Landmark regions (header, nav, main, footer)
@@ -704,6 +795,7 @@ This epic represents the original single-application development before the mono
   - [ ] Fix all critical/serious issues
 
 **Acceptance Criteria**:
+
 - [ ] Screen readers can navigate entire app
 - [ ] Keyboard shortcuts are documented
 - [ ] Voice commands work reliably
@@ -718,9 +810,11 @@ This epic represents the original single-application development before the mono
 **Timeline**: Sprint 16-18 (3 weeks) | **Status**: Planned
 
 #### Sprint 16: Travel Data Model & Capture
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Create Travel module definition
   - [ ] Fields: Location (GPS), tour guide, language, cost, city, country
   - [ ] Templates: Guided tour, language lesson, daily journal, activity
@@ -743,6 +837,7 @@ This epic represents the original single-application development before the mono
   - [ ] Translation option (future)
 
 **Acceptance Criteria**:
+
 - [ ] Travel recordings capture location data accurately
 - [ ] Organization by trip/destination is intuitive
 - [ ] Multiple languages are detected
@@ -750,9 +845,11 @@ This epic represents the original single-application development before the mono
 - [ ] UI is travel-themed and intuitive
 
 #### Sprint 17: Travel-Specific Features
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Recommendation extraction
   - [ ] Detect restaurant, hotel, activity mentions
   - [ ] Extract addresses, hours, prices
@@ -779,6 +876,7 @@ This epic represents the original single-application development before the mono
   - [ ] Budget vs. actual spend
 
 **Acceptance Criteria**:
+
 - [ ] Recommendations are extracted accurately (80%+)
 - [ ] Flashcards help language learning (user testing)
 - [ ] Blog posts are shareable and well-formatted
@@ -786,9 +884,11 @@ This epic represents the original single-application development before the mono
 - [ ] Trip highlights capture best moments
 
 #### Sprint 18: Travel Integrations
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Google Maps integration
   - [ ] Plot recommendations on map
   - [ ] Export to Google Maps (share link)
@@ -809,6 +909,7 @@ This epic represents the original single-application development before the mono
   - [ ] Sample use cases
 
 **Acceptance Criteria**:
+
 - [ ] Map integration works smoothly
 - [ ] Exports to travel apps successful
 - [ ] Social sharing is easy and looks good
@@ -823,9 +924,11 @@ This epic represents the original single-application development before the mono
 **Timeline**: Sprint 19-21 (3 weeks) | **Status**: Planned
 
 #### Sprint 19: Basic Sharing
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Implement transcript sharing (view-only links)
   - [ ] Generate unique shareable URL
   - [ ] Optional password protection
@@ -851,6 +954,7 @@ This epic represents the original single-application development before the mono
   - [ ] Digest option (daily/weekly)
 
 **Acceptance Criteria**:
+
 - [ ] Share links work across devices
 - [ ] Comments are threaded and easy to follow
 - [ ] @mentions send notifications
@@ -858,9 +962,11 @@ This epic represents the original single-application development before the mono
 - [ ] Privacy controls work correctly
 
 #### Sprint 20: Workspaces & Teams
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Create workspace concept
   - [ ] Shared collection of transcripts
   - [ ] Team members with defined roles
@@ -886,6 +992,7 @@ This epic represents the original single-application development before the mono
   - [ ] Usage-based billing
 
 **Acceptance Criteria**:
+
 - [ ] Teams can collaborate in workspaces
 - [ ] Permissions work correctly (no unauthorized access)
 - [ ] Dashboard shows relevant team activity
@@ -893,9 +1000,11 @@ This epic represents the original single-application development before the mono
 - [ ] Workspace management is intuitive
 
 #### Sprint 21: Real-time Collaboration
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Add real-time updates (WebSocket)
   - [ ] Socket.io server setup
   - [ ] Real-time comment updates
@@ -920,6 +1029,7 @@ This epic represents the original single-application development before the mono
   - [ ] Facilitate discussion
 
 **Acceptance Criteria**:
+
 - [ ] Changes sync in real-time (< 100ms)
 - [ ] No conflicts in collaborative editing
 - [ ] Voting results are clear and accurate
@@ -934,9 +1044,11 @@ This epic represents the original single-application development before the mono
 **Timeline**: Sprint 22-24 (3 weeks) | **Status**: Planned
 
 #### Sprint 22: Student Data Model & Capture
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Create Student module definition
   - [ ] Fields: Course, professor, lecture number, topic, semester
   - [ ] Templates: Lecture, lab session, study group, office hours
@@ -960,6 +1072,7 @@ This epic represents the original single-application development before the mono
   - [ ] Reminders before due dates
 
 **Acceptance Criteria**:
+
 - [ ] Students can organize by semester → course
 - [ ] Assignments are tracked automatically
 - [ ] Calendar integration works with Google/iCal
@@ -967,9 +1080,11 @@ This epic represents the original single-application development before the mono
 - [ ] Organization is intuitive for students
 
 #### Sprint 23: Study Tools
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Build flashcard generator from lectures
   - [ ] AI extracts Q&A pairs
   - [ ] Term and definition cards
@@ -996,6 +1111,7 @@ This epic represents the original single-application development before the mono
   - [ ] Printable format
 
 **Acceptance Criteria**:
+
 - [ ] Flashcards help studying (student user testing)
 - [ ] Quizzes test knowledge accurately
 - [ ] Study guides are comprehensive
@@ -1003,9 +1119,11 @@ This epic represents the original single-application development before the mono
 - [ ] Exports work with popular study apps
 
 #### Sprint 24: Student-Specific Features
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Cross-lecture search
   - [ ] "Show me all times professor discussed X"
   - [ ] Search within a course or across courses
@@ -1030,6 +1148,7 @@ This epic represents the original single-application development before the mono
   - [ ] Study effectiveness insights
 
 **Acceptance Criteria**:
+
 - [ ] Search works across semesters effectively
 - [ ] Concept maps are useful for visualization
 - [ ] Study mode helps learning (user testing)
@@ -1044,9 +1163,11 @@ This epic represents the original single-application development before the mono
 **Timeline**: Sprint 25-27 (3 weeks) | **Status**: Planned
 
 #### Sprint 25: Business Data Model & Capture
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Create Business module definition
   - [ ] Fields: Meeting type, project, attendees, department
   - [ ] Templates: Presentation, standup, client call, 1-on-1, all-hands
@@ -1069,6 +1190,7 @@ This epic represents the original single-application development before the mono
   - [ ] Role tagging (presenter, participant, observer)
 
 **Acceptance Criteria**:
+
 - [ ] Meetings organized by project/type
 - [ ] Calendar sync works seamlessly
 - [ ] Attendees are tracked accurately
@@ -1076,9 +1198,11 @@ This epic represents the original single-application development before the mono
 - [ ] UI is professional and business-appropriate
 
 #### Sprint 26: Meeting Intelligence
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Build meeting minutes generator
   - [ ] Auto-generate structured minutes
   - [ ] Sections: Attendees, Agenda, Discussion, Decisions, Action Items
@@ -1107,6 +1231,7 @@ This epic represents the original single-application development before the mono
   - [ ] Recommendations for better meetings
 
 **Acceptance Criteria**:
+
 - [ ] Minutes are professional and complete
 - [ ] Action items are clear and actionable
 - [ ] Effectiveness metrics provide insights
@@ -1114,9 +1239,11 @@ This epic represents the original single-application development before the mono
 - [ ] Business users find it valuable
 
 #### Sprint 27: Business Integrations
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Slack integration
   - [ ] Post meeting summary to Slack channel
   - [ ] @mention attendees for action items
@@ -1142,6 +1269,7 @@ This epic represents the original single-application development before the mono
   - [ ] Compliance documentation (SOC 2, GDPR)
 
 **Acceptance Criteria**:
+
 - [ ] Integrations work seamlessly
 - [ ] Tasks sync to project management tools
 - [ ] Email summaries are professional
@@ -1156,9 +1284,11 @@ This epic represents the original single-application development before the mono
 **Timeline**: Sprint 28-30 (3 weeks) | **Status**: Planned
 
 #### Sprint 28: Infrastructure Setup
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Set up Hostinger VPS (Ubuntu 22.04 LTS)
   - [ ] Provision VPS instance
   - [ ] SSH key authentication
@@ -1191,6 +1321,7 @@ This epic represents the original single-application development before the mono
   - [ ] Performance metrics (New Relic/DataDog)
 
 **Acceptance Criteria**:
+
 - [ ] VPS is configured and secure (A+ SSL rating)
 - [ ] Docker containers run smoothly
 - [ ] SSL certificates auto-renew
@@ -1198,9 +1329,11 @@ This epic represents the original single-application development before the mono
 - [ ] Monitoring alerts work
 
 #### Sprint 29: Database Migration & API
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Migrate IndexedDB → PostgreSQL sync
   - [ ] Two-way sync strategy
   - [ ] Conflict resolution
@@ -1230,6 +1363,7 @@ This epic represents the original single-application development before the mono
   - [ ] Deprecation warnings
 
 **Acceptance Criteria**:
+
 - [ ] Data syncs between local and cloud reliably
 - [ ] API is secure and well-documented
 - [ ] Auth works with refresh tokens
@@ -1237,9 +1371,11 @@ This epic represents the original single-application development before the mono
 - [ ] Versioning allows future updates
 
 #### Sprint 30: PWA & Production Launch
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Optimize PWA for production
   - [ ] Service worker caching strategy
   - [ ] Offline support for critical paths
@@ -1272,6 +1408,7 @@ This epic represents the original single-application development before the mono
   - [ ] Iterate based on feedback
 
 **Acceptance Criteria**:
+
 - [ ] PWA works offline reliably
 - [ ] CI/CD deploys automatically
 - [ ] Documentation is complete and helpful
@@ -1287,9 +1424,11 @@ This epic represents the original single-application development before the mono
 **Timeline**: Sprint 31-33 (3 weeks) | **Status**: Planned
 
 #### Sprint 31: React Native Setup
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Set up React Native project
   - [ ] Expo or bare React Native?
   - [ ] TypeScript configuration
@@ -1315,15 +1454,18 @@ This epic represents the original single-application development before the mono
   - [ ] Bundle identifiers
 
 **Acceptance Criteria**:
+
 - [ ] Native app runs on iOS and Android
 - [ ] Code sharing works (70%+ shared)
 - [ ] Navigation feels native
 - [ ] Builds are automated
 
 #### Sprint 32: Mobile-Specific Features
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Implement background recording
   - [ ] Record even when app is backgrounded
   - [ ] iOS background modes
@@ -1350,6 +1492,7 @@ This epic represents the original single-application development before the mono
   - [ ] Fallback to PIN
 
 **Acceptance Criteria**:
+
 - [ ] Recording works in background
 - [ ] Notifications are timely and relevant
 - [ ] Camera integrates seamlessly
@@ -1357,9 +1500,11 @@ This epic represents the original single-application development before the mono
 - [ ] Biometric auth is secure
 
 #### Sprint 33: App Store Launch
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] App Store optimization (ASO)
   - [ ] Keyword research
   - [ ] App name and subtitle
@@ -1393,6 +1538,7 @@ This epic represents the original single-application development before the mono
   - [ ] User engagement metrics
 
 **Acceptance Criteria**:
+
 - [ ] Apps approved and published on both stores
 - [ ] Download numbers tracked
 - [ ] Reviews monitored and responded to
@@ -1407,9 +1553,11 @@ This epic represents the original single-application development before the mono
 **Timeline**: Sprint 34-36 (3 weeks) | **Status**: Planned
 
 #### Sprint 34: Q&A Over Transcripts
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Implement RAG (Retrieval Augmented Generation)
   - [ ] Vector embeddings for transcripts
   - [ ] Vector database (Pinecone, Qdrant, or pgvector)
@@ -1434,6 +1582,7 @@ This epic represents the original single-application development before the mono
   - [ ] Confidence score for answers
 
 **Acceptance Criteria**:
+
 - [ ] Q&A answers are accurate (90%+)
 - [ ] Citations link to correct transcript moments
 - [ ] Search is semantic, not just keyword
@@ -1441,9 +1590,11 @@ This epic represents the original single-application development before the mono
 - [ ] Performance is fast (< 2s response time)
 
 #### Sprint 35: Predictive Analytics
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Build recommendation engine
   - [ ] Collaborative filtering
   - [ ] Content-based filtering
@@ -1466,6 +1617,7 @@ This epic represents the original single-application development before the mono
   - [ ] Visualize trade-offs
 
 **Acceptance Criteria**:
+
 - [ ] Recommendations are personalized and relevant
 - [ ] Patterns are insightful and accurate
 - [ ] Scenarios are actionable
@@ -1473,9 +1625,11 @@ This epic represents the original single-application development before the mono
 - [ ] Users find predictive features valuable
 
 #### Sprint 36: Multi-Modal AI
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Add image analysis (describe photos)
   - [ ] Gemini Vision API
   - [ ] Describe property photos
@@ -1501,6 +1655,7 @@ This epic represents the original single-application development before the mono
   - [ ] Bilingual transcripts
 
 **Acceptance Criteria**:
+
 - [ ] Images are analyzed accurately
 - [ ] Videos are understood contextually
 - [ ] Documents extract key info reliably
@@ -1515,9 +1670,11 @@ This epic represents the original single-application development before the mono
 **Timeline**: Sprint 37-39 (3 weeks) | **Status**: Planned
 
 #### Sprint 37: Freemium Implementation
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Define free vs. pro tiers
   - [ ] Free: 3 transcripts/month, 1 module, local storage
   - [ ] Pro: Unlimited transcripts, all modules, cloud sync, advanced AI
@@ -1545,6 +1702,7 @@ This epic represents the original single-application development before the mono
   - [ ] Invoice generation
 
 **Acceptance Criteria**:
+
 - [ ] Free tier is useful but limited
 - [ ] Upgrade flow is smooth (< 2 minutes)
 - [ ] Payments work reliably
@@ -1552,9 +1710,11 @@ This epic represents the original single-application development before the mono
 - [ ] 5% conversion target (free → pro)
 
 #### Sprint 38: Module Marketplace
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Create module marketplace UI
   - [ ] Browse modules (grid/list)
   - [ ] Search and filter
@@ -1584,6 +1744,7 @@ This epic represents the original single-application development before the mono
   - [ ] Review checklist
 
 **Acceptance Criteria**:
+
 - [ ] Third-party modules can be published
 - [ ] Marketplace is discoverable
 - [ ] Revenue sharing works correctly
@@ -1591,9 +1752,11 @@ This epic represents the original single-application development before the mono
 - [ ] 10+ third-party modules in first quarter
 
 #### Sprint 39: Enterprise Features
+
 **Duration**: 1 week
 
 **Deliverables**:
+
 - [ ] Build white-label option
   - [ ] Custom branding (logo, colors)
   - [ ] Custom domain
@@ -1626,6 +1789,7 @@ This epic represents the original single-application development before the mono
   - [ ] GDPR compliance documentation
 
 **Acceptance Criteria**:
+
 - [ ] Enterprise customers can white-label
 - [ ] SSO works with major providers
 - [ ] Reporting is comprehensive
@@ -1637,41 +1801,45 @@ This epic represents the original single-application development before the mono
 
 ## 🎯 Success Metrics by Epic
 
-| Epic | Key Metrics | Target |
-|------|-------------|--------|
-| Epic 1 (Monorepo) | Build time, code reuse | 50% faster builds, 70% code sharing |
-| Epic 2 (Profiles) | Onboarding completion, module activation | 80% complete, avg 2 modules |
-| Epic 3 (Real Estate) | Properties tracked, comparisons made | 1000 properties, 500 comparisons |
-| Epic 4 (AI Support) | Decision confidence usage, accuracy | 70% use it, 85% helpful |
-| Epic 5 (Vehicles) | Vehicles tracked, TCO calculations | 500 vehicles, 300 TCO calcs |
-| Epic 6 (Accessibility) | WCAG compliance, user feedback | AAA, 90% satisfaction |
-| Epic 7 (Travel) | Tours tracked, recommendations | 300 tours, 1000 recommendations |
-| Epic 8 (Collaboration) | Shared transcripts, comments | 50% share, 30% comment |
-| Epic 9 (Students) | Lectures tracked, flashcards | 2000 lectures, 5000 flashcards |
-| Epic 10 (Business) | Meetings tracked, action items | 1000 meetings, 3000 items |
-| Epic 11 (Cloud) | Uptime, response time | 99.9% uptime, <500ms |
-| Epic 12 (Mobile) | App downloads, DAU | 10k downloads, 1k DAU |
-| Epic 13 (Advanced AI) | Q&A queries, accuracy | 5000 queries, 90% accurate |
-| Epic 14 (Monetization) | Free→Pro conversion, revenue | 5% conversion, $10k MRR |
+| Epic                   | Key Metrics                              | Target                              |
+| ---------------------- | ---------------------------------------- | ----------------------------------- |
+| Epic 1 (Monorepo)      | Build time, code reuse                   | 50% faster builds, 70% code sharing |
+| Epic 2 (Profiles)      | Onboarding completion, module activation | 80% complete, avg 2 modules         |
+| Epic 3 (Real Estate)   | Properties tracked, comparisons made     | 1000 properties, 500 comparisons    |
+| Epic 4 (AI Support)    | Decision confidence usage, accuracy      | 70% use it, 85% helpful             |
+| Epic 5 (Vehicles)      | Vehicles tracked, TCO calculations       | 500 vehicles, 300 TCO calcs         |
+| Epic 6 (Accessibility) | WCAG compliance, user feedback           | AAA, 90% satisfaction               |
+| Epic 7 (Travel)        | Tours tracked, recommendations           | 300 tours, 1000 recommendations     |
+| Epic 8 (Collaboration) | Shared transcripts, comments             | 50% share, 30% comment              |
+| Epic 9 (Students)      | Lectures tracked, flashcards             | 2000 lectures, 5000 flashcards      |
+| Epic 10 (Business)     | Meetings tracked, action items           | 1000 meetings, 3000 items           |
+| Epic 11 (Cloud)        | Uptime, response time                    | 99.9% uptime, <500ms                |
+| Epic 12 (Mobile)       | App downloads, DAU                       | 10k downloads, 1k DAU               |
+| Epic 13 (Advanced AI)  | Q&A queries, accuracy                    | 5000 queries, 90% accurate          |
+| Epic 14 (Monetization) | Free→Pro conversion, revenue             | 5% conversion, $10k MRR             |
 
 ---
 
 ## 📅 Timeline Summary
 
 ### Phase 1: Original MVP (Completed & Remaining)
+
 - **Completed**: Sprints 1-4, 6-7 (~14 weeks)
 - **Remaining**: Sprints 5, 7B, 8-10 (~8 weeks)
 
 ### Phase 2: Monorepo Transformation
+
 - **Epic 1**: Monorepo Foundation (2 weeks)
 - **Epic 2**: User Profiles (2 weeks)
 
 ### Phase 3: Core Modules
+
 - **Epic 3**: Real Estate Module (3 weeks)
 - **Epic 4**: AI Decision Support (3 weeks)
 - **Epic 5**: Vehicle Module (3 weeks)
 
 ### Phase 4: Expansion
+
 - **Epic 6**: Accessibility (2 weeks)
 - **Epic 7**: Travel Module (3 weeks)
 - **Epic 8**: Collaboration (3 weeks)
@@ -1679,6 +1847,7 @@ This epic represents the original single-application development before the mono
 - **Epic 10**: Business Module (3 weeks)
 
 ### Phase 5: Scale
+
 - **Epic 11**: Cloud Deployment (3 weeks)
 - **Epic 12**: Mobile Apps (3 weeks)
 - **Epic 13**: Advanced AI (3 weeks)
@@ -1691,22 +1860,26 @@ This epic represents the original single-application development before the mono
 ## 🚀 Immediate Next Steps
 
 ### Week 1-2: Complete Monorepo Setup
+
 - [ ] Extract all shared packages
 - [ ] Migrate existing app to apps/core
 - [ ] Test all functionality works
 - [ ] Update documentation
 
 ### Week 3-4: Finish Original MVP
+
 - [ ] Complete export functionality (Sprint 5)
 - [ ] Implement speaker management (Sprint 7B)
 - [ ] Add search & filter (Sprint 8)
 
 ### Week 5-6: User Profiles
+
 - [ ] Build profile system
 - [ ] Create module registry
 - [ ] Design onboarding flow
 
 ### Week 7-9: Real Estate Module MVP
+
 - [ ] Data model & capture
 - [ ] Comparison & analysis
 - [ ] Export & polish
