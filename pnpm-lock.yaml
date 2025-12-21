@@ -50,6 +50,9 @@ importers:
       '@transcript-parser/types':
         specifier: workspace:*
         version: link:packages/types
+      '@transcript-parser/ui':
+        specifier: workspace:*
+        version: link:packages/ui
       app-builder-bin:
         specifier: ^5.0.0-alpha.12
         version: 5.0.0-alpha.13
@@ -375,9 +378,6 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.4
         version: 1.2.4(@types/react@18.3.27)(react@18.3.1)
-      '@tanstack/react-virtual':
-        specifier: ^3.13.13
-        version: 3.13.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@transcript-parser/types':
         specifier: workspace:*
         version: link:../types
@@ -403,11 +403,14 @@ importers:
         specifier: ^3.4.0
         version: 3.4.0
     devDependencies:
+      '@types/node':
+        specifier: ^25.0.3
+        version: 25.0.3
       '@types/react':
-        specifier: ^18.3.18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18.3.5
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       tsup:
         specifier: ^8.0.1
@@ -415,6 +418,9 @@ importers:
       typescript:
         specifier: ~5.6.2
         version: 5.6.3
+      vite:
+        specifier: ^6.0.5
+        version: 6.4.1(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
 
 packages:
 

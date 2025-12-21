@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import { ToastProvider } from '@/components/ui/toast'
+import { ToastProvider } from '@transcript-parser/ui'
 
 // Initialize demo account if it doesn't exist
 const initializeDemoAccount = () => {

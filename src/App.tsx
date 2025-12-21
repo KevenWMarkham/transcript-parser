@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react'
-import { Header } from '@/components/Header'
-import { UploadVideo } from '@/components/UploadVideo'
-import { VideoPreview } from '@/components/VideoPreview'
-import { TranscriptView } from '@/components/TranscriptView'
-import { ProcessingStatus } from '@/components/ProcessingStatus'
-import { AdvancedExportPanel } from '@/components/AdvancedExportPanel'
-import { Login } from '@/components/Login'
-import { Register } from '@/components/Register'
-import { TranscriptLibrary } from '@/components/TranscriptLibrary'
-import { CostSummaryModal } from '@/components/CostSummaryModal'
-import { VideoPlayerModal } from '@/components/VideoPlayerModal'
 import {
+  Header,
+  UploadVideo,
+  VideoPreview,
+  TranscriptView,
+  ProcessingStatus,
+  AdvancedExportPanel,
+  Login,
+  Register,
+  TranscriptLibrary,
+  CostSummaryModal,
+  VideoPlayerModal,
   ApiKeySettings,
+  BalanceAlert,
+  Button,
+  useTranscription,
   loadApiConfig,
+  shouldShowBalanceAlert,
   type ApiKeyConfig,
-} from '@/components/ApiKeySettings'
-import { BalanceAlert, shouldShowBalanceAlert } from '@/components/BalanceAlert'
-import { useTranscription } from '@/hooks/useTranscription'
+} from '@transcript-parser/ui'
 import { apiClient } from '@transcript-parser/ai-services'
 import { usageTracker } from '@transcript-parser/ai-services'
 import {
@@ -24,7 +26,6 @@ import {
   extractVideoMetadata,
   type VideoMetadata,
 } from '@/utils/fileUtils'
-import { Button } from '@/components/ui/button'
 import { largeTranscriptDemo } from '@/data/largeTranscriptDemo'
 import type { TranscriptData } from '@transcript-parser/types'
 
