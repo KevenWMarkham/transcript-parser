@@ -1,0 +1,32 @@
+{
+  "name": "@transcript-parser/export",
+  "version": "0.1.0",
+  "description": "Export utilities for transcript data (SRT, VTT, CSV, JSON, TXT)",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": ["export", "transcript", "srt", "vtt", "csv"],
+  "author": "Keven Markham",
+  "license": "ISC",
+  "sideEffects": false,
+  "dependencies": {
+    "@transcript-parser/types": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.1",
+    "typescript": "~5.6.2"
+  }
+}

@@ -18,7 +18,7 @@ import {
   downloadFile,
   copyToClipboard,
   type ExportOptions,
-} from '@/utils/exportFormats'
+} from '@transcript-parser/export'
 
 interface ExportDialogProps {
   entries: TranscriptEntry[]
