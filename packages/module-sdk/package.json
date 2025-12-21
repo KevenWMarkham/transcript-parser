@@ -1,0 +1,32 @@
+{
+  "name": "@transcript-parser/module-sdk",
+  "version": "0.1.0",
+  "description": "SDK for creating snap-in modules for Transcript Parser",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": ["module", "plugin", "sdk"],
+  "author": "Keven Markham",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "tsup": "^8.0.1",
+    "typescript": "~5.6.2"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1"
+  }
+}

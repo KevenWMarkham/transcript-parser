@@ -152,7 +152,7 @@ export function toJSON(
   const { includeConfidence = true } = options
 
   const data = entries.map(entry => {
-    const item: any = {
+    const item: Record<string, unknown> = {
       id: entry.id,
       speaker: entry.speaker,
       speakerNumber: entry.speakerNumber,
@@ -219,15 +219,28 @@ export function downloadFile(
   filename: string,
   mimeType: string = 'text/plain'
 ): void {
-  const blob = new Blob([content], { type: mimeType })
+  // Add UTF-8 BOM for better compatibility with Excel and other tools
+  const BOM = '\uFEFF'
+  const contentWithBOM = mimeType === 'text/csv' ? BOM + content : content
+
+  const blob = new Blob([contentWithBOM], { type: `${mimeType};charset=utf-8` })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
   a.download = filename
+  a.style.display = 'none'
+
+  // Ensure the link is added to the document
   document.body.appendChild(a)
+
+  // Force download by triggering click
   a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
+
+  // Clean up
+  setTimeout(() => {
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }, 100)
 }
 
 /**

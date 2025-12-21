@@ -15,7 +15,7 @@ export function Header() {
           {/* Image with overlay gradient */}
           <div className="absolute inset-0">
             <img
-              src="/images/banner.png"
+              src={`${import.meta.env.BASE_URL}images/banner.png`}
               alt="Video Transcript Parser Banner"
               className="w-full h-full object-cover"
               onError={(e) => {

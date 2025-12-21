@@ -26,7 +26,10 @@
       "Bash(npm run electron:build:win:*)",
       "Bash(npm install:*)",
       "Bash(git push:*)",
-      "Bash(git mv:*)"
+      "Bash(git mv:*)",
+      "Bash(dir:*)",
+      "Bash(pnpm --version:*)",
+      "Bash(pnpm install)"
     ],
     "deny": [],
     "ask": []
