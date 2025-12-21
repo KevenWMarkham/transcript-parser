@@ -970,25 +970,543 @@ After all expert reviews complete, create a consolidated report:
 
 ### If Changes Needed ⚠️
 
-1. **Create Issue List**
-   - Document all issues found
-   - Prioritize by severity
-   - Assign to appropriate areas
+#### 1. Extract Expert Feedback into Actionable Tasks
 
-2. **Fix Critical Issues**
-   - Address all blocking issues
-   - Re-run affected tests
-   - Re-submit for review
+Create a comprehensive list of rework items from all expert reviews:
 
-3. **Update Documentation**
-   - Fix any documentation gaps
-   - Update READMEs
-   - Add missing examples
+**Create File**: `implementation/code-review/REWORK_TASKS.md`
 
-4. **Re-Review**
-   - Request another code review
-   - Focus on changed areas
-   - Verify fixes are complete
+````markdown
+# Sprint 01 - Code Review Rework Tasks
+
+**Created**: [Date]
+**Review Completed**: [Date]
+**Status**: 🔴 In Progress
+
+---
+
+## 🚨 Critical Issues (Must Fix Before Sprint Complete)
+
+### From 🏗️ Architecture Expert (Dr. Sarah Chen)
+
+#### Issue #1: [Title]
+
+- **Severity**: 🔴 Critical
+- **Package**: @transcript-parser/[name]
+- **Location**: [file:line]
+- **Issue**: [Description of what's wrong]
+- **Impact**: [Why this blocks sprint completion]
+- **Recommendation**: [Expert's suggested fix]
+- **Action Required**: [Specific implementation steps]
+- **Verification**: [How to verify fix works]
+- **Status**: [ ] Not Started / [ ] In Progress / [ ] Complete
+
+**Commands to verify fix**:
+
+```bash
+[exact commands to run]
+```
+````
+
+### From 🔒 Security Expert (James Liu)
+
+[Continue for all critical issues from all experts]
+
+---
+
+## ⚠️ Major Issues (Should Fix Before Sprint Complete)
+
+### From ⚡ Performance Expert (Aisha Patel)
+
+#### Issue #5: [Title]
+
+- **Severity**: ⚠️ Major
+- **Package**: @transcript-parser/[name]
+- **Location**: [file:line]
+- **Issue**: [Description]
+- **Impact**: [User/developer impact]
+- **Recommendation**: [Expert's suggested fix]
+- **Action Required**: [Implementation steps]
+- **Can Defer To**: Sprint 02 if blocked
+- **Status**: [ ] Not Started / [ ] In Progress / [ ] Complete / [ ] Deferred
+
+---
+
+## 💡 Minor Issues (Can Defer to Future Sprints)
+
+### From 📖 Documentation Expert (Rachel Green)
+
+#### Issue #12: [Title]
+
+- **Severity**: 💡 Minor
+- **Package**: @transcript-parser/[name]
+- **Issue**: [Description]
+- **Recommendation**: [Suggested improvement]
+- **Deferred To**: Sprint 02
+- **Reason**: [Why deferring is acceptable]
+
+---
+
+## 📊 Summary
+
+- **Total Issues**: [count]
+- **Critical**: [count] (🔴 Must fix)
+- **Major**: [count] (⚠️ Should fix)
+- **Minor**: [count] (💡 Can defer)
+- **Deferred**: [count]
+
+---
+
+## ✅ Completion Criteria
+
+Sprint 01 can be marked complete when:
+
+- [ ] All 🔴 Critical issues resolved and verified
+- [ ] All ⚠️ Major issues either resolved or explicitly deferred with justification
+- [ ] All fixes validated by re-running verification commands
+- [ ] Re-review completed and approved by affected experts
+- [ ] Documentation updated with lessons learned
+
+````
+
+---
+
+#### 2. Prioritize and Categorize Issues
+
+Use this severity matrix:
+
+**🔴 Critical (Must Fix)**:
+- Blocks core functionality
+- Security vulnerabilities
+- Breaking changes introduced
+- Violates architectural principles
+- Circular dependencies
+- Missing critical accessibility features (WCAG A)
+
+**⚠️ Major (Should Fix)**:
+- Impacts performance significantly (>20% degradation)
+- Missing important tests (coverage <80%)
+- Accessibility issues (WCAG AA)
+- Poor documentation for key features
+- Suboptimal architecture but not blocking
+- Can potentially defer to Sprint 02 if blocking issues arise
+
+**💡 Minor (Can Defer)**:
+- Nice-to-have improvements
+- Documentation polish
+- Non-critical performance optimizations
+- Additional test cases
+- Enhanced examples
+- Future enhancements
+
+---
+
+#### 3. Create Rework Implementation Plan
+
+**Create File**: `implementation/code-review/REWORK_PLAN.md`
+
+```markdown
+# Sprint 01 - Rework Implementation Plan
+
+**Created**: [Date]
+**Target Completion**: [Date]
+
+---
+
+## 🎯 Rework Goals
+
+1. Address all critical issues from code review
+2. Resolve major issues or document deferrals
+3. Ensure Sprint 01 foundation is solid
+4. Update documentation with lessons learned
+
+---
+
+## 📋 Implementation Sequence
+
+### Phase 1: Critical Fixes (Estimated: [X] hours)
+
+#### Fix 1: [Title] - @transcript-parser/[package]
+**Expert**: 🏗️ Architecture (Dr. Sarah Chen)
+**Estimated Time**: [X] min
+
+**Steps**:
+1. Read current implementation: `[file path]`
+2. Apply fix: [specific changes needed]
+3. Verify: `[command to run]`
+4. Test: `cd packages/[name] && pnpm test`
+5. Commit: `git commit -m "fix([package]): [description]"`
+
+**Acceptance Criteria**:
+- [ ] Fix applied successfully
+- [ ] Tests passing
+- [ ] Build successful
+- [ ] Expert verification command passes
+
+---
+
+#### Fix 2: [Title] - @transcript-parser/[package]
+[Continue for all critical fixes]
+
+---
+
+### Phase 2: Major Fixes (Estimated: [X] hours)
+
+[Similar structure for major fixes]
+
+---
+
+### Phase 3: Verification (Estimated: 30 min)
+
+1. **Run Full Build**
+   ```bash
+   pnpm install
+   pnpm build
+````
+
+2. **Run All Tests**
+
+   ```bash
+   pnpm test
+   ```
+
+3. **Verify Each Fix**
+
+   ```bash
+   # Run verification commands from REWORK_TASKS.md
+   ```
+
+4. **Bundle Analysis**
+   ```bash
+   cd apps/transcript-parser
+   npm run build
+   # Verify bundle size maintained or improved
+   ```
+
+---
+
+### Phase 4: Documentation Updates (Estimated: 30 min)
+
+1. Update SESSION_SUMMARY.md with rework completed
+2. Update README.md if approach changed
+3. Document lessons learned for future sprints
+4. Create templates for future packages if patterns emerged
+
+---
+
+## 🔄 Re-Review Process
+
+After all fixes are complete:
+
+1. **Update REWORK_TASKS.md**
+   - Mark all items as complete
+   - Document verification results
+   - Note any deferred items
+
+2. **Request Focused Re-Review**
+
+   **Create File**: `implementation/code-review/RE_REVIEW_REQUEST.md`
+
+   ````markdown
+   # Sprint 01 - Re-Review Request
+
+   **Date**: [Date]
+   **Scope**: Focused re-review of fixed issues
+
+   ## 🎯 What Changed
+
+   ### Critical Fixes Applied
+
+   1. **[Package]**: [Fix description]
+      - Expert: [Name]
+      - Original Issue: [Link to REWORK_TASKS.md#issue-1]
+      - Verification: ✅ [Command passed]
+
+   [Continue for all fixes]
+
+   ## 🔍 Review Focus Areas
+
+   Please review ONLY the following:
+
+   ### 🏗️ Architecture Expert
+
+   - [ ] Issue #1 fix verified in @transcript-parser/[package]
+   - [ ] Issue #3 fix verified in @transcript-parser/[package]
+
+   ### 🔒 Security Expert
+
+   - [ ] Issue #2 fix verified in @transcript-parser/[package]
+
+   [Continue for all affected experts]
+
+   ## ✅ Verification Commands
+
+   All verification commands from original review have been re-run:
+
+   ```bash
+   # [List all commands that were re-run with results]
+   ```
+   ````
+
+   ## 📊 Updated Metrics
+   - Build time: [before] → [after]
+   - Bundle size: [before] → [after]
+   - Test coverage: [before] → [after]
+   - ESLint errors: [before] → [after]
+
+   ## 🚀 Ready for Re-Review
+   - [x] All critical fixes applied
+   - [x] All verification commands passing
+   - [x] Tests passing (with coverage)
+   - [x] Build successful
+   - [x] Documentation updated
+
+   ```
+
+   ```
+
+3. **Execute Focused Re-Review**
+   - Only review changed areas
+   - Verify fixes address original issues
+   - Check for new issues introduced by fixes
+   - Sign off on each resolved issue
+
+4. **Final Approval**
+   - All affected experts sign off
+   - Update CODE_REVIEW_SUMMARY.md with final verdict
+   - Mark Sprint 01 as complete
+
+---
+
+## 📝 Lessons Learned Documentation
+
+After completing rework, update implementation files:
+
+**Update File**: `implementation/SESSION_SUMMARY.md`
+
+Add section:
+
+```markdown
+## 🔄 Code Review Rework (Post-Implementation)
+
+### Issues Found
+
+**Total Issues**: [count]
+
+- Critical: [count]
+- Major: [count]
+- Minor: [count]
+
+### Key Fixes Applied
+
+1. **[Package]**: [Fix description]
+   - Why: [Issue explanation]
+   - Fix: [What was changed]
+   - Impact: [Improvement gained]
+   - Lesson: [What to do differently next time]
+
+### Patterns for Future Sprints
+
+Based on code review feedback:
+
+1. **[Pattern/Practice]**: [Description]
+   - When: [When to apply]
+   - How: [Implementation approach]
+   - Example: [Code reference]
+
+### Templates Created
+
+- [Template name]: [Purpose and location]
+- [Template name]: [Purpose and location]
+```
+
+---
+
+## 🎯 Deferral Process
+
+If major issues need to be deferred to Sprint 02:
+
+**Create File**: `implementation/code-review/DEFERRED_ITEMS.md`
+
+```markdown
+# Sprint 01 - Deferred Issues
+
+Items deferred from Sprint 01 code review to future sprints.
+
+---
+
+## Sprint 02 (Next Sprint)
+
+### Issue #[X]: [Title]
+
+- **Original Severity**: ⚠️ Major
+- **Package**: @transcript-parser/[name]
+- **Expert**: [Name]
+- **Issue**: [Description]
+- **Why Deferred**: [Justification - e.g., "Requires dependency on Sprint 02 module system"]
+- **Impact of Deferring**: [What's acceptable without this fix]
+- **Workaround**: [Temporary mitigation if any]
+- **Target Sprint**: Sprint 02
+- **Story Points**: [estimate]
+
+---
+
+## Future Sprints
+
+### Issue #[X]: [Title]
+
+- **Original Severity**: 💡 Minor
+- **Package**: @transcript-parser/[name]
+- **Expert**: [Name]
+- **Issue**: [Description]
+- **Why Deferred**: [Justification - e.g., "Nice-to-have, not blocking any workflows"]
+- **Target Sprint**: [Sprint number or "Backlog"]
+```
+
+**Update Epic Backlog**:
+
+Add deferred items to:
+`specs/epics/epic-01-monorepo-foundation/sprints/sprint-02/Sprint 02 - Backlog.md`
+
+---
+
+## 🔧 Implementation Tips
+
+### For Each Fix:
+
+1. **Create Feature Branch** (optional for small fixes)
+
+   ```bash
+   git checkout -b fix/sprint-01-review-issue-[N]
+   ```
+
+2. **Make Changes**
+   - Follow expert recommendation exactly
+   - Test thoroughly
+   - Update relevant documentation
+
+3. **Verify Fix**
+
+   ```bash
+   # Run expert's verification command
+   # Run package tests
+   cd packages/[name]
+   pnpm test
+
+   # Run package build
+   pnpm build
+   ```
+
+4. **Commit with Reference**
+
+   ```bash
+   git add .
+   git commit -m "fix([package]): [description] (review issue #[N])"
+   ```
+
+5. **Update REWORK_TASKS.md**
+   - Mark issue as complete
+   - Document verification results
+   - Note any deviations from recommendation
+
+### For Complex Fixes:
+
+If a fix requires significant refactoring:
+
+1. **Create Implementation Sub-Plan**
+   - Break fix into smaller steps
+   - Identify affected files
+   - Plan testing strategy
+
+2. **Consider Creating New Package** (if architecture issue)
+   - May need to extract more code
+   - Follow same package creation pattern
+   - Update dependencies
+
+3. **Add Integration Tests**
+   - Prevent regression
+   - Verify fix across packages
+
+---
+
+## ✅ Re-Review Sign-Off
+
+After all fixes and re-review:
+
+**Update File**: `implementation/code-review/CODE_REVIEW_SUMMARY.md`
+
+Add section:
+
+```markdown
+## 🔄 Re-Review Results
+
+**Re-Review Date**: [Date]
+**Scope**: [Focused/Full]
+
+### Fixes Verified
+
+- [x] Issue #1: [Title] - ✅ Approved by 🏗️ Architecture Expert
+- [x] Issue #2: [Title] - ✅ Approved by 🔒 Security Expert
+- [x] Issue #3: [Title] - ✅ Approved by ⚡ Performance Expert
+
+### Final Expert Sign-Off
+
+- [x] 🏗️ Architecture (Dr. Sarah Chen) - Re-approved
+- [x] 🔒 Security (James Liu) - Re-approved
+- [x] ⚡ Performance (Aisha Patel) - Re-approved
+- [x] 🎨 UX Design (Marcus Rodriguez) - No changes required
+- [x] ♿ Accessibility (Emily Thompson) - No changes required
+- [x] 🧪 Testing (David Kim) - No changes required
+- [x] 📖 Documentation (Rachel Green) - No changes required
+
+### Final Metrics
+
+- Build time: [time]
+- Bundle size: [size]
+- Test coverage: [percentage]
+- ESLint errors: 0
+- TypeScript errors: 0
+- Security vulnerabilities: 0
+
+### Final Verdict
+
+**Status**: ✅ APPROVED
+
+All critical and major issues have been resolved. Sprint 01 foundation is solid and ready for Sprint 02.
+
+**Sign-off**: [Name] - [Date]
+```
+
+---
+
+## 🎉 Sprint 01 Completion
+
+Once all rework is complete and re-review approved:
+
+1. **Update Sprint Status**
+
+   ```bash
+   # Update implementation/README.md
+   # Change phase from "CODE REVIEW" to "COMPLETE"
+   # Update status to "✅ Complete"
+   ```
+
+2. **Create Git Tag**
+
+   ```bash
+   git tag -a v2.0.0-sprint-01 -m "Sprint 01 - Monorepo Foundation Complete (with code review fixes)"
+   git push origin v2.0.0-sprint-01
+   ```
+
+3. **Document for Sprint 02**
+   - Move lessons learned to Epic level
+   - Create templates for future use
+   - Update patterns documentation
+
+4. **Celebrate!** 🎉
+   - Sprint 01 is DONE
+   - Foundation is solid
+   - Ready for Sprint 02
 
 ---
 
