@@ -5,7 +5,7 @@
 import { renderHook, act, waitFor } from '@testing-library/react'
 import { useTranscription } from './useTranscription'
 import type { VideoMetadata } from '@/utils/fileUtils'
-import * as audioExtractorModule from '@/services/audioExtractor'
+import * as audioExtractorModule from '@transcript-parser/audio-processing'
 import * as geminiClientModule from '@transcript-parser/ai-services'
 
 // Mock the services
