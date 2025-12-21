@@ -6,7 +6,7 @@
 import { GoogleGenAI } from '@google/genai'
 import { usageTracker } from '@/services/usageTracker'
 import { apiClient } from '@/services/apiClient'
-import type { TranscriptEntry, Speaker } from '@/types/transcript'
+import type { TranscriptEntry, Speaker } from '@transcript-parser/types'
 
 export interface DetectedSpeakerName {
   speakerId: number

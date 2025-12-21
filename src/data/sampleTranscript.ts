@@ -1,4 +1,4 @@
-import type { TranscriptData } from '@/types/transcript'
+import type { TranscriptData } from '@transcript-parser/types'
 
 export const sampleTranscript: TranscriptData = {
   id: 'transcript-sample-001',

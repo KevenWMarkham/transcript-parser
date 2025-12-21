@@ -5,7 +5,7 @@
 
 import { useState, useCallback } from 'react'
 import { openDB } from 'idb'
-import type { TranscriptData } from '@/types/transcript'
+import type { TranscriptData } from '@transcript-parser/types'
 import type { VideoMetadata } from '@/utils/fileUtils'
 import { isAudioFile } from '@/utils/fileUtils'
 import { AudioExtractor } from '@/services/audioExtractor'

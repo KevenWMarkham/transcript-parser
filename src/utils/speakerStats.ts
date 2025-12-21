@@ -1,4 +1,4 @@
-import type { TranscriptEntry, Speaker } from '@/types/transcript'
+import type { TranscriptEntry, Speaker } from '@transcript-parser/types'
 
 export interface SpeakerStats {
   speaker: Speaker

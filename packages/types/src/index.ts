@@ -473,31 +473,3 @@ export interface LLMUsage {
   operation: string;
   createdAt: Date;
 }
-
-// Export all types
-export type {
-  TranscriptEntry,
-  Speaker,
-  BaseTranscriptMetadata,
-  ExtendedTranscriptMetadata,
-  TranscriptData,
-  Attachment,
-  UserProfile,
-  UserPreferences,
-  TranscriptFilter,
-  ExportOptions,
-  AIInsights,
-  AIQuestion,
-  ActionItem,
-  Decision,
-  Comparison,
-  Comment,
-  UserRating,
-  Workspace,
-  APIResponse,
-  PaginationMeta,
-  PaginatedResponse,
-  DBUser,
-  DBTranscript,
-  LLMUsage,
-};

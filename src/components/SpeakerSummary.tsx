@@ -3,7 +3,7 @@ import { Users, MessageCircle, Clock, TrendingUp } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { calculateSpeakerStats, formatDuration } from '@/utils/speakerStats'
-import type { TranscriptEntry, Speaker } from '@/types/transcript'
+import type { TranscriptEntry, Speaker } from '@transcript-parser/types'
 
 interface SpeakerSummaryProps {
   entries: TranscriptEntry[]

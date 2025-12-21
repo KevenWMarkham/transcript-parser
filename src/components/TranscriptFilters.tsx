@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import type { Speaker } from '@/types/transcript'
+import type { Speaker } from '@transcript-parser/types'
 
 export interface TranscriptFilterOptions {
   selectedSpeakers: Set<number>

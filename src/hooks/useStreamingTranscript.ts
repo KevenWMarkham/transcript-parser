@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import type { TranscriptEntry } from '@/types/transcript'
+import type { TranscriptEntry } from '@transcript-parser/types'
 
 interface UseStreamingTranscriptReturn {
   entries: TranscriptEntry[]

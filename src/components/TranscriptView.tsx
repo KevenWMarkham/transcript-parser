@@ -22,7 +22,7 @@ import {
   SpeakerNameDetectionService,
   type DetectedSpeakerName,
 } from '@/services/speakerNameDetection'
-import type { TranscriptData } from '@/types/transcript'
+import type { TranscriptData } from '@transcript-parser/types'
 
 interface TranscriptViewProps {
   transcript?: TranscriptData | null

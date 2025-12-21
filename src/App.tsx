@@ -26,7 +26,7 @@ import {
 } from '@/utils/fileUtils'
 import { Button } from '@/components/ui/button'
 import { largeTranscriptDemo } from '@/data/largeTranscriptDemo'
-import type { TranscriptData } from '@/types/transcript'
+import type { TranscriptData } from '@transcript-parser/types'
 
 function App() {
   // Auth state

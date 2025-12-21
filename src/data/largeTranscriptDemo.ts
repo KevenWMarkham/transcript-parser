@@ -1,4 +1,4 @@
-import type { TranscriptData } from '@/types/transcript'
+import type { TranscriptData } from '@transcript-parser/types'
 
 /**
  * Large demo transcript with 60 entries for testing virtualization and performance

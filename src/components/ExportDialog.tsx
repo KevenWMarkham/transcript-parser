@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useToast } from '@/components/ui/toast'
-import type { TranscriptEntry } from '@/types/transcript'
+import type { TranscriptEntry } from '@transcript-parser/types'
 import {
   toPlainText,
   toSRT,

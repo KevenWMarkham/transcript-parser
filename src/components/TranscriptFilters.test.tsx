@@ -2,7 +2,7 @@ import { describe, it, expect, jest } from '@jest/globals'
 import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { TranscriptFilters, TranscriptFilterOptions } from './TranscriptFilters'
-import type { Speaker } from '@/types/transcript'
+import type { Speaker } from '@transcript-parser/types'
 
 const mockSpeakers: Speaker[] = [
   { id: 1, name: 'Speaker 1', color: 'blue' },

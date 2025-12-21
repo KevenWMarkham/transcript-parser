@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { formatTimestamp } from '@/utils/fileUtils'
 import { highlightText } from '@/utils/textHighlight'
-import type { TranscriptEntry as TranscriptEntryType } from '@/types/transcript'
+import type { TranscriptEntry as TranscriptEntryType } from '@transcript-parser/types'
 
 interface TranscriptEntryProps {
   entry: TranscriptEntryType

@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import type { DetectedSpeakerName } from '@/services/speakerNameDetection'
-import type { Speaker } from '@/types/transcript'
+import type { Speaker } from '@transcript-parser/types'
 
 interface SpeakerNameSuggestionsProps {
   suggestions: DetectedSpeakerName[]

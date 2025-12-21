@@ -1,7 +1,7 @@
 import { useRef, useMemo, useCallback, useEffect } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { TranscriptEntry as TranscriptEntryComponent } from '@/components/TranscriptEntry'
-import type { TranscriptEntry, Speaker } from '@/types/transcript'
+import type { TranscriptEntry, Speaker } from '@transcript-parser/types'
 
 interface TranscriptListProps {
   entries: TranscriptEntry[]

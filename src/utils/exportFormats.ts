@@ -1,4 +1,4 @@
-import type { TranscriptEntry } from '@/types/transcript'
+import type { TranscriptEntry } from '@transcript-parser/types'
 
 /**
  * Format timestamp for display (MM:SS or HH:MM:SS)

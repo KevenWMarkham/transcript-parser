@@ -1,7 +1,7 @@
 import { describe, it, expect, jest } from '@jest/globals'
 import { render, screen } from '@testing-library/react'
 import { TranscriptList } from './TranscriptList'
-import type { TranscriptEntry, Speaker } from '@/types/transcript'
+import type { TranscriptEntry, Speaker } from '@transcript-parser/types'
 
 const mockSpeakers: Speaker[] = [
   { id: 1, name: 'Speaker 1', color: 'blue' },

@@ -1,7 +1,7 @@
 import { describe, it, expect } from '@jest/globals'
 import { renderHook, act } from '@testing-library/react'
 import { useStreamingTranscript } from './useStreamingTranscript'
-import type { TranscriptEntry } from '@/types/transcript'
+import type { TranscriptEntry } from '@transcript-parser/types'
 
 const createMockEntry = (
   id: string,

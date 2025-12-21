@@ -10,7 +10,7 @@ import {
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import type { Speaker, TranscriptEntry } from '@/types/transcript'
+import type { Speaker, TranscriptEntry } from '@transcript-parser/types'
 import { useMemo, useState } from 'react'
 
 interface SpeakerAnalyticsProps {

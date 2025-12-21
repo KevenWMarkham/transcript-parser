@@ -10,7 +10,7 @@ import type {
   TranscriptData,
   TranscriptEntry,
   Speaker,
-} from '@/types/transcript'
+} from '@transcript-parser/types'
 
 export interface TranscriptionOptions {
   apiKey?: string

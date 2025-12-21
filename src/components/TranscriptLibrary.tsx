@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { openDB } from 'idb'
-import type { TranscriptData } from '@/types/transcript'
+import type { TranscriptData } from '@transcript-parser/types'
 
 interface TranscriptLibraryProps {
   onLoadTranscript?: (transcript: TranscriptData) => void

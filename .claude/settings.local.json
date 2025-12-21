@@ -29,7 +29,10 @@
       "Bash(git mv:*)",
       "Bash(dir:*)",
       "Bash(pnpm --version:*)",
-      "Bash(pnpm install)"
+      "Bash(pnpm install)",
+      "Bash(npm test:*)",
+      "Bash(pnpm build:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
