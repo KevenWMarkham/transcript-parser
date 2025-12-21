@@ -50,6 +50,7 @@
     "@google/genai": "^1.34.0",
     "@transcript-parser/ai-services": "workspace:*",
     "@transcript-parser/audio-processing": "workspace:*",
+    "@transcript-parser/config": "workspace:*",
     "@transcript-parser/database": "workspace:*",
     "@transcript-parser/export": "workspace:*",
     "@transcript-parser/types": "workspace:*",

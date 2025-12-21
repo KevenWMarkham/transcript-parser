@@ -1,0 +1,20 @@
+{
+  "name": "@transcript-parser/config",
+  "version": "0.1.0",
+  "description": "Shared configuration files (ESLint, TypeScript, Tailwind)",
+  "exports": {
+    "./eslint": "./eslint.config.js",
+    "./tailwind": "./tailwind.config.ts",
+    "./typescript": "./tsconfig.base.json"
+  },
+  "keywords": ["config", "eslint", "typescript", "tailwind"],
+  "author": "Keven Markham",
+  "license": "ISC",
+  "sideEffects": false,
+  "dependencies": {
+    "eslint-plugin-jsx-a11y": "^6.8.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.6.2"
+  }
+}
