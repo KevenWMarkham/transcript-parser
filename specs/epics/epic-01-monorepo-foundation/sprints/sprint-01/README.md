@@ -10,9 +10,10 @@
 
 ### I'm ready to continue - what do I do?
 
-👉 **Read this file**: [CONTINUE_SESSION_PROMPT.md](./CONTINUE_SESSION_PROMPT.md)
+👉 **Read this file**: [implementation/CONTINUE_SESSION_PROMPT.md](./implementation/CONTINUE_SESSION_PROMPT.md)
 
 That document has:
+
 - ✅ Step-by-step instructions for all remaining packages
 - ✅ Copy-paste ready templates
 - ✅ Exact commands to run
@@ -25,10 +26,12 @@ That document has:
 ## 📊 Current Progress
 
 ### Completed ✅
+
 - **Package 1/8**: `@transcript-parser/types` - TypeScript types
 - **Package 2/8**: `@transcript-parser/export` - Export formatters
 
 ### Remaining ⏳
+
 - **Package 3/8**: `@transcript-parser/ai-services` - Gemini AI (~45 min)
 - **Package 4/8**: `@transcript-parser/audio-processing` - FFmpeg (~1.5 hours) ⚠️ Critical
 - **Package 5/8**: `@transcript-parser/database` - Drizzle ORM (~45 min)
@@ -40,18 +43,25 @@ That document has:
 
 ---
 
-## 📁 Documentation Files
+## 📁 Documentation Structure
 
-### Start Here
-- **[CONTINUE_SESSION_PROMPT.md](./CONTINUE_SESSION_PROMPT.md)** - Complete implementation guide for next session
-- **[SESSION_SUMMARY.md](./SESSION_SUMMARY.md)** - What was done in Session 1
+**📖 See detailed folder guide**: [FOLDER_STRUCTURE.md](./FOLDER_STRUCTURE.md)
 
-### Planning Documents
+### Implementation (Active Work) 🔥
+
+- **[implementation/README.md](./implementation/README.md)** - Implementation folder overview
+- **[implementation/CONTINUE_SESSION_PROMPT.md](./implementation/CONTINUE_SESSION_PROMPT.md)** - 👈 **Continue work here**
+- **[implementation/SESSION_SUMMARY.md](./implementation/SESSION_SUMMARY.md)** - Session 1 summary
+
+### Planning (Pre-Implementation) 📋
+
+- **[planning/README.md](./planning/README.md)** - Planning folder overview
 - **[planning/IMPLEMENTATION_SESSION_PROMPT.md](./planning/IMPLEMENTATION_SESSION_PROMPT.md)** - Original session plan
 - **[planning/EXECUTION_PLAN.md](./planning/EXECUTION_PLAN.md)** - Detailed technical execution plan
 - **[planning/DESIGN_IMPLEMENTATION_GUIDE.md](./planning/DESIGN_IMPLEMENTATION_GUIDE.md)** - Design system specifications
 
-### Expert Feedback
+### Expert Feedback (Planning Phase) ✅
+
 - **[planning/expert-feedback/](./planning/expert-feedback/)** - 7 domain expert reviews
   - Architecture (TypeScript project references, turbo.json optimization)
   - UX Design (README templates, onboarding)
@@ -61,17 +71,26 @@ That document has:
   - Testing (Vitest workspace, 80% coverage)
   - Documentation (TypeDoc, guides)
 
+### Sprint Overview 📄
+
+- **[Sprint 01 - Overview.md](./Sprint%2001%20-%20Overview.md)** - Sprint goals and stories
+- **[Sprint 01 - Session Prompt.md](./Sprint%2001%20-%20Session%20Prompt.md)** - Original session prompt
+- **[FOLDER_STRUCTURE.md](./FOLDER_STRUCTURE.md)** - Complete folder organization guide
+
 ---
 
 ## 🎓 What We Learned (Session 1)
 
 ### Validated Approach
+
 ✅ **Copy-then-migrate** works perfectly for single developer
+
 - No breaking changes
 - Easy rollback
 - Low stress
 
 ### Key Pattern
+
 ```bash
 1. Create package structure
 2. Copy files from src/
@@ -82,11 +101,13 @@ That document has:
 ```
 
 ### Critical Config
+
 TypeScript packages need:
+
 ```json
 {
   "compilerOptions": {
-    "moduleResolution": "bundler"  // Must have!
+    "moduleResolution": "bundler" // Must have!
   }
 }
 ```
@@ -96,6 +117,7 @@ TypeScript packages need:
 ## 🚀 Success Metrics
 
 ### Current State ✅
+
 - 2/8 packages complete (25%)
 - Zero breaking changes
 - All builds passing
@@ -103,6 +125,7 @@ TypeScript packages need:
 - Git: 3 clean commits
 
 ### Expected Final State 🎯
+
 - 8/8 packages complete (100%)
 - Zero breaking changes
 - FFmpeg lazy loaded (~30MB saved)
@@ -115,6 +138,7 @@ TypeScript packages need:
 ## 🔗 Key Commands
 
 ### Verify Current State
+
 ```bash
 git status
 git log --oneline -3
@@ -122,16 +146,18 @@ npm run build
 ```
 
 ### Continue Work
+
 ```bash
 # Read the continuation guide
-cat CONTINUE_SESSION_PROMPT.md
+cat implementation/CONTINUE_SESSION_PROMPT.md
 
 # Jump to Package 3
 cd packages/ai-services
-# Follow instructions in CONTINUE_SESSION_PROMPT.md
+# Follow instructions in implementation/CONTINUE_SESSION_PROMPT.md
 ```
 
 ### If Something Breaks
+
 ```bash
 # See recent commits
 git log --oneline -5
@@ -145,9 +171,11 @@ git reset --hard c07b015  # After export package
 ## 📞 Need Help?
 
 ### Common Issues
-See: [CONTINUE_SESSION_PROMPT.md - Common Issues & Solutions](./CONTINUE_SESSION_PROMPT.md#-common-issues--solutions)
+
+See: [implementation/CONTINUE_SESSION_PROMPT.md - Common Issues & Solutions](./implementation/CONTINUE_SESSION_PROMPT.md#-common-issues--solutions)
 
 ### Specific Problems
+
 1. **Build fails**: Check tsconfig.json has `"moduleResolution": "bundler"`
 2. **Import errors**: Run `pnpm install` at root
 3. **Package not found**: Add to package.json dependencies
@@ -158,6 +186,7 @@ See: [CONTINUE_SESSION_PROMPT.md - Common Issues & Solutions](./CONTINUE_SESSION
 ## 🎯 Sprint 01 Goals
 
 ### Must Have ✅
+
 - [x] Extract @transcript-parser/types
 - [x] Extract @transcript-parser/export
 - [ ] Extract @transcript-parser/ai-services
@@ -170,11 +199,13 @@ See: [CONTINUE_SESSION_PROMPT.md - Common Issues & Solutions](./CONTINUE_SESSION
 - [ ] Zero breaking changes
 
 ### Should Have 📋
+
 - [ ] Package README files
 - [ ] TypeDoc API documentation
 - [ ] 80% test coverage
 
 ### Could Have 💡
+
 - [ ] Storybook for UI
 - [ ] Visual dependency graph
 - [ ] Turborepo remote cache
@@ -184,11 +215,13 @@ See: [CONTINUE_SESSION_PROMPT.md - Common Issues & Solutions](./CONTINUE_SESSION
 ## 📈 Timeline
 
 ### Session 1 (Completed)
+
 - Duration: ~2 hours
 - Packages: 2/8 (types, export)
 - Status: ✅ Success
 
 ### Sessions 2-4 (Estimated)
+
 - Duration: ~8-10 hours total
 - Packages: 6/8 remaining
 - Breakdown:
@@ -209,9 +242,9 @@ See: [CONTINUE_SESSION_PROMPT.md - Common Issues & Solutions](./CONTINUE_SESSION
 
 ---
 
-**Ready to continue?** 👉 Open [CONTINUE_SESSION_PROMPT.md](./CONTINUE_SESSION_PROMPT.md)
+**Ready to continue?** 👉 Open [implementation/CONTINUE_SESSION_PROMPT.md](./implementation/CONTINUE_SESSION_PROMPT.md)
 
-**Need context?** 👉 Read [SESSION_SUMMARY.md](./SESSION_SUMMARY.md)
+**Need context?** 👉 Read [implementation/SESSION_SUMMARY.md](./implementation/SESSION_SUMMARY.md)
 
 **Want the big picture?** 👉 See [Epic 01 Overview](../../Epic%2001%20-%20Monorepo%20Foundation%20-%20Overview.md)
 

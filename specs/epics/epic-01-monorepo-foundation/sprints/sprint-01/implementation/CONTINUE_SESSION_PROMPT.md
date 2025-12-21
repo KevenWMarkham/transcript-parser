@@ -9,10 +9,12 @@
 ## 📊 Current Progress
 
 ### ✅ Completed Packages
+
 - **Package 1/8**: `@transcript-parser/types` - All TypeScript types
 - **Package 2/8**: `@transcript-parser/export` - Export formatters (SRT, VTT, CSV, JSON, TXT)
 
 ### ⏳ Remaining Packages (In Order)
+
 1. **Package 3/8**: `@transcript-parser/ai-services` - Gemini AI client
 2. **Package 4/8**: `@transcript-parser/audio-processing` - FFmpeg extractors
 3. **Package 5/8**: `@transcript-parser/database` - Drizzle ORM + Neon
@@ -25,6 +27,7 @@
 ## 🎯 Quick Start (Next Session)
 
 ### Step 1: Verify Current State
+
 ```bash
 # Check git status
 git status
@@ -42,6 +45,7 @@ git log --oneline -3
 ```
 
 ### Step 2: Test Current Build
+
 ```bash
 # Verify everything still works
 npm run build
@@ -52,6 +56,7 @@ npm run build
 ```
 
 ### Step 3: Continue with Package 3
+
 Jump to: [Package 3: @transcript-parser/ai-services](#package-3-transcript-parserai-services)
 
 ---
@@ -61,6 +66,7 @@ Jump to: [Package 3: @transcript-parser/ai-services](#package-3-transcript-parse
 For each package, follow this exact sequence:
 
 ### Step A: Create Package Structure
+
 ```bash
 # 1. Create directories
 mkdir -p packages/[package-name]/src
@@ -71,12 +77,14 @@ mkdir -p packages/[package-name]/src
 ```
 
 ### Step B: Copy Source Files
+
 ```bash
 # Copy (NOT move) files from src/ to packages/[name]/src/
 cp src/[source-path] packages/[package-name]/src/[dest-file].ts
 ```
 
 ### Step C: Build Package
+
 ```bash
 cd packages/[package-name]
 pnpm install
@@ -89,6 +97,7 @@ pnpm build
 ```
 
 ### Step D: Add to Main App
+
 ```bash
 # Edit package.json, add to dependencies:
 "@transcript-parser/[package-name]": "workspace:*"
@@ -98,6 +107,7 @@ pnpm install
 ```
 
 ### Step E: Update Imports
+
 ```bash
 # Find all files importing from old path
 grep -rl "from '@/[old-path]'" src/
@@ -107,6 +117,7 @@ sed -i "s|from '@/[old-path]'|from '@transcript-parser/[package-name]'|g" src/**
 ```
 
 ### Step F: Test & Commit
+
 ```bash
 # Test build
 npm run build
@@ -121,6 +132,7 @@ git commit --no-verify -m "feat: extract @transcript-parser/[package-name] packa
 ## 📦 Package Templates
 
 ### Standard package.json Template
+
 ```json
 {
   "name": "@transcript-parser/[PACKAGE-NAME]",
@@ -157,6 +169,7 @@ git commit --no-verify -m "feat: extract @transcript-parser/[package-name] packa
 ```
 
 ### Standard tsconfig.json Template
+
 ```json
 {
   "compilerOptions": {
@@ -189,11 +202,13 @@ git commit --no-verify -m "feat: extract @transcript-parser/[package-name] packa
 **Import Updates**: ~5 files
 
 ### 3.1 Create Package Structure
+
 ```bash
 mkdir -p packages/ai-services/src
 ```
 
 ### 3.2 Create package.json
+
 ```json
 {
   "name": "@transcript-parser/ai-services",
@@ -231,9 +246,11 @@ mkdir -p packages/ai-services/src
 ```
 
 ### 3.3 Create tsconfig.json
+
 Use the standard template above.
 
 ### 3.4 Copy Source Files
+
 ```bash
 # Copy Gemini client
 cp src/services/geminiClient.ts packages/ai-services/src/gemini-client.ts
@@ -243,6 +260,7 @@ cp src/services/speakerNameDetection.ts packages/ai-services/src/speaker-detecti
 ```
 
 ### 3.5 Create src/index.ts
+
 ```typescript
 // Re-export all AI services
 export * from './gemini-client'
@@ -250,7 +268,9 @@ export * from './speaker-detection'
 ```
 
 ### 3.6 Update Internal Imports
+
 Edit `packages/ai-services/src/gemini-client.ts`:
+
 ```typescript
 // Change:
 import type { TranscriptEntry, Speaker } from '@/types/transcript'
@@ -260,6 +280,7 @@ import type { TranscriptEntry, Speaker } from '@transcript-parser/types'
 ```
 
 ### 3.7 Build Package
+
 ```bash
 cd packages/ai-services
 pnpm install
@@ -272,7 +293,9 @@ pnpm build
 ```
 
 ### 3.8 Add to Main App
+
 Edit `package.json`:
+
 ```json
 "dependencies": {
   "@transcript-parser/ai-services": "workspace:*",
@@ -281,41 +304,48 @@ Edit `package.json`:
 ```
 
 Run:
+
 ```bash
 pnpm install
 ```
 
 ### 3.9 Update Imports in Main App
+
 Find files:
+
 ```bash
 grep -rl "from '@/services/geminiClient'" src/
 grep -rl "from '@/services/speakerNameDetection'" src/
 ```
 
 Update all:
+
 ```bash
 find src -type f \( -name "*.ts" -o -name "*.tsx" \) -exec sed -i "s|from '@/services/geminiClient'|from '@transcript-parser/ai-services'|g" {} \;
 find src -type f \( -name "*.ts" -o -name "*.tsx" \) -exec sed -i "s|from '@/services/speakerNameDetection'|from '@transcript-parser/ai-services'|g" {} \;
 ```
 
 ### 3.10 **CRITICAL: Secure API Key Management** ⚠️
+
 Verify in `packages/ai-services/src/gemini-client.ts`:
+
 ```typescript
 export const getGeminiApiKey = (): string => {
-  const key = import.meta.env.VITE_GEMINI_API_KEY;
+  const key = import.meta.env.VITE_GEMINI_API_KEY
   if (!key) {
     throw new Error(
       'VITE_GEMINI_API_KEY is not set. Please add it to your .env file. ' +
-      'See .env.example for details.'
-    );
+        'See .env.example for details.'
+    )
   }
-  return key;
-};
+  return key
+}
 ```
 
 **DO NOT** hardcode API keys!
 
 ### 3.11 Test
+
 ```bash
 npm run build
 
@@ -323,6 +353,7 @@ npm run build
 ```
 
 ### 3.12 Commit
+
 ```bash
 git add -A
 git commit --no-verify -m "feat: extract @transcript-parser/ai-services package (3/8)
@@ -346,11 +377,13 @@ AI services now centralized with security best practices."
 **Import Updates**: ~8 files
 
 ### 4.1 Create Package Structure
+
 ```bash
 mkdir -p packages/audio-processing/src
 ```
 
 ### 4.2 Create package.json
+
 ```json
 {
   "name": "@transcript-parser/audio-processing",
@@ -389,9 +422,11 @@ mkdir -p packages/audio-processing/src
 ```
 
 ### 4.3 Create tsconfig.json
+
 Use standard template.
 
 ### 4.4 Copy Source Files
+
 ```bash
 cp src/services/audioExtractor.ts packages/audio-processing/src/audio-extractor.ts
 cp src/services/ffmpegExtractor.ts packages/audio-processing/src/ffmpeg-extractor.ts
@@ -400,52 +435,55 @@ cp src/services/ffmpegExtractor.ts packages/audio-processing/src/ffmpeg-extracto
 ### 4.5 **CRITICAL: Implement FFmpeg Lazy Loading** ⚠️
 
 Create `packages/audio-processing/src/ffmpeg-loader.ts`:
+
 ```typescript
 /**
  * Lazy load FFmpeg to reduce initial bundle size
  * FFmpeg.wasm is ~30MB - only load when needed
  */
-let ffmpegInstance: any = null;
+let ffmpegInstance: any = null
 
 export async function loadFFmpeg() {
   if (ffmpegInstance) {
-    return ffmpegInstance;
+    return ffmpegInstance
   }
 
   // Dynamic import - only loads when called
-  const { createFFmpeg } = await import('@ffmpeg/ffmpeg');
+  const { createFFmpeg } = await import('@ffmpeg/ffmpeg')
 
   ffmpegInstance = createFFmpeg({
     log: true,
-    corePath: 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js'
-  });
+    corePath: 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js',
+  })
 
-  await ffmpegInstance.load();
+  await ffmpegInstance.load()
 
-  return ffmpegInstance;
+  return ffmpegInstance
 }
 
 export function isFFmpegLoaded(): boolean {
-  return ffmpegInstance !== null;
+  return ffmpegInstance !== null
 }
 
 export function resetFFmpeg(): void {
-  ffmpegInstance = null;
+  ffmpegInstance = null
 }
 ```
 
 Update `audio-extractor.ts` to use lazy loader:
+
 ```typescript
-import { loadFFmpeg } from './ffmpeg-loader';
+import { loadFFmpeg } from './ffmpeg-loader'
 
 export async function extractAudio(file: File): Promise<Blob> {
-  const ffmpeg = await loadFFmpeg(); // Lazy load here
+  const ffmpeg = await loadFFmpeg() // Lazy load here
 
   // ... rest of extraction logic
 }
 ```
 
 ### 4.6 Create src/index.ts
+
 ```typescript
 // Re-export all audio processing utilities
 export * from './audio-extractor'
@@ -454,6 +492,7 @@ export * from './ffmpeg-loader'
 ```
 
 ### 4.7 Build Package
+
 ```bash
 cd packages/audio-processing
 pnpm install
@@ -461,6 +500,7 @@ pnpm build
 ```
 
 ### 4.8 Add to Main App
+
 ```json
 "dependencies": {
   "@transcript-parser/audio-processing": "workspace:*",
@@ -472,12 +512,14 @@ pnpm install
 ```
 
 ### 4.9 Update Imports
+
 ```bash
 find src -type f \( -name "*.ts" -o -name "*.tsx" \) -exec sed -i "s|from '@/services/audioExtractor'|from '@transcript-parser/audio-processing'|g" {} \;
 find src -type f \( -name "*.ts" -o -name "*.tsx" \) -exec sed -i "s|from '@/services/ffmpegExtractor'|from '@transcript-parser/audio-processing'|g" {} \;
 ```
 
 ### 4.10 Test
+
 ```bash
 npm run build
 
@@ -486,6 +528,7 @@ npm run build
 ```
 
 ### 4.11 Commit
+
 ```bash
 git add -A
 git commit --no-verify -m "feat: extract @transcript-parser/audio-processing package (4/8)
@@ -509,11 +552,13 @@ Performance improvement: FFmpeg now loads on-demand only."
 **Import Updates**: ~6 files
 
 ### 5.1 Create Package Structure
+
 ```bash
 mkdir -p packages/database/src
 ```
 
 ### 5.2 Create package.json
+
 ```json
 {
   "name": "@transcript-parser/database",
@@ -553,9 +598,11 @@ mkdir -p packages/database/src
 ```
 
 ### 5.3 Create tsconfig.json
+
 Use standard template.
 
 ### 5.4 Copy Source Files
+
 ```bash
 # Copy database schema
 cp src/db/schema.ts packages/database/src/schema.ts
@@ -568,6 +615,7 @@ cp -r src/db/migrations packages/database/src/migrations
 ```
 
 ### 5.5 Create src/index.ts
+
 ```typescript
 // Re-export database utilities
 export * from './schema'
@@ -575,21 +623,24 @@ export * from './client'
 ```
 
 ### 5.6 **CRITICAL: Secure Database Connection** ⚠️
+
 Verify in `packages/database/src/client.ts`:
+
 ```typescript
 export function getDatabaseUrl(): string {
-  const url = process.env.DATABASE_URL;
+  const url = process.env.DATABASE_URL
   if (!url) {
     throw new Error(
       'DATABASE_URL is not set. Please add it to your .env file. ' +
-      'Example: postgresql://user:password@host:5432/dbname'
-    );
+        'Example: postgresql://user:password@host:5432/dbname'
+    )
   }
-  return url;
+  return url
 }
 ```
 
 ### 5.7 Build Package
+
 ```bash
 cd packages/database
 pnpm install
@@ -597,6 +648,7 @@ pnpm build
 ```
 
 ### 5.8 Add to Main App & Update Imports
+
 ```json
 "dependencies": {
   "@transcript-parser/database": "workspace:*",
@@ -612,6 +664,7 @@ find src -type f \( -name "*.ts" -o -name "*.tsx" \) -exec sed -i "s|from '@/db/
 ```
 
 ### 5.9 Test & Commit
+
 ```bash
 npm run build
 
@@ -639,6 +692,7 @@ Database layer now centralized and portable."
 ### ⚠️ WARNING: This is the LARGEST package
 
 UI package contains:
+
 - 46 TSX component files
 - shadcn/ui components
 - Custom hooks
@@ -648,6 +702,7 @@ UI package contains:
 ### Strategy: Extract in Sub-Phases
 
 #### Phase 6A: shadcn/ui Components (1 hour)
+
 ```bash
 mkdir -p packages/ui/src/components/ui
 
@@ -656,6 +711,7 @@ cp src/components/ui/*.tsx packages/ui/src/components/ui/
 ```
 
 #### Phase 6B: Core Components (1 hour)
+
 ```bash
 mkdir -p packages/ui/src/components
 
@@ -666,6 +722,7 @@ cp src/components/UploadVideo.tsx packages/ui/src/components/
 ```
 
 #### Phase 6C: Hooks & Utils (30 min)
+
 ```bash
 mkdir -p packages/ui/src/hooks
 mkdir -p packages/ui/src/lib
@@ -678,12 +735,15 @@ cp src/lib/utils.ts packages/ui/src/lib/
 ```
 
 #### Phase 6D: Update All Imports (1 hour)
+
 This will require updating MANY files. Use:
+
 ```bash
 find src -type f \( -name "*.ts" -o -name "*.tsx" \) -exec sed -i "s|from '@/components/|from '@transcript-parser/ui/components/|g" {} \;
 ```
 
 ### 6.1 package.json for UI
+
 ```json
 {
   "name": "@transcript-parser/ui",
@@ -739,7 +799,9 @@ find src -type f \( -name "*.ts" -o -name "*.tsx" \) -exec sed -i "s|from '@/com
 ```
 
 ### 6.2 **CRITICAL: Accessibility Requirements** ♿
+
 Ensure in UI package:
+
 ```bash
 # Add ESLint accessibility plugin
 pnpm add -D eslint-plugin-jsx-a11y
@@ -750,13 +812,16 @@ pnpm add -D eslint-plugin-jsx-a11y
 ```
 
 ### 6.3 Due to Complexity
+
 Consider using **Explore agent** to help:
+
 ```typescript
 // Use Task tool with subagent_type: "Explore"
 // To find all component dependencies and update paths
 ```
 
 ### 6.4 Commit
+
 ```bash
 git add -A
 git commit --no-verify -m "feat: extract @transcript-parser/ui package (6/8)
@@ -781,6 +846,7 @@ UI components now in centralized, accessible library."
 **Import Updates**: Minimal
 
 ### 7.1 Quick Setup
+
 ```bash
 mkdir -p packages/config/src
 
@@ -791,6 +857,7 @@ cp tsconfig.json packages/config/src/tsconfig.base.json
 ```
 
 ### 7.2 package.json
+
 ```json
 {
   "name": "@transcript-parser/config",
@@ -818,6 +885,7 @@ cp tsconfig.json packages/config/src/tsconfig.base.json
 ```
 
 ### 7.3 Commit
+
 ```bash
 git add -A
 git commit --no-verify -m "feat: extract @transcript-parser/config package (7/8)
@@ -841,9 +909,11 @@ Shared configurations now centralized."
 **Import Updates**: ~4 files
 
 ### 8.1 Note
+
 This package **already has files** in `packages/module-sdk/src/index.ts`!
 
 ### 8.2 Verify Existing Structure
+
 ```bash
 ls -la packages/module-sdk/
 
@@ -854,6 +924,7 @@ ls -la packages/module-sdk/
 ```
 
 ### 8.3 Build & Test
+
 ```bash
 cd packages/module-sdk
 pnpm install
@@ -863,6 +934,7 @@ pnpm build
 ```
 
 ### 8.4 Add to Main App
+
 ```json
 "dependencies": {
   "@transcript-parser/module-sdk": "workspace:*",
@@ -877,6 +949,7 @@ find src -type f \( -name "*.ts" -o -name "*.tsx" \) -exec sed -i "s|from '@/mod
 ```
 
 ### 8.5 Commit
+
 ```bash
 git add -A
 git commit --no-verify -m "feat: extract @transcript-parser/module-sdk package (8/8)
@@ -896,6 +969,7 @@ git commit --no-verify -m "feat: extract @transcript-parser/module-sdk package (
 ### Final Verification Checklist
 
 #### Build Tests
+
 ```bash
 # 1. Clean build from root
 pnpm clean
@@ -909,6 +983,7 @@ ls -la packages/*/dist/
 ```
 
 #### Package Tests
+
 ```bash
 # 3. Test all packages independently
 cd packages/types && pnpm build
@@ -922,6 +997,7 @@ cd ../module-sdk && pnpm build
 ```
 
 #### Main App Test
+
 ```bash
 # 4. Run main app build
 npm run build
@@ -938,6 +1014,7 @@ npm run dev
 ```
 
 ### Performance Verification
+
 ```bash
 # Check bundle sizes
 ls -lh dist/assets/
@@ -947,6 +1024,7 @@ ls -lh dist/assets/
 ```
 
 ### Create Summary Commit
+
 ```bash
 git add -A
 git commit --no-verify -m "docs: Sprint 01 complete - all 8 packages extracted
@@ -971,7 +1049,9 @@ Monorepo foundation complete! 🎉"
 ## 🚨 Common Issues & Solutions
 
 ### Issue 1: "Cannot find module '@transcript-parser/X'"
+
 **Solution**:
+
 ```bash
 # Make sure dependency is added to package.json
 # Then reinstall
@@ -979,7 +1059,9 @@ pnpm install
 ```
 
 ### Issue 2: TypeScript build fails with "module not found"
+
 **Solution**: Check tsconfig.json has:
+
 ```json
 {
   "compilerOptions": {
@@ -989,19 +1071,25 @@ pnpm install
 ```
 
 ### Issue 3: Circular dependency warnings
+
 **Solution**:
+
 - Check import order in packages
 - Ensure types package has no dependencies on other packages
 - Use dependency graph: types → export/database → ai-services/audio → ui
 
 ### Issue 4: FFmpeg still in main bundle
+
 **Solution**:
+
 - Verify `loadFFmpeg()` uses dynamic `await import()`
 - Check Vite is code-splitting correctly
 - Inspect network tab - FFmpeg should load separately
 
 ### Issue 5: Pre-commit hooks failing
+
 **Solution**:
+
 - Fix linting errors OR
 - Use `git commit --no-verify` temporarily
 - Plan to fix linting in separate cleanup commit
@@ -1011,6 +1099,7 @@ pnpm install
 ## 📊 Expected Final State
 
 ### Package Structure
+
 ```
 packages/
 ├── types/           ✅ 0 dependencies
@@ -1024,6 +1113,7 @@ packages/
 ```
 
 ### Main App Dependencies
+
 ```json
 {
   "dependencies": {
@@ -1040,6 +1130,7 @@ packages/
 ```
 
 ### Build Metrics
+
 - **Total Packages**: 8
 - **Main Bundle**: ~730KB (same or smaller than baseline)
 - **FFmpeg**: Lazy loaded (~30MB, not in main bundle)
@@ -1051,6 +1142,7 @@ packages/
 ## 🎯 Success Criteria (Sprint 01)
 
 ### Must Have (All Required) ✅
+
 - [x] All 8 packages created and building
 - [x] Main app using all packages
 - [x] All builds passing
@@ -1060,11 +1152,13 @@ packages/
 - [x] Accessibility requirements met (WCAG AA)
 
 ### Should Have (High Priority)
+
 - [ ] Package README files (can do in Sprint 02)
 - [ ] TypeDoc API documentation (can do in Sprint 02)
 - [ ] Test coverage for packages (can do in Sprint 02)
 
 ### Could Have (Nice to Have)
+
 - [ ] Storybook for UI components
 - [ ] Visual dependency graph
 - [ ] Turborepo remote cache
@@ -1074,18 +1168,21 @@ packages/
 ## 📞 Need Help?
 
 ### If Package Build Fails
+
 1. Check tsconfig.json matches template
 2. Verify package.json dependencies
 3. Run `pnpm install` in package directory
 4. Check for TypeScript errors in source files
 
 ### If Main App Build Fails
+
 1. Verify all packages are built first
 2. Check package.json has all workspace dependencies
 3. Run `pnpm install` at root
 4. Check import paths in source files
 
 ### If Tests Fail
+
 1. Update test imports to use packages
 2. Create mocks for FFmpeg and Gemini
 3. See [Expert Feedback - Testing.md](./planning/expert-feedback/Expert%20Feedback%20-%20Testing.md)
@@ -1097,16 +1194,19 @@ packages/
 After Sprint 01 completes, you can move on to:
 
 ### Sprint 02: App Migration (apps/web)
+
 - Move `src/` to `apps/web/`
 - Update Vite configuration
 - Test Turborepo build pipeline
 
 ### Sprint 03: Documentation
+
 - Create README for each package
 - Setup TypeDoc
 - Write getting started guides
 
 ### Sprint 04: Testing
+
 - Add unit tests for all packages
 - Achieve 80% coverage
 - Setup Vitest workspace
