@@ -426,15 +426,3 @@ export class ModuleRegistry {
 export function createModule(definition: ModuleDefinition): ModuleDefinition {
   return definition;
 }
-
-// Export all types
-export type {
-  ModuleDetailViewProps,
-  ModuleListItemProps,
-  ModuleComparisonViewProps,
-  ModuleSettingsPanelProps,
-  ModuleWelcomeScreenProps,
-  ModuleAnalyticsProps,
-  ModuleActionContext,
-  ModuleExportData,
-};

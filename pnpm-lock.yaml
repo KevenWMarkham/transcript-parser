@@ -44,6 +44,9 @@ importers:
       '@transcript-parser/export':
         specifier: workspace:*
         version: link:packages/export
+      '@transcript-parser/module-sdk':
+        specifier: workspace:*
+        version: link:packages/module-sdk
       '@transcript-parser/types':
         specifier: workspace:*
         version: link:packages/types
