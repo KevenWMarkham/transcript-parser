@@ -4,8 +4,8 @@
  */
 
 import { GoogleGenAI } from '@google/genai'
-import { usageTracker } from '@transcript-parser/ai-services'
-import { apiClient } from '@transcript-parser/ai-services'
+import { usageTracker } from './usage-tracker'
+import { apiClient } from './api-client'
 import type {
   TranscriptData,
   TranscriptEntry,

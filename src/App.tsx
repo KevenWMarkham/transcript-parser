@@ -17,8 +17,8 @@ import {
 } from '@/components/ApiKeySettings'
 import { BalanceAlert, shouldShowBalanceAlert } from '@/components/BalanceAlert'
 import { useTranscription } from '@/hooks/useTranscription'
-import { apiClient } from '@/services/apiClient'
-import { usageTracker } from '@/services/usageTracker'
+import { apiClient } from '@transcript-parser/ai-services'
+import { usageTracker } from '@transcript-parser/ai-services'
 import {
   validateVideoFile,
   extractVideoMetadata,

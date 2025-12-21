@@ -4,7 +4,7 @@ import { UserPlus, Mail, Lock, Eye, EyeOff, User, Video } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { apiClient } from '@/services/apiClient'
+import { apiClient } from '@transcript-parser/ai-services'
 
 interface RegisterProps {
   onSuccess: () => void

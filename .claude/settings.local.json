@@ -32,7 +32,10 @@
       "Bash(pnpm install)",
       "Bash(npm test:*)",
       "Bash(pnpm build:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(tree:*)",
+      "Bash(pnpm add:*)"
     ],
     "deny": [],
     "ask": []

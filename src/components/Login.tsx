@@ -4,7 +4,7 @@ import { Shield, Mail, Lock, Eye, EyeOff, Video } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { apiClient } from '@/services/apiClient'
+import { apiClient } from '@transcript-parser/ai-services'
 
 interface LoginProps {
   onSuccess: () => void

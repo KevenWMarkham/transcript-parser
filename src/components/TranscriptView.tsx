@@ -21,7 +21,7 @@ import { performanceMonitor } from '@/utils/performance'
 import {
   SpeakerNameDetectionService,
   type DetectedSpeakerName,
-} from '@/services/speakerNameDetection'
+} from '@transcript-parser/ai-services'
 import type { TranscriptData } from '@transcript-parser/types'
 
 interface TranscriptViewProps {

@@ -9,7 +9,7 @@ import type { TranscriptData } from '@transcript-parser/types'
 import type { VideoMetadata } from '@/utils/fileUtils'
 import { isAudioFile } from '@/utils/fileUtils'
 import { AudioExtractor } from '@/services/audioExtractor'
-import { GeminiClient } from '@/services/geminiClient'
+import { GeminiClient } from '@transcript-parser/ai-services'
 import { FFmpegExtractor } from '@/services/ffmpegExtractor'
 
 const DB_NAME = 'transcript-db'

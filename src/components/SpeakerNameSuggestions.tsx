@@ -3,7 +3,7 @@ import { Sparkles, Check, X, AlertCircle } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import type { DetectedSpeakerName } from '@/services/speakerNameDetection'
+import type { DetectedSpeakerName } from '@transcript-parser/ai-services'
 import type { Speaker } from '@transcript-parser/types'
 
 interface SpeakerNameSuggestionsProps {
