@@ -1,7 +1,7 @@
 {
   "name": "@transcript-parser/audio-processing",
-  "version": "0.1.0",
-  "description": "Audio extraction from video files using FFmpeg.wasm",
+  "version": "0.2.0",
+  "description": "Audio extraction from video files using server-side FFmpeg",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -13,8 +13,8 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --external @ffmpeg/ffmpeg --external @ffmpeg/util",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --external @ffmpeg/ffmpeg --external @ffmpeg/util",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit"
   },
@@ -28,8 +28,6 @@
   "license": "ISC",
   "sideEffects": false,
   "dependencies": {
-    "@ffmpeg/ffmpeg": "^0.12.15",
-    "@ffmpeg/util": "^0.12.2",
     "@transcript-parser/types": "workspace:*"
   },
   "devDependencies": {
