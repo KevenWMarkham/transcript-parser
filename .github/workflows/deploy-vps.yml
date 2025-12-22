@@ -91,6 +91,14 @@ jobs:
               ls -t /tmp/backup-*.tar.gz 2>/dev/null | tail -n +6 | xargs -r rm
             fi
 
+            # Stop and remove old containers
+            echo "🛑 Stopping old containers..."
+            docker compose down --remove-orphans || true
+
+            # Clean up old files (keep data volumes)
+            echo "🧹 Cleaning up old files..."
+            rm -f docker-compose.yml Dockerfile Dockerfile.* 2>/dev/null || true
+
             # Extract new deployment
             echo "📂 Extracting new files..."
             tar -xzf /tmp/deploy-vps.tar.gz
@@ -98,7 +106,6 @@ jobs:
 
             # Rebuild and restart containers
             echo "🐳 Rebuilding Docker containers..."
-            docker compose down --remove-orphans || true
             docker compose up --build -d
 
             # Wait for services to be healthy
