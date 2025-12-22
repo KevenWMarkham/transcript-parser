@@ -68,7 +68,7 @@ jobs:
             --exclude=test-results \
             --exclude=playwright-report \
             --exclude='*.tar.gz' \
-            .
+            . || [[ $? -eq 1 ]]
 
       - name: Upload to VPS
         run: |
