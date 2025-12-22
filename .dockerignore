@@ -1,0 +1,56 @@
+# Dependencies
+node_modules
+**/node_modules
+
+# Build outputs
+dist
+**/dist
+build
+**/build
+.next
+
+# Testing
+coverage
+**/coverage
+test-results
+**/test-results
+playwright-report
+**/playwright-report
+
+# Development files
+.git
+.github
+.vscode
+.idea
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+!README.md
+docs
+specs
+
+# CI/CD
+.gitlab-ci.yml
+.travis.yml
+azure-pipelines.yml
+
+# Temporary files
+*.tmp
+*.temp
+.cache

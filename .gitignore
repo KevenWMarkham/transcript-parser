@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+.env
+.env.local
+.env.*.local
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -37,3 +43,35 @@ windows-installer/
 *.deb
 *.rpm
 *.zip
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Turborepo cache
+.turbo
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Cache directories
+.cache/
+
+# Hosting credentials (sensitive)
+docs/hosting/
+
+# Deployment files (production secrets)
+.env.production
+.env.staging
+certbot/
+*.pem
+*.key
+
+# Playwright test artifacts
+test-results/
+playwright-report/
+!playwright-report/index.html
+
+# E2E test screenshots
+tests/e2e/*.png
+tests/e2e/*.webm
