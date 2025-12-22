@@ -1,0 +1,152 @@
+name: Deploy to VPS (Docker)
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: 'Skip tests'
+        required: false
+        default: 'false'
+
+env:
+  VPS_HOST: 72.62.86.210
+  VPS_USER: root
+  DEPLOY_PATH: /var/www/smarthaven
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    if: github.event.inputs.skip_tests != 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run unit tests
+        run: pnpm test
+
+  deploy:
+    name: Deploy to VPS
+    needs: [test]
+    if: always() && (needs.test.result == 'success' || github.event.inputs.skip_tests == 'true')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.VPS_SSH_KEY }}
+          known_hosts: ${{ secrets.VPS_KNOWN_HOSTS }}
+
+      - name: Create deployment package
+        run: |
+          tar -czvf deploy-vps.tar.gz \
+            --exclude=node_modules \
+            --exclude=dist \
+            --exclude=.git \
+            --exclude=coverage \
+            --exclude=test-results \
+            --exclude=playwright-report \
+            --exclude='*.tar.gz' \
+            .
+
+      - name: Upload to VPS
+        run: |
+          scp deploy-vps.tar.gz ${{ env.VPS_USER }}@${{ env.VPS_HOST }}:/tmp/
+
+      - name: Deploy on VPS
+        run: |
+          ssh ${{ env.VPS_USER }}@${{ env.VPS_HOST }} << 'ENDSSH'
+            set -e
+
+            echo "📦 Extracting deployment package..."
+            cd ${{ env.DEPLOY_PATH }}
+
+            # Backup current deployment
+            if [ -d "src" ]; then
+              echo "📁 Creating backup..."
+              BACKUP_NAME="backup-$(date +%Y%m%d-%H%M%S).tar.gz"
+              tar -czf /tmp/$BACKUP_NAME src/ docker-compose.yml nginx/ 2>/dev/null || true
+              # Keep only last 5 backups
+              ls -t /tmp/backup-*.tar.gz 2>/dev/null | tail -n +6 | xargs -r rm
+            fi
+
+            # Extract new deployment
+            echo "📂 Extracting new files..."
+            tar -xzf /tmp/deploy-vps.tar.gz
+            rm /tmp/deploy-vps.tar.gz
+
+            # Rebuild and restart containers
+            echo "🐳 Rebuilding Docker containers..."
+            docker compose down
+            docker compose build --no-cache app
+            docker compose up -d
+
+            # Wait for services to be healthy
+            echo "⏳ Waiting for services to start..."
+            sleep 15
+
+            # Check if app is running
+            if docker compose ps | grep -q "transcript-parser.*running"; then
+              echo "✅ App container is running"
+            else
+              echo "❌ App container failed to start"
+              docker compose logs app --tail=50
+              exit 1
+            fi
+
+            # Reload nginx to pick up any config changes
+            docker compose exec -T nginx nginx -s reload || true
+
+            echo "🎉 Deployment complete!"
+          ENDSSH
+
+      - name: Verify deployment
+        run: |
+          echo "🔍 Verifying deployment..."
+          sleep 5
+
+          # Check if site is accessible
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://smarthavenai.com || echo "000")
+
+          if [ "$HTTP_STATUS" = "200" ]; then
+            echo "✅ Site is accessible (HTTP $HTTP_STATUS)"
+          else
+            echo "⚠️ Site returned HTTP $HTTP_STATUS"
+          fi
+
+          # Check CORS headers for FFmpeg
+          echo "🔍 Checking FFmpeg CORS headers..."
+          HEADERS=$(curl -sI https://smarthavenai.com | grep -i "cross-origin" || echo "none")
+          echo "$HEADERS"
+
+          if echo "$HEADERS" | grep -q "cross-origin-opener-policy"; then
+            echo "✅ FFmpeg headers are configured"
+          else
+            echo "⚠️ FFmpeg headers may be missing"
+          fi
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Deployment failed! Check the logs above."
