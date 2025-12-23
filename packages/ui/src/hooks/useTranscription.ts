@@ -23,6 +23,14 @@ export type ProcessingState =
   | 'complete'
   | 'error'
 
+// Debug message for troubleshooting
+let debugMessage = ''
+export function getDebugMessage() { return debugMessage }
+function setDebug(msg: string) {
+  debugMessage = msg
+  console.log('[Transcription Debug]', msg)
+}
+
 export interface UseTranscriptionResult {
   processingState: ProcessingState
   progress: number
@@ -53,12 +61,14 @@ export function useTranscription(): UseTranscriptionResult {
         setError(null)
         setProgress(0)
         setTranscript(null)
+        setDebug(`Starting transcription for: ${file.name} (${(file.size/1024/1024).toFixed(2)}MB)`)
 
         // Extract audio from video, or use audio file directly
         let audioBlob: Blob
 
         if (isAudioFile(file)) {
           // Audio file - use directly
+          setDebug('File is audio - using directly')
           audioBlob = file
           setProgress(30)
         } else {
@@ -135,6 +145,7 @@ export function useTranscription(): UseTranscriptionResult {
 
         // Transcribe with Gemini (30-100% progress)
         setProcessingState('transcribing')
+        setDebug(`Audio ready: ${(audioBlob.size/1024/1024).toFixed(2)}MB, type: ${audioBlob.type || 'unknown'}`)
 
         // Simulate progress for transcription (since Gemini doesn't provide progress)
         const progressInterval = setInterval(() => {
@@ -149,9 +160,11 @@ export function useTranscription(): UseTranscriptionResult {
         }, 500)
 
         try {
+          setDebug('Calling Gemini API...')
           const geminiClient = new GeminiClient()
           const transcriptData =
             await geminiClient.transcribeWithSpeakers(audioBlob)
+          setDebug(`Gemini returned ${transcriptData.entries?.length || 0} entries, ${transcriptData.speakers?.length || 0} speakers`)
 
           clearInterval(progressInterval)
 
@@ -187,10 +200,13 @@ export function useTranscription(): UseTranscriptionResult {
           setProcessingState('complete')
         } catch (transcriptionError) {
           clearInterval(progressInterval)
+          setDebug(`Gemini error: ${transcriptionError instanceof Error ? transcriptionError.message : 'Unknown'}`)
           throw transcriptionError
         }
       } catch (err) {
         setProcessingState('error')
+        const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+        setDebug(`Error: ${errorMsg}`)
         setError(err instanceof Error ? err : new Error('Unknown error'))
         throw err
       }

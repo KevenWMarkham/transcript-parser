@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useState, useMemo } from 'react'
 import { Clock, Check, Edit2, Save, X, RotateCcw } from 'lucide-react'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
@@ -7,6 +7,12 @@ import { Input } from './ui/input'
 import { formatTimestamp } from '../utils/fileUtils'
 import { highlightText } from '../utils/textHighlight'
 import type { TranscriptEntry as TranscriptEntryType } from '@transcript-parser/types'
+
+// Detect touch device (iOS/Android)
+function isTouchDevice() {
+  if (typeof window === 'undefined') return false
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0
+}
 
 interface TranscriptEntryProps {
   entry: TranscriptEntryType
@@ -37,6 +43,9 @@ export const TranscriptEntry = memo(function TranscriptEntry({
     entry.startTime.toString()
   )
   const [editedEndTime, setEditedEndTime] = useState(entry.endTime.toString())
+
+  // Check if touch device for UI adjustments
+  const isTouch = useMemo(() => isTouchDevice(), [])
 
   const handleSave = () => {
     if (!onEdit) return
@@ -143,16 +152,20 @@ export const TranscriptEntry = memo(function TranscriptEntry({
           </Badge>
         )}
 
-        {/* Edit button - shows on hover */}
+        {/* Edit button - always visible on touch, hover on desktop */}
         {enableEditing && !isEditing && (
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setIsEditing(true)}
-            className="opacity-0 group-hover:opacity-100 transition-opacity h-7 px-2 ml-auto"
+            className={`transition-opacity ml-auto ${
+              isTouch
+                ? 'opacity-100 h-9 px-3'
+                : 'opacity-0 group-hover:opacity-100 h-7 px-2'
+            }`}
             aria-label="Edit entry"
           >
-            <Edit2 className="w-3.5 h-3.5" />
+            <Edit2 className={isTouch ? 'w-4 h-4' : 'w-3.5 h-3.5'} />
           </Button>
         )}
 
@@ -163,20 +176,20 @@ export const TranscriptEntry = memo(function TranscriptEntry({
               variant="default"
               size="sm"
               onClick={handleSave}
-              className="h-7 px-2"
+              className={isTouch ? 'h-10 px-4' : 'h-7 px-2'}
               aria-label="Save changes"
             >
-              <Save className="w-3.5 h-3.5 mr-1" />
+              <Save className={isTouch ? 'w-4 h-4 mr-1' : 'w-3.5 h-3.5 mr-1'} />
               Save
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={handleCancel}
-              className="h-7 px-2"
+              className={isTouch ? 'h-10 px-3' : 'h-7 px-2'}
               aria-label="Cancel editing"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className={isTouch ? 'w-5 h-5' : 'w-3.5 h-3.5'} />
             </Button>
           </div>
         )}
@@ -186,9 +199,11 @@ export const TranscriptEntry = memo(function TranscriptEntry({
         <Textarea
           value={editedText}
           onChange={e => setEditedText(e.target.value)}
-          className="min-h-[100px]"
+          className={`min-h-[100px] ${isTouch ? 'text-base' : ''}`}
           aria-label="Edit transcript text"
           autoFocus
+          autoCapitalize="sentences"
+          autoCorrect="on"
         />
       ) : (
         <p className="text-slate-700 leading-relaxed">
@@ -209,7 +224,7 @@ export const TranscriptEntry = memo(function TranscriptEntry({
         </p>
       )}
 
-      {enableEditing && !isEditing && (
+      {enableEditing && !isEditing && !isTouch && (
         <div className="text-xs text-muted-foreground mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
           Double-click to edit
         </div>

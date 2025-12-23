@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epic 09: Student Module - Integrated Planning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            min-height: 100vh;
+            max-width: 1920px;
+            margin: 0 auto;
+            gap: 0;
+        }
+
+        /* Left Navigation */
+        .nav-sidebar {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 2rem 1.5rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .nav-sidebar h1 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #60a5fa;
+        }
+
+        .nav-sidebar .subtitle {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            font-weight: normal;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .nav-links a:hover {
+            background: #334155;
+            color: #60a5fa;
+        }
+
+        .nav-links a.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            padding: 3rem;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid #3b82f6;
+        }
+
+        .content-header h2 {
+            font-size: 2rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .persona-badge {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            background: #dbeafe;
+            color: #1e40af;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .time-section {
+            margin-bottom: 3rem;
+        }
+
+        .time-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .scenario {
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.375rem;
+        }
+
+        .scenario h4 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .scenario-context {
+            background: white;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .without-tp, .with-tp {
+            margin-bottom: 1.5rem;
+        }
+
+        .without-tp h5 {
+            color: #dc2626;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .with-tp h5 {
+            color: #059669;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .without-tp h5::before {
+            content: "❌";
+        }
+
+        .with-tp h5::before {
+            content: "✅";
+        }
+
+        .scenario ul {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .scenario li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .scenario li::before {
+            content: "•";
+            position: absolute;
+            left: -1rem;
+            color: #3b82f6;
+        }
+
+        .user-story-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .user-story-box h5 {
+            color: #92400e;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .user-story-text {
+            font-style: italic;
+            color: #78350f;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 0.375rem;
+        }
+
+        .acceptance-criteria {
+            background: white;
+            padding: 1rem;
+            border-radius: 0.375rem;
+        }
+
+        .acceptance-criteria h6 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .acceptance-criteria ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .acceptance-criteria li {
+            padding: 0.375rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .acceptance-criteria li::before {
+            content: "☐";
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        /* Right Sidebar - Expert Feedback */
+        .expert-sidebar {
+            background: #fef3c7;
+            padding: 2rem 1.5rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-left: 3px solid #f59e0b;
+        }
+
+        .expert-sidebar h3 {
+            font-size: 1rem;
+            color: #92400e;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .expert-sidebar h3::before {
+            content: "💡";
+        }
+
+        .expert-quote {
+            background: white;
+            border-left: 3px solid #f59e0b;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.375rem;
+            font-style: italic;
+            color: #78350f;
+        }
+
+        .expert-name {
+            font-weight: 600;
+            color: #92400e;
+            font-style: normal;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .expert-domain {
+            font-size: 0.75rem;
+            color: #a16207;
+            font-style: normal;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-metrics {
+            background: #dbeafe;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .impact-metrics h5 {
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #93c5fd;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+
+        .metric-value {
+            color: #1e40af;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .container {
+                grid-template-columns: 240px 1fr 280px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-sidebar, .expert-sidebar {
+                position: relative;
+                height: auto;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-sidebar {
+                display: none;
+            }
+
+            .expert-sidebar {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Navigation -->
+        <nav class="nav-sidebar">
+            <h1>Epic 09</h1>
+            <p class="subtitle">Student Module Planning</p>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Personas</div>
+                <ul class="nav-links">
+                    <li><a href="#sarah" class="active">Sarah - Undergrad</a></li>
+                    <li><a href="#marcus">Marcus - Graduate</a></li>
+                    <li><a href="#aisha">Aisha - International</a></li>
+                    <li><a href="#jordan">Jordan - Dyslexia</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">User Stories</div>
+                <ul class="nav-links">
+                    <li><a href="#sprint-01">Sprint 01 - Core Features</a></li>
+                    <li><a href="#sprint-02">Sprint 02 - Advanced</a></li>
+                    <li><a href="#sprint-03">Sprint 03 - Analytics</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Expert Reviews</div>
+                <ul class="nav-links">
+                    <li><a href="#expert-education">Education Specialist</a></li>
+                    <li><a href="#expert-ux">UX Design</a></li>
+                    <li><a href="#expert-ai">AI & NLP</a></li>
+                    <li><a href="#expert-accessibility">Accessibility</a></li>
+                    <li><a href="#expert-performance">Performance</a></li>
+                    <li><a href="#expert-security">Privacy & Security</a></li>
+                    <li><a href="#expert-xr">XR & Wearables</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sarah's Day -->
+            <section id="sarah">
+                <div class="content-header">
+                    <h2>Sarah's Study Day</h2>
+                    <div>
+                        <span class="persona-badge">Diligent Undergrad</span>
+                        <span class="persona-badge">Biology Pre-Med</span>
+                        <span class="persona-badge">Time-Constrained</span>
+                    </div>
+                </div>
+
+                <!-- Morning -->
+                <div class="time-section">
+                    <div class="time-header">🌅 Morning (8:00 AM - 12:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>8:00 AM - Biology Lecture (90 minutes)</h4>
+                        <div class="scenario-context">
+                            <strong>Context:</strong> Professor covers "Cellular Respiration" - very dense material, talks too fast
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Tries to take notes but professor talks too fast</li>
+                                <li>Misses explanation of Krebs cycle while copying diagram from slide</li>
+                                <li>Feels frustrated - knows this will be on the exam</li>
+                                <li>Plans to re-watch entire 90-minute recording tonight</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser</h5>
+                            <ul>
+                                <li>Opens app, starts new recording tagged #Biology #CellularRespiration</li>
+                                <li>Focuses entirely on understanding the concepts</li>
+                                <li>Taps phone to bookmark timestamp when confused about ATP production</li>
+                                <li>Feels confident she can review later without re-watching everything</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 01, Story 2)</h5>
+                            <div class="user-story-text">
+                                "As a student with limited study time, I want AI to automatically generate a concise summary of my lecture, so that I can quickly review key concepts without re-watching the entire recording."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Summary generated within 30 seconds for 90-min lecture</li>
+                                    <li>Includes main topic, 3-5 key concepts, important definitions</li>
+                                    <li>Summary is saved with transcript and can be edited</li>
+                                    <li>Exportable as PDF, TXT, or Markdown</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <h4>9:45 AM - Between Classes (15 min)</h4>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Reviews messy Biology notes, realizes she didn't catch half the content</li>
+                                <li>Texts study group: "Did anyone get the Krebs cycle explanation?"</li>
+                                <li>Feels behind already</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser</h5>
+                            <ul>
+                                <li>On walk to next class, opens phone</li>
+                                <li>Skims AI-generated summary (2-minute read vs. 90-minute lecture)</li>
+                                <li>Key concepts highlighted: "Glycolysis, Krebs Cycle, Electron Transport Chain"</li>
+                                <li>Sees she understood most of it, marks Krebs cycle section to review later</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Afternoon -->
+                <div class="time-section">
+                    <div class="time-header">🌞 Afternoon (12:30 PM - 5:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>12:30 PM - Library: Study Time (2.5 hours)</h4>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser (Total: ~3 hours)</h5>
+                            <ul>
+                                <li><strong>Re-watch Biology lecture</strong> (60 min): Skips through looking for Krebs cycle, pauses, rewinds, takes notes</li>
+                                <li><strong>Create Biology flashcards</strong> (60 min): Opens Quizlet, types 30 flashcards manually, makes typos, slow process</li>
+                                <li><strong>Start Orgo notes</strong> (30 min): Doesn't have time to finish, will have to do tonight</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (Cloud AI) (Total: ~90 min)</h5>
+                            <ul>
+                                <li><strong>Review Biology transcript</strong> (15 min): Searches "Krebs cycle", reads explanation, makes sense now</li>
+                                <li><strong>Generate flashcards</strong> (5 min): Clicks "Generate Flashcards", AI creates 25 cards in 30 seconds, reviews and edits 3 cards, exports to Anki</li>
+                                <li><strong>Create study guide</strong> (10 min): AI generates outline with structure, exports as PDF</li>
+                                <li><strong>Practice quiz</strong> (30 min): Takes AI-generated quiz, scores 12/15, reviews wrong answers</li>
+                                <li><strong>Free time!</strong> (15 min): Checks social media, feels accomplished</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp" style="margin-top: 1.5rem;">
+                            <h5>With Transcript Parser + Local AI (Ollama - Privacy Mode) (Total: ~90 min)</h5>
+                            <ul>
+                                <li><strong>Privacy benefit:</strong> Sarah is privacy-conscious and doesn't want her lecture data sent to cloud APIs</li>
+                                <li><strong>Review Biology transcript</strong> (15 min): Same as cloud version</li>
+                                <li><strong>Generate flashcards</strong> (5 min): Clicks "Generate Flashcards" → Uses local Ollama (LLaMA 3 8B model), processing happens on her laptop (no data sent to cloud), AI creates 25 flashcards in 45 seconds, lecture content never leaves her device</li>
+                                <li><strong>Create study guide</strong> (10 min): Local AI processing, zero cost, completely private</li>
+                                <li><strong>Practice quiz</strong> (30 min): Local quiz generation, no cloud API calls</li>
+                                <li><strong>Cost savings:</strong> $0 (vs. $0.05-0.15/transcript with cloud)</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp" style="margin-top: 1.5rem;">
+                            <h5>With Transcript Parser + Meta Ray-Ban Glasses</h5>
+                            <ul>
+                                <li><strong>Hands-free recording:</strong> Wears Meta Ray-Ban Smart Glasses ($299), starts recording with tap on temple</li>
+                                <li><strong>Visual capture:</strong> Glasses camera captures whiteboard diagrams and PowerPoint slides</li>
+                                <li><strong>OCR extraction:</strong> Later, app extracts text from slides automatically</li>
+                                <li><strong>Benefit:</strong> Can focus 100% on listening without managing phone or laptop</li>
+                                <li><strong>After class:</strong> Has audio transcript + slide images + diagrams captured</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 01, Story 3)</h5>
+                            <div class="user-story-text">
+                                "As a student preparing for exams, I want AI to automatically create flashcards from my lecture, so that I can study effectively without spending hours making flashcards manually."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Flashcards generated within 20 seconds for 90-min lecture</li>
+                                    <li>Generates 20-30 cards (terminology, concepts, dates, formulas)</li>
+                                    <li>User can review, edit, delete, and add custom cards</li>
+                                    <li>Export to Anki (.apkg), Quizlet (.txt), CSV, or PDF</li>
+                                    <li>Text-to-speech option for dyslexic students</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="impact-metrics">
+                            <h5>⏱️ Time Savings Analysis</h5>
+                            <div class="metric-row">
+                                <span class="metric-label">Without Transcript Parser:</span>
+                                <span class="metric-value">3 hours 15 minutes</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">With Transcript Parser:</span>
+                                <span class="metric-value">1 hour 30 minutes</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Time Saved:</span>
+                                <span class="metric-value" style="color: #059669; font-weight: bold;">1 hour 45 minutes (54%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evening -->
+                <div class="time-section">
+                    <div class="time-header">🌆 Evening (5:00 PM - 11:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>6:00 PM - Study Session 2 (2 hours)</h4>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Still working on Orgo notes and flashcards</li>
+                                <li>Exhausted, hard to focus</li>
+                                <li>Finishes around 9:00 PM, completely burned out</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser</h5>
+                            <ul>
+                                <li>Reviews Orgo study guide (20 min) - clear and organized</li>
+                                <li>Takes practice quiz (20 min) - scores 14/15, feels confident</li>
+                                <li>Studies Physics for tomorrow (60 min)</li>
+                                <li>Reviews Monday's lectures (30 min)</li>
+                                <li>Done by 8:00 PM with energy to spare</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <h4>10:30 PM - Before Bed</h4>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Reviews notes one more time</li>
+                                <li>Anxious about exam, worries she missed something</li>
+                                <li>Trouble falling asleep</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser</h5>
+                            <ul>
+                                <li>Gets spaced repetition reminder for Bio flashcards</li>
+                                <li>Quick 10-min review</li>
+                                <li>Checks study guide one more time</li>
+                                <li>Feels prepared and confident</li>
+                                <li>Falls asleep easily</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 01, Story 8)</h5>
+                            <div class="user-story-text">
+                                "As a student who forgets material over time, I want reminders to review flashcards at optimal intervals, so that I retain information long-term using spaced repetition."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Spaced repetition algorithm (1 day, 3 days, 1 week, 2 weeks, 1 month)</li>
+                                    <li>In-app notifications, email reminders (optional), push notifications (optional)</li>
+                                    <li>User can snooze, mark as reviewed, or adjust frequency</li>
+                                    <li>Tracks cards due for review and mastery level</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="impact-metrics">
+                        <h5>📊 Daily Impact Summary</h5>
+                        <div class="metric-row">
+                            <span class="metric-label">Total Study Time Saved:</span>
+                            <span class="metric-value">2.25 hours (40%)</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Free Time Gained:</span>
+                            <span class="metric-value">+1.5 hours</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Stress Level (Without):</span>
+                            <span class="metric-value">7/10</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Stress Level (With):</span>
+                            <span class="metric-value" style="color: #059669;">3/10</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Confidence Level (Without):</span>
+                            <span class="metric-value">5/10</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Confidence Level (With):</span>
+                            <span class="metric-value" style="color: #059669;">8/10</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Marcus's Day -->
+            <section id="marcus" style="margin-top: 4rem;">
+                <div class="content-header">
+                    <h2>Marcus's Research Day</h2>
+                    <div>
+                        <span class="persona-badge">PhD Student</span>
+                        <span class="persona-badge">Computer Science</span>
+                        <span class="persona-badge">Research-Focused</span>
+                    </div>
+                </div>
+
+                <div class="time-section">
+                    <div class="time-header">🌅 Morning (9:00 AM - 12:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>9:00 AM - Research Seminar (90 minutes)</h4>
+                        <div class="scenario-context">
+                            <strong>Speaker:</strong> External visitor from Stanford - "Multimodal Learning for Vision-Language Tasks"<br>
+                            <strong>Challenge:</strong> Highly technical content, multiple paper references, complex diagrams
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Brings iPad + Apple Pencil to take notes</li>
+                                <li>Speaker shows complex architecture diagram - Marcus sketches it</li>
+                                <li>Misses next 2 minutes of explanation while drawing</li>
+                                <li>Speaker mentions 5 related papers - Marcus scribbles names but gets spellings wrong</li>
+                                <li>During Q&A, professor asks great follow-up question</li>
+                                <li>Marcus thinks "I should remember this" but doesn't write it down</li>
+                                <li>After seminar: Messy notes, partial paper list, vague memory of Q&A</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (Cloud AI)</h5>
+                            <ul>
+                                <li>Opens app, starts recording with tags: #Seminar #MultimodalLearning #VisionLanguage #Stanford</li>
+                                <li>Adds custom vocabulary: CLIP, ViLT, BLIP, contrastive learning</li>
+                                <li>Listens actively, sketches diagram on iPad (synced to notes)</li>
+                                <li>When speaker mentions papers, taps "bookmark" icon (marks timestamp)</li>
+                                <li>During Q&A, focuses on discussion (knows it's being recorded)</li>
+                                <li>After seminar: Complete transcript, timestamped bookmarks, ready for processing</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp" style="margin-top: 1.5rem;">
+                            <h5>With Transcript Parser + Apple Vision Pro (Research-Grade)</h5>
+                            <ul>
+                                <li><strong>Wears Apple Vision Pro</strong> (university has 2 for research use)</li>
+                                <li><strong>Spatial audio recording:</strong> 6-mic array captures speaker separately from audience questions</li>
+                                <li><strong>Visual capture:</strong> Records slides, diagrams, speaker gestures in 3D</li>
+                                <li><strong>Real-time transcription:</strong> Sees live captions in AR overlay (helps follow complex terms)</li>
+                                <li><strong>OCR integration:</strong> Automatically extracts text from slides, equations from whiteboard</li>
+                                <li><strong>Spatial bookmarks:</strong> Taps finger in air to mark important moments</li>
+                                <li><strong>After seminar:</strong> Has transcript + slide deck (OCR extracted) + 3D spatial audio for re-experiencing presentation</li>
+                                <li><strong>Research benefit:</strong> Can revisit seminar from exact perspective, see diagrams again in 3D</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 02, Story 4)</h5>
+                            <div class="user-story-text">
+                                "As a student writing papers, I want to export transcript sections with proper citations, so that I can reference lecture content in my essays and research papers."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Citation format options: APA (7th), MLA (9th), Chicago (17th)</li>
+                                    <li>Citation includes: Professor, lecture title, course, date, university, timestamp</li>
+                                    <li>PDF formatting with title page, page numbers, headers/footers</li>
+                                    <li>User can select specific sections to export and add annotations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <h4>10:45 AM - Post-Seminar Processing (30 min)</h4>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser (30+ minutes, incomplete)</h5>
+                            <ul>
+                                <li>Tries to remember details while fresh</li>
+                                <li>Types up notes from iPad scribbles</li>
+                                <li>Googles paper names (some misspelled): "Flamingo model" ✓, "BLIP 2 paper" ✓, "Kosmos model" (spells it "Cosmos") ✗</li>
+                                <li>Gives up after 20 min, will ask lab mates later</li>
+                                <li><strong>Result:</strong> Captured 3 out of 7 papers mentioned</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (Cloud AI) (15 minutes, comprehensive)</h5>
+                            <ul>
+                                <li><strong>Clicks "Generate Research Summary"</strong> (30 sec): Gets main topic, key methods, novel contributions, open questions</li>
+                                <li><strong>Extracts citations</strong> (15 sec): AI identifies 7 paper references, exports as BibTeX, imports into Zotero automatically</li>
+                                <li><strong>Adds research notes</strong> (10 min): Annotates "Related to Chapter 3 - alternative baseline", tags sections</li>
+                                <li><strong>Shares with lab</strong> (5 min): Generates plain-language summary, posts to Slack</li>
+                                <li><strong>Result:</strong> All 7 papers captured, organized notes, team informed</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp" style="margin-top: 1.5rem;">
+                            <h5>With Transcript Parser + Local AI (Ollama - Sensitive Research)</h5>
+                            <ul>
+                                <li><strong>Context:</strong> Marcus is working on proprietary research for a defense contractor. Cloud AI is prohibited.</li>
+                                <li><strong>Local processing only</strong> (45 sec): Transcript processed on his workstation (RTX 4090 GPU), uses Ollama with fine-tuned LLaMA 3 70B model (research-grade), research summary generated locally</li>
+                                <li><strong>Security:</strong> Transcript contains unpublished research - cannot risk cloud leak</li>
+                                <li><strong>Compliance:</strong> ITAR regulations prohibit cloud processing of defense research</li>
+                                <li><strong>Citation extraction (local)</strong> (20 sec): Ollama identifies 7 paper references using local NER model, exports to BibTeX (all local), zero data sent to cloud</li>
+                                <li><strong>Why local AI:</strong> Security (unpublished research, intellectual property), Compliance (government contracts require on-premises), Academic integrity (prevent idea leakage before publication), Quality (fine-tuned 70B model matches GPT-4), Cost (university pays for GPU, no per-use API costs)</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 01, Custom Vocabulary)</h5>
+                            <div class="user-story-text">
+                                "As a graduate student in a technical field, I need AI to accurately transcribe domain-specific terminology, so that my notes are correct and useful for research."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Custom vocabulary per domain (ML/NLP, Biology, etc.)</li>
+                                    <li>User can add technical terms, acronyms, proper names</li>
+                                    <li>AI prioritizes custom vocab during transcription</li>
+                                    <li>Confidence scores shown for uncertain terms</li>
+                                    <li>User correction learning (save corrections for future)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="time-section">
+                    <div class="time-header">🌞 Afternoon (4:00 PM - 6:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>4:00 PM - Weekly Lab Meeting (2 hours)</h4>
+                        <div class="scenario-context">
+                            <strong>Attendees:</strong> 6 PhD students, 2 postdocs, Professor Chen<br>
+                            <strong>Agenda:</strong> Project updates, experiment results, planning
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Takes laptop notes in Google Doc</li>
+                                <li>6 people presenting (12 min each), types frantically, misses details</li>
+                                <li>Forgets to note action items for himself</li>
+                                <li>After meeting, doesn't remember what Sarah committed to (relevant to his project)</li>
+                                <li>No one has complete record of decisions made</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser</h5>
+                            <ul>
+                                <li>Starts recording, tags: #LabMeeting #Week47 #ActionItems</li>
+                                <li>Listens actively, asks questions, participates fully</li>
+                                <li>After meeting, AI processes and generates:
+                                    <ul style="margin-top: 0.5rem;">
+                                        <li><strong>Attendance:</strong> 6 PhD students, 2 postdocs, Professor Chen</li>
+                                        <li><strong>Action Items by person:</strong>
+                                            <ul style="margin-top: 0.25rem;">
+                                                <li>Marcus: Run baseline experiments by Friday, share results in Slack</li>
+                                                <li>Sarah: Finish data collection, coordinate with Marcus</li>
+                                                <li>Tom: Literature review on evaluation metrics</li>
+                                            </ul>
+                                        </li>
+                                        <li><strong>Decisions:</strong> Use BLEU score for evaluation, submit to ACL 2024 (deadline: Jan 15)</li>
+                                    </ul>
+                                </li>
+                                <li>Exports action items to Google Calendar (automatic reminders)</li>
+                                <li>Shares summary with lab group via Slack</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 02, Story 5)</h5>
+                            <div class="user-story-text">
+                                "As a student in a study group, I want to share my lecture transcripts with classmates, so that we can collaborate on notes and study together."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Share via link (read-only or editable) or with specific users</li>
+                                    <li>Permissions: View only, View + comment, View + edit</li>
+                                    <li>Recipients see transcript in "Shared with Me" section</li>
+                                    <li>Owner can revoke access anytime, edit history tracked</li>
+                                    <li>Collaboration: Comments/annotations (threaded), highlighting, discussions</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="impact-metrics">
+                            <h5>🔬 Research Productivity Impact</h5>
+                            <div class="metric-row">
+                                <span class="metric-label">Papers Captured:</span>
+                                <span class="metric-value">7/7 (100%) vs 3/7 (43%)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Time Processing Notes:</span>
+                                <span class="metric-value">15 min vs 30+ min</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Lab Alignment:</span>
+                                <span class="metric-value" style="color: #059669;">Complete record vs vague memory</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Action Items Missed:</span>
+                                <span class="metric-value" style="color: #059669;">0 vs 2-3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Aisha's Day -->
+            <section id="aisha" style="margin-top: 4rem;">
+                <div class="content-header">
+                    <h2>Aisha's Learning Day</h2>
+                    <div>
+                        <span class="persona-badge">International Student</span>
+                        <span class="persona-badge">Business Administration</span>
+                        <span class="persona-badge">ESL Learner</span>
+                    </div>
+                </div>
+
+                <div class="time-section">
+                    <div class="time-header">🌅 Morning (6:30 AM - 12:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>6:30 AM - Commute to Campus (1 hour)</h4>
+                        <div class="scenario-context">
+                            <strong>Challenge:</strong> Wants to review yesterday's lecture during bus + subway commute
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Recorded yesterday's "Consumer Behavior" lecture on phone</li>
+                                <li>Opens Voice Recorder app - 90 minutes of audio, no way to skim</li>
+                                <li>Too much to re-listen during commute</li>
+                                <li>Feels anxious - probably missed important details</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (Cloud AI)</h5>
+                            <ul>
+                                <li>Opens app on phone, sees AI summary (2-minute read):
+                                    <ul style="margin-top: 0.5rem;">
+                                        <li>Main topic: Consumer decision-making process</li>
+                                        <li>Key terms: Cognitive dissonance, buyer's remorse, post-purchase behavior</li>
+                                        <li>Case example: Apple's ecosystem lock-in strategy</li>
+                                    </ul>
+                                </li>
+                                <li>Taps unfamiliar term "cognitive dissonance" → sees definition</li>
+                                <li>Understands the concept now (struggled during lecture)</li>
+                                <li>Feels prepared for class discussion today</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp" style="margin-top: 1.5rem;">
+                            <h5>With Transcript Parser + Local AI (Ollama - Translation Privacy)</h5>
+                            <ul>
+                                <li><strong>Context:</strong> Aisha is translating lectures to Bengali to understand better. She doesn't want her university to know she's struggling.</li>
+                                <li><strong>Local translation (offline during commute):</strong>
+                                    <ul style="margin-top: 0.5rem;">
+                                        <li>Bus has no Wi-Fi, but she pre-downloaded transcript</li>
+                                        <li>Opens "Local Translation Mode" (Ollama running on phone via Termux)</li>
+                                        <li>Translates marketing terms to Bengali locally (no cloud API calls)</li>
+                                        <li><strong>Privacy:</strong> University can't see she's translating (no cloud logs)</li>
+                                        <li><strong>Cultural sensitivity:</strong> Doesn't want to seem like she can't understand English</li>
+                                        <li><strong>Cost:</strong> Free translation (no Google Translate API costs)</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Bilingual flashcards (local):</strong> Front: "Viral Marketing" (English), Back: "ভাইরাল মার্কেটিং - মুখে মুখে দ্রুত ছড়িয়ে পড়া বিজ্ঞাপন" (Bengali explanation)</li>
+                                <li><strong>Privacy preserved:</strong> No record she needed translation help</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 03, Story 2)</h5>
+                            <div class="user-story-text">
+                                "As an international student learning in a non-native language, I want to translate key terms and phrases from lectures, so that I can understand difficult concepts in my native language."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>In-transcript translation: Select word/phrase → "Translate" appears</li>
+                                    <li>20+ languages supported (Spanish, Mandarin, Arabic, Hindi, Bengali, etc.)</li>
+                                    <li>Word, phrase, and sentence-level translation</li>
+                                    <li>Bilingual flashcards: English term + native language translation option</li>
+                                    <li>Cultural context explanations for idioms and references</li>
+                                    <li>Pronunciation guide (IPA or audio) for difficult words</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <h4>9:00 AM - Marketing Strategy Lecture (90 min)</h4>
+                        <div class="scenario-context">
+                            <strong>Topic:</strong> "Digital Marketing & Social Media Campaigns"<br>
+                            <strong>Challenge:</strong> Professor speaks fast, uses jargon, references unfamiliar brands
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Tries to take notes on laptop</li>
+                                <li>Professor mentions brands Aisha doesn't know (Glossier, Warby Parker, Allbirds)</li>
+                                <li>References "viral marketing" with TikTok examples (not familiar with Canadian TikTok culture)</li>
+                                <li>Misses most case study details while looking up brand names</li>
+                                <li>Feels lost and frustrated</li>
+                                <li>Plans to borrow notes from classmate</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (Cloud AI)</h5>
+                            <ul>
+                                <li>Starts recording: #Marketing #DigitalMarketing #SocialMedia</li>
+                                <li>Focuses on listening, tries to understand overall concepts</li>
+                                <li>When professor mentions unfamiliar brands, taps "bookmark" button</li>
+                                <li>During "viral TikTok campaign" example, feels confused but knows she can review later</li>
+                                <li>Leaves feeling okay - not fully understanding, but has complete record</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp" style="margin-top: 1.5rem;">
+                            <h5>With Transcript Parser + Meta Ray-Ban Glasses (Discreet)</h5>
+                            <ul>
+                                <li><strong>Wears Meta Ray-Ban Smart Glasses</strong> (look like regular sunglasses)</li>
+                                <li><strong>Cultural benefit:</strong> In some cultures, recording openly might be seen as rude - glasses are discreet</li>
+                                <li>Starts recording with quiet tap on temple</li>
+                                <li><strong>Visual capture:</strong> Glasses camera captures professor's PowerPoint slides</li>
+                                <li><strong>OCR extraction:</strong> Later, app extracts brand names, campaign examples from slides</li>
+                                <li><strong>Hands-free:</strong> Can take handwritten notes in notebook (her preferred method)</li>
+                                <li>No laptop or phone on desk - more culturally comfortable note-taking style</li>
+                                <li><strong>After class:</strong> Has audio transcript + slide images + her handwritten notes</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <h4>10:45 AM - Case Study Presentation Prep (30 min)</h4>
+                        <div class="scenario-context">
+                            <strong>Challenge:</strong> Presenting at 12:30 PM, needs to understand her section
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Reviews group slides</li>
+                                <li>Realizes she doesn't fully understand parts she's supposed to present</li>
+                                <li>Considers asking group to change who presents what (embarrassing)</li>
+                                <li>Anxiety rising</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser</h5>
+                            <ul>
+                                <li>Opens this morning's lecture transcript</li>
+                                <li>Searches for "social media campaign" (her presentation topic)</li>
+                                <li>Reads professor's explanation again (makes more sense when reading)</li>
+                                <li>Uses built-in translation for 2 marketing terms (English → Bengali → understands → back to English)</li>
+                                <li>Clicks "key concepts" highlighting → sees what professor emphasized</li>
+                                <li>Practices pronunciation using text-to-speech</li>
+                                <li>Feels more confident now</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="time-section">
+                    <div class="time-header">🌞 Afternoon (12:30 PM - 5:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>12:30 PM - Group Presentation (30 min)</h4>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Presents her section, but mispronounces "engagement metrics"</li>
+                                <li>Classmate corrects her (embarrassing)</li>
+                                <li>Professor asks follow-up question</li>
+                                <li>Doesn't fully understand question, gives vague answer</li>
+                                <li>Feels disappointed in performance</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser</h5>
+                            <ul>
+                                <li>Presents confidently (practiced pronunciation this morning)</li>
+                                <li>Professor asks: "How does this relate to the cognitive dissonance concept we discussed yesterday?"</li>
+                                <li>Aisha knows this! (Reviewed summary this morning on commute)</li>
+                                <li>Gives clear answer, connects concepts</li>
+                                <li>Professor: "Excellent connection, Aisha"</li>
+                                <li>Feels proud and validated</li>
+                            </ul>
+                        </div>
+
+                        <div class="impact-metrics">
+                            <h5>🌍 International Student Impact</h5>
+                            <div class="metric-row">
+                                <span class="metric-label">Reading vs Listening:</span>
+                                <span class="metric-value">80% reading / 20% audio (easier comprehension)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Words Translated Per Lecture:</span>
+                                <span class="metric-value">10-15 terms</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Class Participation:</span>
+                                <span class="metric-value">2-3 contributions vs 0-1</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Confidence Level:</span>
+                                <span class="metric-value" style="color: #059669;">High vs Low</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="time-section">
+                    <div class="time-header">🌆 Evening (5:00 PM - 10:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>5:00 PM - Commute Home (1 hour) + 7:00 PM Study Session</h4>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser (3 hours total)</h5>
+                            <ul>
+                                <li>Reviews handwritten notes (messy, incomplete)</li>
+                                <li>Re-listens to relevant lecture sections (1 hour)</li>
+                                <li>Struggles to remember case examples</li>
+                                <li>Writes essay slowly in English (not native language)</li>
+                                <li>Uses Grammarly to fix errors</li>
+                                <li>Frustrated and exhausted</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (1.5 hours total)</h5>
+                            <ul>
+                                <li><strong>On commute:</strong> Reviews AI summaries on phone (5 min each), generates flashcards, downloads transcripts for offline</li>
+                                <li><strong>At home - Essay research</strong> (30 min): Searches all marketing lectures for "consumer behavior", finds 5 relevant sections, copies key quotes</li>
+                                <li><strong>Outline essay</strong> (15 min): Uses AI-generated study guide structure</li>
+                                <li><strong>Write essay</strong> (45 min): Uses transcript quotes (accurate citations), references case studies from lectures, Grammarly helps with grammar</li>
+                                <li><strong>Bonus: Language learning</strong> (30 min): Reviews idioms from lectures, creates custom flashcards, practices pronunciation</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 03, Simplified English)</h5>
+                            <div class="user-story-text">
+                                "As an ESL student, I want AI to rewrite complex lecture explanations in simpler English, so that I can understand concepts without language barriers."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>AI rewrites summaries in B1/B2 level English (Common European Framework)</li>
+                                    <li>Shorter sentences (< 15 words), common vocabulary</li>
+                                    <li>Explains idioms and cultural references</li>
+                                    <li>Toggle between standard and simplified versions</li>
+                                    <li>Benefits: ESL students, deaf students, learning disabilities</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Jordan's Day -->
+            <section id="jordan" style="margin-top: 4rem;">
+                <div class="content-header">
+                    <h2>Jordan's Learning Day</h2>
+                    <div>
+                        <span class="persona-badge">Student with Dyslexia</span>
+                        <span class="persona-badge">History Major</span>
+                        <span class="persona-badge">Accessibility Needs</span>
+                    </div>
+                </div>
+
+                <div class="time-section">
+                    <div class="time-header">🌅 Morning (7:00 AM - 12:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>7:00 AM - Morning Reality Check</h4>
+                        <div class="scenario-context">
+                            <strong>Context:</strong> Monday = American History lecture + discussion<br>
+                            <strong>Weekend:</strong> Assigned 60-page textbook reading on "The Civil War Era, 1850-1877"
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Weekend Reading Experience</h5>
+                            <ul>
+                                <li>Took 5 hours to read 60 pages (vs. classmates' 90 minutes)</li>
+                                <li>Text was dense, small font, lots of dates and names</li>
+                                <li>Letters started swimming on page after hour 2</li>
+                                <li>Missed some details due to fatigue</li>
+                                <li>Feels unprepared despite spending entire Sunday afternoon reading</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <h4>8:00 AM - American History Lecture (90 min)</h4>
+                        <div class="scenario-context">
+                            <strong>Topic:</strong> "Causes of the Civil War"
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Brings laptop, tries to type notes</li>
+                                <li>Professor talks fast, shows slides with text</li>
+                                <li>Jordan reads slide, misses verbal explanation</li>
+                                <li>Tries to copy slide text, makes typos: "Missuri Compromise" (Missouri)</li>
+                                <li>Loses place in notes, can't keep up</li>
+                                <li>Gives up on typing, just listens (but will forget details)</li>
+                                <li>Leaves lecture stressed - knows notes are incomplete</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (Cloud AI)</h5>
+                            <ul>
+                                <li>Opens app, starts recording</li>
+                                <li>Settings: <strong>Dyslexia-friendly mode</strong> (OpenDyslexic font, cream background, 16pt text)</li>
+                                <li>Tags: #History #CivilWar #LectureNotes</li>
+                                <li>Focuses entirely on listening (his strength!)</li>
+                                <li>Professor mentions "Bleeding Kansas" - Jordan remembers from reading but couldn't spell it</li>
+                                <li>Taps bookmark when professor explains Dred Scott case (wants to review later)</li>
+                                <li>Relaxed - knows transcript will have correct spelling, complete content</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp" style="margin-top: 1.5rem;">
+                            <h5>With Transcript Parser + Meta Ray-Ban Glasses (Hands-Free)</h5>
+                            <ul>
+                                <li><strong>Wears Meta Ray-Ban Smart Glasses</strong> ($299)</li>
+                                <li><strong>Dyslexia accommodation:</strong> Hands-free recording reduces cognitive load</li>
+                                <li>Starts recording with tap on temple (no phone/laptop setup)</li>
+                                <li><strong>Voice commands:</strong> "Hey Meta, bookmark" - marks timestamp without touching anything</li>
+                                <li><strong>Benefit:</strong> Can take handwritten notes without managing devices</li>
+                                <li>After class: Has transcript + his notes, all spelled correctly by AI</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp" style="margin-top: 1.5rem;">
+                            <h5>With Transcript Parser + Local AI (Ollama - Disability Privacy)</h5>
+                            <ul>
+                                <li><strong>Context:</strong> Jordan is registered with disability services but doesn't want cloud services tracking his accommodation usage</li>
+                                <li><strong>Local TTS processing:</strong>
+                                    <ul style="margin-top: 0.5rem;">
+                                        <li>All transcripts processed with local TTS engine (Piper or Coqui)</li>
+                                        <li>No cloud API calls (Google TTS, Amazon Polly)</li>
+                                        <li><strong>Privacy:</strong> No record of TTS usage (disability accommodation is private medical info)</li>
+                                        <li><strong>Disability privacy:</strong> ADA protects medical privacy - doesn't want cloud logs of TTS usage</li>
+                                        <li><strong>Compliance:</strong> FERPA and ADA require disability data protection</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Local study guide generation:</strong> All AI features work offline (privacy preserved)</li>
+                                <li><strong>Cost:</strong> $0 for unlimited TTS (vs. $0.001-0.01/character with cloud)</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 03, Story 3)</h5>
+                            <div class="user-story-text">
+                                "As a student with dyslexia, I want the entire app to be dyslexia-friendly, so that I can use all features without reading difficulties."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li><strong>Typography:</strong> Font options (OpenDyslexic, Comic Sans, Arial), 14-20pt size, 1.5-2.5x line spacing, no justified text</li>
+                                    <li><strong>Colors:</strong> Cream/light blue backgrounds (not pure white), dark gray text (not pure black), high contrast mode</li>
+                                    <li><strong>Reading aids:</strong> Reading ruler, focus mode, dyslexia-friendly highlighting, numbered paragraphs</li>
+                                    <li><strong>Integrated TTS:</strong> Built-in text-to-speech, highlight words as spoken, 0.5-2x speed</li>
+                                    <li><strong>Spell-tolerant search:</strong> Handles b/d swaps, reversals, missing letters</li>
+                                    <li><strong>UI:</strong> Large buttons, icons + text labels, consistent layout, generous spacing</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <h4>11:00 AM - Library: Essay Prep (1 hour)</h4>
+                        <div class="scenario-context">
+                            <strong>Assignment:</strong> 5-page essay on Civil War causes (due Friday)
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser (Overwhelming)</h5>
+                            <ul>
+                                <li>Needs to review textbook + lecture notes</li>
+                                <li>Opens textbook to Chapter 15 (50 pages)</li>
+                                <li>Starts reading... after 20 min, only on page 3</li>
+                                <li>Letters b and d keep swapping</li>
+                                <li>Reads "debt" as "dedt", "border states" as "dorder states"</li>
+                                <li>Has to re-read sentences multiple times</li>
+                                <li>Exhausted and discouraged</li>
+                                <li>Thinks: "I'll never finish this essay on time"</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (Empowering)</h5>
+                            <ul>
+                                <li><strong>Reviews lecture transcript</strong> (10 min): Opens on laptop (dyslexia-friendly font auto-applied), uses TTS to read aloud while following visually, highlights key points</li>
+                                <li><strong>Generates study guide</strong> (2 min): AI creates outline with clear structure (Economic causes, Political causes, Social causes, Timeline)</li>
+                                <li><strong>Creates essay outline</strong> (15 min): Uses study guide as framework, adds textbook quotes via search</li>
+                                <li><strong>Starts writing</strong> (30 min): Uses transcript quotes (spelling is correct!), references dates from timeline (no errors), 2 pages drafted</li>
+                                <li><strong>Generates flashcards</strong> (3 min): For key dates - all spelling correct, exports to Quizlet with TTS</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="time-section">
+                    <div class="time-header">🌞 Afternoon (12:30 PM - 5:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>12:30 PM - Study Session: Exam Prep (2 hours)</h4>
+                        <div class="scenario-context">
+                            <strong>Challenge:</strong> Midterm next Monday on 4 chapters (200 pages of textbook)
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser (Overwhelming)</h5>
+                            <ul>
+                                <li>Knows he should re-read textbook chapters</li>
+                                <li>Looks at page count: 200 pages</li>
+                                <li>Calculates: 3 hours/chapter × 4 = <strong>12 hours</strong> of reading</li>
+                                <li>Plus needs time to study after reading</li>
+                                <li>Feels overwhelmed, considers giving up</li>
+                                <li>Anxiety spiraling: "I can't do this. I'm going to fail."</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (Manageable)</h5>
+                            <ul>
+                                <li><strong>Reviews all 8 lecture transcripts</strong> (60 min): Uses TTS at 1.25x speed, follows along with text highlighted, pauses when needed, covers 4 weeks comprehensively</li>
+                                <li><strong>Generates comprehensive study guide</strong> (5 min): AI compiles all lectures - Timeline of events, Key figures with roles, Causes categorized, Visual hierarchy</li>
+                                <li><strong>Creates master flashcard deck</strong> (10 min): AI generates 60 flashcards from all lectures (dates, events, figures), all spelling correct, exports to Quizlet</li>
+                                <li><strong>Takes practice quiz</strong> (30 min): AI-generated 40 questions, scores 32/40 (80%), reviews wrong answers</li>
+                                <li><strong>Targeted review</strong> (25 min): Identifies weak area (Reconstruction), searches transcripts, creates additional flashcards, takes mini-quiz: 9/10</li>
+                            </ul>
+                        </div>
+
+                        <div class="impact-metrics">
+                            <h5>♿ Accessibility Impact</h5>
+                            <div class="metric-row">
+                                <span class="metric-label">Study Time (Reading-based):</span>
+                                <span class="metric-value">12+ hours</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Study Time (Audio + Transcript):</span>
+                                <span class="metric-value" style="color: #059669;">2.5 hours (79% reduction)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Mental Exhaustion (Reading):</span>
+                                <span class="metric-value">8/10</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Mental Exhaustion (Audio):</span>
+                                <span class="metric-value" style="color: #059669;">3/10</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Exam Readiness:</span>
+                                <span class="metric-value" style="color: #059669;">85-90% vs 65-70%</span>
+                            </div>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Key Insight: Dyslexia ≠ Intelligence</h5>
+                            <div class="user-story-text">
+                                Jordan's dyslexia doesn't affect his intelligence or understanding - he just processes information better through audio + structured text than dense textbook reading. With the right tools, he can compete on equal footing with neurotypical students.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <h4>3:30 PM - Free Time (90 min)</h4>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Would still be reading textbook</li>
+                                <li>Exhausted, no energy for activities</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser</h5>
+                            <ul>
+                                <li>Joins friends at campus coffee shop</li>
+                                <li>Plays intramural basketball</li>
+                                <li>Better work-life balance</li>
+                                <li>Reduced stress = better mental health</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sprint Summaries -->
+            <section id="sprint-01" style="margin-top: 4rem;">
+                <div class="content-header">
+                    <h2>Sprint 01: Core Features Summary</h2>
+                    <div>
+                        <span class="persona-badge">34 Story Points</span>
+                        <span class="persona-badge">8 User Stories</span>
+                    </div>
+                </div>
+
+                <div class="user-story-box">
+                    <h5>🎯 Sprint Goal</h5>
+                    <div class="user-story-text">
+                        Deliver core AI-powered study tools that save students time and improve comprehension
+                    </div>
+                </div>
+
+                <div class="scenario">
+                    <h4>High Priority Stories (Must Have - 26 points)</h4>
+                    <ul>
+                        <li><strong>Story 1: Student Profile Extension</strong> (3 pts) - Customize for academic needs, learning preferences, accessibility</li>
+                        <li><strong>Story 2: AI Lecture Summarizer</strong> (8 pts) - Generate summaries within 30 seconds, export to PDF/TXT/Markdown</li>
+                        <li><strong>Story 3: Flashcard Generator</strong> (8 pts) - Auto-create 20-30 cards, export to Anki/Quizlet, dyslexia-friendly</li>
+                        <li><strong>Story 4: Practice Quiz Generator</strong> (5 pts) - 15-20 questions (MC, T/F, short answer), immediate feedback</li>
+                        <li><strong>Story 5: Key Concept Highlighter</strong> (2 pts) - Auto-highlight critical/important/useful content</li>
+                    </ul>
+                </div>
+
+                <div class="scenario">
+                    <h4>Medium Priority Stories (Should Have - 6 points)</h4>
+                    <ul>
+                        <li><strong>Story 6: Course Organization</strong> (3 pts) - Organize transcripts by course, view analytics per course</li>
+                        <li><strong>Story 7: Search Across Lectures</strong> (3 pts) - Semantic search, spell-tolerant for dyslexia</li>
+                    </ul>
+                </div>
+
+                <div class="scenario">
+                    <h4>Low Priority Stories (Could Have - 2 points)</h4>
+                    <ul>
+                        <li><strong>Story 8: Spaced Repetition Reminders</strong> (2 pts) - Review intervals, notifications, mastery tracking</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Sprint 02 Summary -->
+            <section id="sprint-02" style="margin-top: 4rem;">
+                <div class="content-header">
+                    <h2>Sprint 02: Advanced Features Summary</h2>
+                    <div>
+                        <span class="persona-badge">55 Story Points</span>
+                        <span class="persona-badge">9 User Stories</span>
+                    </div>
+                </div>
+
+                <div class="user-story-box">
+                    <h5>🎯 Sprint Goal</h5>
+                    <div class="user-story-text">
+                        Deliver advanced AI features, collaboration tools, local AI processing (Ollama), and XR glasses integration for enhanced learning experiences
+                    </div>
+                </div>
+
+                <div class="scenario">
+                    <h4>High Priority Stories (21 points)</h4>
+                    <ul>
+                        <li><strong>Story 1: AI-Generated Study Guides</strong> (8 pts) - Organized by topics, headings, subheadings, timeline view, exportable</li>
+                        <li><strong>Story 4: Citation Export for Papers</strong> (5 pts) - APA/MLA/Chicago, proper formatting, PDF export with title pages</li>
+                        <li><strong>Story 5: Collaboration & Sharing</strong> (8 pts) - Share transcripts, permissions (view/comment/edit), commenting system</li>
+                    </ul>
+                </div>
+
+                <div class="scenario">
+                    <h4>Medium Priority Stories (21 points)</h4>
+                    <ul>
+                        <li><strong>Story 8: Local AI Processing (Ollama Integration)</strong> (8 pts) - Privacy-focused, FERPA/ITAR/HIPAA compliant, offline AI processing, zero cloud costs</li>
+                        <li><strong>Story 9: XR Glasses Integration</strong> (13 pts) - Meta Ray-Ban Smart Glasses, Apple Vision Pro, hands-free recording, OCR from slides, spatial audio</li>
+                    </ul>
+                </div>
+
+                <div class="scenario">
+                    <h4>Low Priority Stories (13 points)</h4>
+                    <ul>
+                        <li><strong>Story 2: Topic-Based Insights</strong> (5 pts) - AI analyzes recurring topics, shows connections across lectures</li>
+                        <li><strong>Story 3: Action Items Extractor</strong> (3 pts) - Detects assignments, readings, due dates, exports to calendar</li>
+                        <li><strong>Story 6: Notion/Obsidian Export</strong> (3 pts) - Native integration with Notion API, Obsidian vault sync</li>
+                        <li><strong>Story 7: Custom AI Prompts</strong> (2 pts) - Save custom prompt templates for summaries and study guides</li>
+                    </ul>
+                </div>
+
+                <div class="user-story-box">
+                    <h5>🔒 Privacy & Cost Benefits - Story 8: Ollama Integration</h5>
+                    <div class="acceptance-criteria">
+                        <h6>Privacy Benefits:</h6>
+                        <ul>
+                            <li><strong>Medical privacy (Jordan):</strong> No cloud logs of disability accommodations (FERPA/ADA protected)</li>
+                            <li><strong>Research privacy (Marcus):</strong> Unpublished research stays on device (ITAR compliance for defense work)</li>
+                            <li><strong>Cultural privacy (Aisha):</strong> Translation usage not tracked (preserves dignity)</li>
+                            <li><strong>University policy (Sarah):</strong> Complies with no-cloud-recording policies</li>
+                        </ul>
+                        <h6 style="margin-top: 1rem;">Cost Benefits:</h6>
+                        <ul>
+                            <li><strong>Free tier users:</strong> Unlimited AI processing ($0 vs $0.05-0.15/transcript cloud)</li>
+                            <li><strong>Pro tier users:</strong> Reduced cloud API costs (60-80% savings)</li>
+                            <li><strong>Universities:</strong> On-premises AI (no per-student cloud costs)</li>
+                        </ul>
+                        <h6 style="margin-top: 1rem;">Supported Models:</h6>
+                        <ul>
+                            <li><strong>Phi-3 Mini (3.8B):</strong> CPU, 4GB RAM - Fast, 70% GPT-4 quality - Mobile/quick summaries</li>
+                            <li><strong>LLaMA 3 8B:</strong> CPU, 16GB RAM - Medium speed, 85% quality - Consumer laptops, most tasks</li>
+                            <li><strong>LLaMA 3 70B:</strong> GPU, 32GB RAM - Slower, 95% quality - Research, PhD students</li>
+                            <li><strong>Mistral 7B:</strong> CPU, 16GB RAM - Medium speed, 80% quality - Alternative to LLaMA</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="user-story-box">
+                    <h5>👓 XR Glasses Benefits - Story 9: XR Integration</h5>
+                    <div class="acceptance-criteria">
+                        <h6>Meta Ray-Ban Smart Glasses ($299-$379):</h6>
+                        <ul>
+                            <li><strong>Hands-free recording:</strong> Tap temple to start (reduces cognitive load for dyslexic students)</li>
+                            <li><strong>Discreet capture:</strong> Culturally appropriate (international students, conservative settings)</li>
+                            <li><strong>Voice commands:</strong> "Hey Meta, bookmark" - mark timestamps without touching devices</li>
+                            <li><strong>Visual capture:</strong> Camera captures slides, diagrams (OCR extraction later)</li>
+                            <li><strong>Natural note-taking:</strong> Can use preferred methods (handwritten) while recording</li>
+                        </ul>
+                        <h6 style="margin-top: 1rem;">Apple Vision Pro ($3,499):</h6>
+                        <ul>
+                            <li><strong>Spatial audio:</strong> 6-mic array separates speaker from audience questions</li>
+                            <li><strong>3D visual capture:</strong> Records slides, diagrams, gestures in 3D space</li>
+                            <li><strong>Real-time transcription:</strong> AR overlay shows live captions (helps with technical terms)</li>
+                            <li><strong>OCR integration:</strong> Extracts text from slides, equations from whiteboards automatically</li>
+                            <li><strong>Spatial bookmarks:</strong> Tap finger in air to mark important moments</li>
+                            <li><strong>Re-experience:</strong> Revisit seminar from exact perspective in 3D (research benefit)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Right Sidebar - Expert Feedback -->
+        <aside class="expert-sidebar">
+            <h3>Expert Feedback</h3>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Elena Rodriguez</div>
+                <div class="expert-domain">Education Specialist</div>
+                <p>"The integration of spaced repetition and active recall is excellent. However, I'm concerned about over-reliance on AI. Students may passively consume summaries without deep processing. Add 'Active Review' mode: ask students to self-test BEFORE revealing AI summary. This improves retention by 40-60%."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Priya Sharma</div>
+                <div class="expert-domain">AI & NLP Specialist</div>
+                <p>"Current prompts are too basic. For Marcus's technical seminars, implement custom vocabulary (BERT, Transformer, CLIP) and Named Entity Recognition. Without this, 'Transformer architecture' becomes 'Transfer architecture' - completely wrong. Also, batch AI calls to reduce costs by 30-40%."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Alex Chen</div>
+                <div class="expert-domain">UX Design Expert</div>
+                <p>"34 story points in Sprint 01 = feature overload risk. Implement progressive disclosure: new users see Transcript → Summary → Flashcards. Advanced features revealed after 5+ sessions. Also, mobile-specific interactions needed: swipe to flip flashcards, thumb-friendly navigation. Remember: 40-70% of usage is mobile."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Jamie Martinez, CPACC</div>
+                <div class="expert-domain">Accessibility Specialist</div>
+                <p>"Dyslexia support for Jordan is EXCEPTIONAL - OpenDyslexic font, TTS, spell-tolerant search, cream backgrounds. This is industry-leading. However, screen reader support is delayed to Sprint 03 - this is a legal risk. Move to Sprint 01. Blind/low vision students (3-5% of population) cannot use the product otherwise. Also address Deaf/Hard of Hearing (5-10%) with visual alternatives to audio."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">David Kim</div>
+                <div class="expert-domain">Performance Engineer</div>
+                <p>"15,000-word transcripts will crash older phones without virtualization. Must implement react-window or similar - render only visible lines. Also, AI operations block UI for 30 seconds. Use background processing with notifications. Sarah studies on phone during commute - mobile performance is CRITICAL."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Sarah Thompson, CISSP</div>
+                <div class="expert-domain">Privacy & Security Expert</div>
+                <p>"⚠️ CRITICAL GAPS: No FERPA compliance (U.S. student privacy law), no GDPR compliance (EU). Universities CANNOT adopt products that violate FERPA. Must implement: student consent for data sharing, data access controls, right to be forgotten, AI vendor agreements (does Google Gemini use data for training?). This is a legal BLOCKER - address in Sprint 01."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Elena Rodriguez</div>
+                <div class="expert-domain">Education Specialist</div>
+                <p>"Quiz design needs improvement. Multiple choice tests recognition, not understanding. Add higher-order questions: 'How would you apply X?' (application), 'Compare X and Y' (analysis), 'Design a solution using A, B, C' (synthesis). Use Bloom's Taxonomy to tag question difficulty."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Alex Chen</div>
+                <div class="expert-domain">UX Design Expert</div>
+                <p>"Information architecture needs definition. How do students navigate between features? Recommend bottom navigation (mobile): [Home] [Courses] [Study] [Search] [Profile]. Also, no onboarding flow specified - 50% higher activation with progressive onboarding."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Priya Sharma</div>
+                <div class="expert-domain">AI & NLP Specialist</div>
+                <p>"Cost analysis: If 1,000 students use all features on 4 lectures/week × 15 weeks = $81,000/semester with GPT-4. Switch to tiered approach: Free tier = Gemini Flash (10x cheaper), Pro tier = GPT-4. Batch processing saves another 30-40%. Total savings: 60-70%."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Jamie Martinez, CPACC</div>
+                <div class="expert-domain">Accessibility Specialist</div>
+                <p>"Motor impairments not considered. 2-5% of students have limited dexterity, tremors, or one-handed use. Requirements: 44×44px minimum click targets (WCAG AAA), keyboard-only navigation (Tab, Enter, Space, Esc), no hover-only interactions, voice control support. These should be Sprint 01."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Elena Rodriguez</div>
+                <div class="expert-domain">Education Specialist</div>
+                <p>"For Aisha and international students: Simplified English summaries are good, but also add elaborative interrogation prompts - 'Why does X cause Y?' Research shows asking 'why' and 'how' questions improves understanding and retention by 25-40%, especially for ESL learners."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Sarah Thompson, CISSP</div>
+                <div class="expert-domain">Privacy & Security Expert</div>
+                <p>"Collaboration feature (Sprint 02) introduces FERPA risks. Sharing education records requires explicit consent. Implement: default private, warning before sharing, revocable access, expiring shares. NO public link sharing (too risky). Also, track who accessed what (audit log) - FERPA requirement."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">David Kim</div>
+                <div class="expert-domain">Performance Engineer</div>
+                <p>"Search across 50 transcripts on client-side = slow and memory-intensive. Must use backend full-text search (PostgreSQL tsvector, Elasticsearch, or Algolia). Target: < 100ms search time. Also implement pagination/infinite scroll for transcript viewing to reduce initial load."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Priya Sharma</div>
+                <div class="expert-domain">AI & NLP Specialist - Ollama Integration</div>
+                <p><strong>HIGH PRIORITY: Local AI with Ollama.</strong> This is a game-changer for privacy and cost. Implement LLaMA 3 8B as default (85% GPT-4 quality, runs on consumer laptops). For PhD students like Marcus, support 70B model (95% quality, requires GPU). Benefits: (1) FERPA/ITAR compliance out of the box, (2) 100% cost reduction for AI processing, (3) Offline capability for commutes. Quality benchmark: LLaMA 3 8B = 85% accuracy vs GPT-4, acceptable for most study tasks. Use cloud AI for free tier (simple), local AI for Pro tier (privacy-conscious).</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Priya Sharma</div>
+                <div class="expert-domain">AI & NLP Specialist - Technical Implementation</div>
+                <p>Ollama integration code example: Use Ollama SDK for TypeScript. For flashcard generation, use temperature: 0.3 (lower for consistency), num_predict: 500 for summaries. For translation (Aisha), use dedicated translation models (aya-23-8b supports Bengali). For technical content (Marcus), fine-tune with domain-specific corpora. Performance: LLaMA 3 8B = 2-3 sec/summary on M1 Mac, 4-5 sec on consumer Windows laptop. Batch processing saves 40% time.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Sarah Thompson, CISSP</div>
+                <div class="expert-domain">Privacy & Security Expert - Ollama Compliance</div>
+                <p><strong>Ollama solves major FERPA/GDPR compliance issues.</strong> With local AI: (1) Student data never leaves device (FERPA compliant by default), (2) No data processor agreements needed (data stays on-premises), (3) Disability accommodations private (ADA/Section 504 protected), (4) ITAR-compliant for defense research. Universities can adopt without legal review. However, still need: data encryption at rest (SQLCipher for local DB), secure cloud sync (E2E encryption for backups), user consent for any cloud features. This is the RIGHT architectural approach.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Michael Park</div>
+                <div class="expert-domain">XR & Wearables Expert</div>
+                <p><strong>XR glasses are the future of lecture capture.</strong> Meta Ray-Ban Smart Glasses ($299-$379) are PERFECT for undergrads: hands-free, discreet, affordable. Apple Vision Pro ($3,499) is research-grade - only for universities or PhD students. Key benefits: (1) Hands-free reduces cognitive load (critical for dyslexic students like Jordan), (2) Discreet recording culturally appropriate (Aisha), (3) OCR from slides (Sarah captures diagrams), (4) Spatial audio separation (Marcus separates speaker from audience). Implementation: Meta View app uploads to cloud, use Wi-Fi Direct for faster local transfer, OCR with Tesseract or Cloud Vision API.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Michael Park</div>
+                <div class="expert-domain">XR & Wearables Expert - Technical Challenges</div>
+                <p>XR technical challenges: (1) Video file size - Meta Ray-Ban records 1920x1080 @ 30fps = 200-500 MB/hour, implement compression (H.265) and cloud upload, (2) Battery drain - 3-4 hours recording max, remind users to charge, (3) Bluetooth bandwidth - use Wi-Fi Direct for faster transfer, (4) OCR accuracy - slides work well (90%+ accuracy), handwritten notes harder (70-80%), use Cloud Vision API for best results. Storage: 32GB glasses = ~60-90 hours of recording. Prioritize: compress video, extract audio + OCR text, delete video after processing (user consent).</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Jamie Martinez, CPACC</div>
+                <div class="expert-domain">Accessibility Specialist - XR for Disabilities</div>
+                <p>XR glasses are TRANSFORMATIVE for students with disabilities. For Jordan (dyslexia): hands-free recording removes device management burden (massive cognitive load reduction). Voice commands ("Hey Meta, bookmark") eliminate need to touch devices. For students with motor impairments: XR glasses remove need for fine motor control (no buttons, no typing). For Deaf/Hard of Hearing: real-time transcription AR overlay (Vision Pro) provides instant captions. This is CUTTING-EDGE accessibility. Recommend subsidies for students with disabilities (ADA reasonable accommodation).</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">David Kim</div>
+                <div class="expert-domain">Performance Engineer - Ollama Performance</div>
+                <p>Ollama performance considerations: (1) Model size vs speed - Phi-3 Mini (3.8B) = 1-2 sec/summary on CPU, LLaMA 3 8B = 2-3 sec on M1/M2, 4-5 sec on consumer laptops, LLaMA 3 70B = 20-30 sec on RTX 4090 GPU. (2) Memory usage - 8B models need 16GB RAM, 70B models need 32GB RAM + GPU. (3) Battery impact - local AI uses 20-30% more battery than cloud (mobile users beware). Recommendation: Default to cloud AI for mobile, local AI for desktop/laptop. Show battery warning if local AI selected on phone. Implement model switching: auto-select based on hardware capabilities.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Alex Chen</div>
+                <div class="expert-domain">UX Design Expert - Local vs Cloud AI</div>
+                <p>Local AI (Ollama) vs Cloud AI UX considerations: (1) First-time user experience - default to cloud AI (faster setup, no model download). After 5 sessions, show "Enable Privacy Mode" prompt → explain Ollama benefits. (2) Model download UX - LLaMA 3 8B = 4.7GB download, show progress bar + time estimate, allow background download. (3) Processing indicator - local AI = "Processing on your device (private)", cloud AI = "Processing with Gemini". (4) Settings discoverability - "Privacy & AI" settings section, toggle "Use local AI (Ollama)", show benefits: privacy, cost savings, offline capability. (5) Error handling - if local model fails, fallback to cloud with user consent.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">All Experts</div>
+                <div class="expert-domain">Consensus Recommendation</div>
+                <p><strong>Move to Sprint 01:</strong> (1) FERPA/GDPR compliance (legal blocker), (2) Screen reader support (legal + 3-5% of students), (3) Prompt optimization (40-60% quality improvement), (4) Virtualization (performance blocker), (5) Background AI processing (UX blocker). These are CRITICAL path items.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">All Experts</div>
+                <div class="expert-domain">Sprint 02 Consensus - Ollama & XR</div>
+                <p><strong>STRONG ENDORSEMENT for Ollama (Story 8) and XR Glasses (Story 9).</strong> Ollama solves: FERPA compliance (legal blocker), privacy concerns (disability accommodations, research), cost reduction (60-100% savings). XR glasses solve: cognitive load (dyslexia), cultural appropriateness (international students), hands-free capture (accessibility). Both are differentiators - competitors don't have this. Recommendation: Prioritize Ollama integration in Sprint 02 (8 pts reasonable), XR glasses can be Sprint 03 if resources limited (Meta Ray-Ban first, Vision Pro later). Quality metrics: Test LLaMA 3 8B vs GPT-4 on 100 real student transcripts, ensure 85%+ quality parity before shipping.</p>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.nav-links a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+
+                    // Update active state
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Update active navigation on scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

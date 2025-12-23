@@ -1,0 +1,188 @@
+================================================================================
+  FINAL DEPLOYMENT - Server-Side FFmpeg Architecture
+================================================================================
+
+PACKAGE: transcript-parser-FINAL-WITH-AUDIO-SERVER.tar.gz (13 MB)
+
+WHAT CHANGED:
+  ✅ Switched from browser FFmpeg.wasm to server-side FFmpeg
+  ✅ No more CORS/header issues
+  ✅ Faster, more reliable processing
+  ✅ Includes audio-server container with native FFmpeg
+
+================================================================================
+  STEP 1: Add SSH Key to Hostinger (Option 1 - Control Panel)
+================================================================================
+
+1. Go to https://hpanel.hostinger.com
+2. Log in with your Hostinger credentials
+3. Navigate to: VPS → Your VPS (72.62.86.210)
+4. Find "SSH Keys" or "Security" section
+5. Click "Add SSH Key"
+6. Paste this public key:
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO/idansGmKVzdp1bdV+nQJ0BghyLJXgPPUpPku1Mu9u kevenm2012@gmail.com
+
+7. Save/Add the key
+8. Wait 30 seconds for it to propagate
+
+================================================================================
+  STEP 2: Test SSH Connection
+================================================================================
+
+Open PowerShell or Command Prompt:
+
+ssh root@72.62.86.210
+
+Should connect WITHOUT asking for password!
+
+If it asks for password, the key isn't added yet. Wait a bit or try again.
+
+================================================================================
+  STEP 3: Upload Deployment Package
+================================================================================
+
+scp transcript-parser-FINAL-WITH-AUDIO-SERVER.tar.gz root@72.62.86.210:/tmp/
+
+This will take a minute (13 MB upload).
+
+================================================================================
+  STEP 4: SSH and Deploy
+================================================================================
+
+ssh root@72.62.86.210
+
+cd /tmp
+tar -xzf transcript-parser-FINAL-WITH-AUDIO-SERVER.tar.gz quick-deploy.sh
+chmod +x quick-deploy.sh
+./quick-deploy.sh
+
+The script will:
+- Backup existing deployment
+- Extract new files
+- Copy your .env.production
+- Build 3 Docker containers (app, audio-server, n8n)
+- Start all services
+
+================================================================================
+  STEP 5: Configure DNS (While Docker Builds)
+================================================================================
+
+While Docker is building (takes 5-10 minutes), configure DNS:
+
+1. Go to https://hpanel.hostinger.com
+2. Navigate to: Domains → smarthavenai.com → DNS/Name Servers
+3. Add these A records:
+
+| Type | Name | Points to     | TTL  |
+|------|------|---------------|------|
+| A    | @    | 72.62.86.210  | 3600 |
+| A    | www  | 72.62.86.210  | 3600 |
+| A    | n8n  | 72.62.86.210  | 3600 |
+| A    | api  | 72.62.86.210  | 3600 |  <- NEW for audio server
+
+4. Save changes
+5. Wait 5-10 minutes for DNS propagation
+
+================================================================================
+  STEP 6: Get SSL Certificates (After DNS Propagates)
+================================================================================
+
+Back in your SSH session:
+
+cd /var/www/smarthaven
+
+# Main domain
+docker compose run --rm certbot certonly --webroot \
+  --webroot-path=/var/www/certbot \
+  --email kevenm2012@gmail.com \
+  --agree-tos \
+  --no-eff-email \
+  -d smarthavenai.com \
+  -d www.smarthavenai.com
+
+# N8N subdomain
+docker compose run --rm certbot certonly --webroot \
+  --webroot-path=/var/www/certbot \
+  --email kevenm2012@gmail.com \
+  --agree-tos \
+  --no-eff-email \
+  -d n8n.smarthavenai.com
+
+# API subdomain (audio server)
+docker compose run --rm certbot certonly --webroot \
+  --webroot-path=/var/www/certbot \
+  --email kevenm2012@gmail.com \
+  --agree-tos \
+  --no-eff-email \
+  -d api.smarthavenai.com
+
+# Restart nginx to use certificates
+docker compose restart nginx
+
+================================================================================
+  STEP 7: Verify Everything Works
+================================================================================
+
+docker compose ps
+
+Should show:
+✅ transcript-parser (healthy)
+✅ audio-extraction (healthy)  <- NEW
+✅ postgres-db (healthy)
+✅ n8n-workflows (healthy)
+✅ nginx-proxy (running)
+
+View logs:
+docker compose logs -f
+
+Test URLs:
+- https://smarthavenai.com (main app)
+- https://n8n.smarthavenai.com (N8N)
+- https://api.smarthavenai.com/health (audio server)
+
+Upload a video and test transcription!
+
+================================================================================
+  NEW ARCHITECTURE
+================================================================================
+
+Before: Browser → FFmpeg.wasm (browser-based, slow, CORS issues)
+After:  Browser → Audio Server → Native FFmpeg (fast, reliable)
+
+The app now sends video files to the audio-server container which:
+1. Receives video upload
+2. Extracts audio using native FFmpeg (fast!)
+3. Returns audio file to browser
+4. Browser sends audio to Gemini for transcription
+
+This fixes ALL the previous errors!
+
+================================================================================
+  TROUBLESHOOTING
+================================================================================
+
+If something fails:
+
+Check logs:
+  docker compose logs -f app
+  docker compose logs -f audio-server
+  docker compose logs -f nginx
+
+Restart a service:
+  docker compose restart app
+  docker compose restart audio-server
+
+Rebuild a service:
+  docker compose up -d --build app
+  docker compose up -d --build audio-server
+
+Check health:
+  curl http://localhost:3001/health  (from VPS)
+  curl https://api.smarthavenai.com/health  (from anywhere)
+
+================================================================================
+
+🚀 START WITH STEP 1: Add your SSH key to Hostinger!
+
+================================================================================

@@ -1,0 +1,68 @@
+================================================================================
+  HOSTINGER DEPLOYMENT - smarthavenai.com/transcript-parser/
+================================================================================
+
+FILE TO UPLOAD:
+  C:\code\transcript-parser\transcript-parser-FINAL.tar.gz
+
+================================================================================
+  DEPLOYMENT STEPS
+================================================================================
+
+1. LOGIN TO HOSTINGER
+   https://hpanel.hostinger.com
+
+2. GO TO FILE MANAGER
+   Click: smarthavenai.com > Files > File Manager
+
+3. NAVIGATE TO
+   public_html/transcript-parser/
+
+4. DELETE ALL FILES
+   Select all > Delete (clear the folder completely)
+
+5. UPLOAD THE TAR.GZ FILE
+   Upload: transcript-parser-FINAL.tar.gz
+
+6. EXTRACT
+   Right-click > Extract
+
+7. CLEANUP
+   Delete the tar.gz file after extraction
+
+8. TEST
+   Hard refresh browser: Ctrl + Shift + R
+   Visit: https://smarthavenai.com/transcript-parser/
+
+================================================================================
+  EXPECTED FOLDER STRUCTURE AFTER EXTRACTION
+================================================================================
+
+public_html/transcript-parser/
+  ├── index.html
+  ├── assets/
+  │   ├── index-D_4QiAFU.js
+  │   ├── index-DUpNWwhc.css
+  │   ├── react-vendor-C1-Qn4uC.js
+  │   └── ... (other JS/CSS files)
+  ├── images/
+  │   └── banner.png
+  ├── ffmpeg-core.js
+  ├── ffmpeg-core.wasm
+  ├── sw.js
+  ├── manifest.webmanifest
+  └── ... (other files)
+
+================================================================================
+  TROUBLESHOOTING
+================================================================================
+
+WHITE SCREEN / 404 ERRORS:
+  - Check that assets/ is a FOLDER, not files with "assets\" in the name
+  - If filenames have backslashes like "assets\file.js", re-extract using tar.gz
+
+CACHED OLD VERSION:
+  - Hard refresh: Ctrl + Shift + R
+  - Or open in Incognito: Ctrl + Shift + N
+
+================================================================================

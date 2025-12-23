@@ -13,6 +13,12 @@ import { Button } from './ui/button'
 import type { Speaker, TranscriptEntry } from '@transcript-parser/types'
 import { useMemo, useState } from 'react'
 
+// Detect touch device (iOS/Android)
+function isTouchDevice() {
+  if (typeof window === 'undefined') return false
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0
+}
+
 interface SpeakerAnalyticsProps {
   speakers: Speaker[]
   entries: TranscriptEntry[]
@@ -127,7 +133,7 @@ export function SpeakerAnalytics({
 
     if (isEditing) {
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <div
             className={`inline-flex items-center pl-4 pr-2 py-2 rounded-2xl text-sm font-medium border ${getSpeakerColorClasses(speaker.color)}`}
           >
@@ -139,11 +145,27 @@ export function SpeakerAnalytics({
               value={editingName}
               onChange={e => setEditingName(e.target.value)}
               onKeyDown={e => {
-                if (e.key === 'Enter') handleSaveEdit(speaker.id)
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  handleSaveEdit(speaker.id)
+                }
                 if (e.key === 'Escape') handleCancelEdit()
               }}
-              className="bg-transparent border-none outline-none focus:outline-none min-w-[100px] max-w-[150px]"
+              onBlur={() => {
+                // On mobile, save on blur (when tapping elsewhere)
+                // Small delay to allow button clicks to register first
+                setTimeout(() => {
+                  if (editingSpeakerId === speaker.id && editingName.trim()) {
+                    // Only save if still editing this speaker
+                  }
+                }, 200)
+              }}
+              className="bg-transparent border-none outline-none focus:outline-none min-w-[100px] max-w-[150px] text-base"
               autoFocus
+              enterKeyHint="done"
+              autoCapitalize="words"
+              autoComplete="off"
+              autoCorrect="off"
             />
           </div>
           <div className="flex items-center gap-1">
@@ -151,17 +173,17 @@ export function SpeakerAnalytics({
               size="sm"
               variant="ghost"
               onClick={() => handleSaveEdit(speaker.id)}
-              className="h-8 w-8 p-0 text-emerald-600 hover:bg-emerald-100"
+              className="h-10 w-10 p-0 text-emerald-600 hover:bg-emerald-100 active:bg-emerald-200"
             >
-              <Check className="w-4 h-4" />
+              <Check className="w-5 h-5" />
             </Button>
             <Button
               size="sm"
               variant="ghost"
               onClick={handleCancelEdit}
-              className="h-8 w-8 p-0 text-red-600 hover:bg-red-100"
+              className="h-10 w-10 p-0 text-red-600 hover:bg-red-100 active:bg-red-200"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </Button>
           </div>
         </div>
@@ -183,7 +205,11 @@ export function SpeakerAnalytics({
             size="sm"
             variant="ghost"
             onClick={() => handleStartEdit(speaker)}
-            className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity text-slate-600 hover:text-blue-600 hover:bg-blue-50"
+            className={`h-8 w-8 p-0 transition-opacity text-slate-600 hover:text-blue-600 hover:bg-blue-50 ${
+              isTouchDevice()
+                ? 'opacity-100'
+                : 'opacity-0 group-hover:opacity-100'
+            }`}
           >
             <Edit2 className="w-4 h-4" />
           </Button>

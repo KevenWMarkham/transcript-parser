@@ -33,18 +33,15 @@ export class FFmpegExtractor {
 
     try {
       console.log('[FFmpeg] Initializing...')
-      console.log(
-        '[FFmpeg] onProgress callback provided?',
-        !!options?.onProgress
-      )
+      console.log('[FFmpeg] crossOriginIsolated:', typeof window !== 'undefined' ? (window as any).crossOriginIsolated : 'N/A')
+      console.log('[FFmpeg] SharedArrayBuffer available:', typeof SharedArrayBuffer !== 'undefined')
+
       this.ffmpeg = new FFmpeg()
 
       this.ffmpeg.on('log', ({ message }) => {
         console.log('[FFmpeg]', message)
         options?.onLog?.(message)
       })
-
-      console.log('[FFmpeg] Loading from local files...')
 
       // Simulate progress updates during loading
       let loadProgress = 0
@@ -57,54 +54,56 @@ export class FFmpegExtractor {
       }, 300)
 
       try {
-        // Use ESM distribution from jsdelivr CDN for better compatibility with Vite
-        // ESM is the proper module format for modern build tools
-        const baseURL =
-          'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm'
-        console.log('[FFmpeg] Loading from ESM build:', baseURL)
+        // Check if we can use multi-threaded version
+        const canUseMultiThreaded = typeof window !== 'undefined' &&
+          (window as any).crossOriginIsolated === true &&
+          typeof SharedArrayBuffer !== 'undefined'
 
-        console.log('[FFmpeg] Converting core.js to blob URL...')
-        const coreURL = await toBlobURL(
-          `${baseURL}/ffmpeg-core.js`,
-          'text/javascript'
-        )
+        let coreURL: string
+        let wasmURL: string
+        let workerURL: string | undefined
 
-        console.log('[FFmpeg] Converting WASM to blob URL...')
-        const wasmURL = await toBlobURL(
-          `${baseURL}/ffmpeg-core.wasm`,
-          'application/wasm'
-        )
+        if (canUseMultiThreaded) {
+          // Use multi-threaded ESM version from jsdelivr CDN
+          console.log('[FFmpeg] Using MULTI-THREADED version (crossOriginIsolated)')
+          const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm'
+          console.log('[FFmpeg] Loading from CDN:', baseURL)
 
-        console.log('[FFmpeg] Converting worker to blob URL...')
-        const workerURL = await toBlobURL(
-          `${baseURL}/ffmpeg-core.worker.js`,
-          'text/javascript'
-        )
+          coreURL = await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript')
+          wasmURL = await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm')
+          workerURL = await toBlobURL(`${baseURL}/ffmpeg-core.worker.js`, 'text/javascript')
+        } else {
+          // Use single-threaded version (no SharedArrayBuffer required)
+          console.log('[FFmpeg] Using SINGLE-THREADED version (no crossOriginIsolated)')
+          const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd'
+          console.log('[FFmpeg] Loading from CDN:', baseURL)
+
+          coreURL = await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript')
+          wasmURL = await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm')
+          workerURL = undefined // Single-threaded doesn't use worker
+        }
 
         clearInterval(progressInterval)
         options?.onProgress?.(95)
 
         console.log('[FFmpeg] Core URL:', coreURL)
         console.log('[FFmpeg] WASM URL:', wasmURL)
-        console.log('[FFmpeg] Worker URL:', workerURL)
+        console.log('[FFmpeg] Worker URL:', workerURL || 'N/A (single-threaded)')
         console.log('[FFmpeg] Loading into memory...')
 
-        // Load FFmpeg with all three files
-        await this.ffmpeg.load({
-          coreURL,
-          wasmURL,
-          workerURL,
-        })
+        // Load FFmpeg
+        if (workerURL) {
+          await this.ffmpeg.load({ coreURL, wasmURL, workerURL })
+        } else {
+          await this.ffmpeg.load({ coreURL, wasmURL })
+        }
 
         options?.onProgress?.(100)
         console.log('[FFmpeg] Loaded successfully ✅')
       } catch (error) {
         clearInterval(progressInterval)
         console.error('[FFmpeg] Detailed error:', error)
-        console.error(
-          '[FFmpeg] Error stack:',
-          error instanceof Error ? error.stack : 'No stack'
-        )
+        console.error('[FFmpeg] Error stack:', error instanceof Error ? error.stack : 'No stack')
         throw error
       }
 
