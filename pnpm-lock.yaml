@@ -292,12 +292,6 @@ importers:
 
   packages/audio-processing:
     dependencies:
-      '@ffmpeg/ffmpeg':
-        specifier: ^0.12.15
-        version: 0.12.15
-      '@ffmpeg/util':
-        specifier: ^0.12.2
-        version: 0.12.2
       '@transcript-parser/types':
         specifier: workspace:*
         version: link:../types
