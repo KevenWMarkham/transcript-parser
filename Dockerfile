@@ -18,8 +18,11 @@ RUN pnpm install --frozen-lockfile
 # Copy source code
 COPY . .
 
-# Build all packages
-RUN pnpm build
+# Build workspace packages first (types, ui, ai-services, export, etc.)
+RUN pnpm -r --filter "@transcript-parser/*" build
+
+# Build main application
+RUN pnpm build:web
 
 # Stage 2: Production image
 FROM node:20-alpine AS production

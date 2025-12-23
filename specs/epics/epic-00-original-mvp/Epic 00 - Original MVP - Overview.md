@@ -3,7 +3,7 @@
 **Epic ID**: EPIC-00
 **Status**: ~65% Complete (13 of 20 weeks)
 **Priority**: Foundation
-**Timeline**: 20 weeks (Sprint 1-10)
+**Timeline**: 24 weeks (Sprint 1-11)
 **Owner**: Development Team
 
 ---
@@ -44,6 +44,7 @@ After completing ~65% of this epic, the project evolved to become a **multi-modu
 - [ ] Search and filter UX (Sprint 8)
 - [ ] PWA features (Sprint 9)
 - [ ] Final integration and polish (Sprint 10)
+- [ ] Session-based notes with AI Experts (Sprint 11) ⭐ Core Feature
 
 ## 🎁 Sprint Summary
 
@@ -242,12 +243,40 @@ After completing ~65% of this epic, the project evolved to become a **multi-modu
 
 ---
 
+### Sprint 11: Session-based Notes with AI Experts ❌ NOT STARTED
+**Duration**: Weeks 21-24 | **Status**: ❌ Planned
+**Priority**: High (Core Functionality)
+
+**Overview**: Generate structured notes from transcripts using templates and AI-powered expert analysis. This is **core functionality** that applies across all persona modules (Real Estate, Travel, Students, etc.).
+
+**Phase 1 - MVP Deliverables**:
+- [ ] Session management (group multiple transcripts)
+- [ ] Meeting Notes template
+- [ ] Note generation with Gemini AI
+- [ ] SessionList, SessionCreate, NotesView UI components
+- [ ] Database schema for sessions and notes
+
+**Phase 2 - AI Experts**:
+- [ ] Topic detection from transcripts
+- [ ] Auto-detect relevant experts (Legal, Tech, Business, PM, HR, Finance)
+- [ ] Expert contributions in note sections
+- [ ] ExpertPanel UI
+
+**Phase 3 - Inline Annotations**:
+- [ ] Expert annotations on transcript entries
+- [ ] Background research sidebar
+- [ ] AnnotatedTranscript component
+
+**Location**: `sprints/sprint-11/Sprint-11-Session-Notes.md`
+
+---
+
 ## 📊 Overall Progress
 
 ### Completion Status
-- **Sprints Completed**: 6 out of 10 (60%)
-- **Story Points**: ~65% of MVP
-- **Weeks Elapsed**: ~13 of 20
+- **Sprints Completed**: 6 out of 11 (55%)
+- **Story Points**: ~55% of MVP
+- **Weeks Elapsed**: ~13 of 24
 
 ### Completed Features
 1. ✅ Video upload and preview
@@ -265,6 +294,7 @@ After completing ~65% of this epic, the project evolved to become a **multi-modu
 3. ⏳ Search and filter
 4. ⏳ PWA installation
 5. ⏳ Final polish and deployment
+6. ⏳ Session-based notes with AI Experts ⭐ Core Feature
 
 ## 🔄 Architecture Evolution
 
@@ -359,15 +389,16 @@ This epic is the **foundation** for the new modular platform:
 ## 🎯 Definition of Done (Epic 00)
 
 This epic will be considered **complete** when:
-- [ ] All 10 sprints finished
+- [ ] All 11 sprints finished
 - [ ] All planned features implemented
+- [ ] Session Notes with AI Experts working
 - [ ] Tests passing (unit + E2E)
 - [ ] PWA score 100
 - [ ] Production deployed
 - [ ] User documentation complete
 - [ ] No critical bugs
 
-**Current Status**: 60% complete, transitioning to Epic 01
+**Current Status**: 55% complete, transitioning to Epic 01
 
 ## 📝 Notes
 
@@ -390,6 +421,7 @@ This is numbered "00" because it's the **pre-modular foundation**. It represents
 ### Sprint Documentation
 All sprint docs are in `sprints/` subdirectory:
 - Sprint 01 through Sprint 10 (original plan)
+- Sprint 11: Session Notes with AI Experts (core feature)
 - Sprint 7 has subdirectory with multiple docs
 
 ### Other Epics

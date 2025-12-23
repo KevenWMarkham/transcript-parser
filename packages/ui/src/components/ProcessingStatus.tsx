@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Wand2,
@@ -9,6 +10,7 @@ import {
 import { Button } from './ui/button'
 import { Progress } from './ui/progress'
 import type { ProcessingState } from '../hooks/useTranscription'
+import { getDebugMessage } from '../hooks/useTranscription'
 
 interface ProcessingStatusProps {
   processingState: ProcessingState
@@ -23,6 +25,16 @@ export function ProcessingStatus({
   error,
   onReset,
 }: ProcessingStatusProps) {
+  const [debugMsg, setDebugMsg] = useState('')
+
+  // Poll for debug message updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDebugMsg(getDebugMessage())
+    }, 500)
+    return () => clearInterval(interval)
+  }, [])
+
   const getStateMessage = () => {
     switch (processingState) {
       case 'idle':
@@ -126,6 +138,14 @@ export function ProcessingStatus({
                   ? 'Initializing...'
                   : `${Math.round(progress)}%`}
               </p>
+            </div>
+          )}
+
+          {/* Debug info - visible for troubleshooting */}
+          {debugMsg && (
+            <div className="mt-3 p-3 rounded-lg bg-yellow-100 border-2 border-yellow-500">
+              <p className="text-sm font-bold text-black">🔍 Status:</p>
+              <p className="text-sm font-mono text-black break-all">{debugMsg}</p>
             </div>
           )}
         </div>

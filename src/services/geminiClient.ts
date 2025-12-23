@@ -38,6 +38,9 @@ export class GeminiError extends Error {
   }
 }
 
+// Hardcoded API key for beta/access code mode (production builds)
+const BETA_API_KEY = 'AIzaSyDpqoSyupsF9Zkqww5qi622rRSKhhjlRPg'
+
 export class GeminiQuotaError extends GeminiError {
   constructor(message: string = 'API quota exceeded or rate limit reached') {
     super(message, 'QUOTA_EXCEEDED')
@@ -52,9 +55,6 @@ export class GeminiInvalidAudioError extends GeminiError {
   }
 }
 
-// Hardcoded API key for beta/access code mode (production builds)
-const BETA_API_KEY = 'AIzaSyB8DYs1TQdd6FmzEsFhKHdBRaquSyD2cdY'
-
 export class GeminiClient {
   private ai: GoogleGenAI
   private model: string
@@ -64,7 +64,7 @@ export class GeminiClient {
   private readonly RETRY_DELAY = 1000 // ms
 
   constructor(options?: TranscriptionOptions) {
-    // Priority: 1) options.apiKey, 2) localStorage config, 3) env variable, 4) hardcoded beta key
+    // Priority: 1) options.apiKey, 2) localStorage config, 3) env variable
     let apiKey = options?.apiKey
 
     if (!apiKey) {
@@ -91,12 +91,15 @@ export class GeminiClient {
     }
 
     if (!apiKey) {
-      throw new GeminiError('Gemini API key is required', 'MISSING_API_KEY')
+      throw new GeminiError(
+        'Gemini API key is required. Please set VITE_GEMINI_API_KEY in your .env file or provide an API key in the settings.',
+        'MISSING_API_KEY'
+      )
     }
 
     this.ai = new GoogleGenAI({ apiKey })
-    // Use gemini-2.5-flash for audio/video transcription
-    this.model = options?.model || 'gemini-2.5-flash'
+    // Use gemini-2.0-flash for audio/video transcription (2.5 requires waitlist)
+    this.model = options?.model || 'gemini-2.0-flash'
   }
 
   /**

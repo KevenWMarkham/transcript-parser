@@ -5,21 +5,20 @@ WORKDIR /app
 # Install FFmpeg
 RUN apk add --no-cache ffmpeg
 
-# Copy package files
-COPY package*.json ./
+# Create simple package.json for audio extraction server
+RUN echo '{"name":"audio-server","version":"1.0.0","dependencies":{"express":"^4.18.2","cors":"^2.8.5","multer":"^1.4.5-lts.1"}}' > package.json
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
-# Copy source code
-COPY . .
-
-# Build TypeScript
-RUN npm run build
+# Copy the simple audio extraction server
+COPY index.js ./
 
 # Create uploads directory
-RUN mkdir -p uploads/videos uploads/audio
+RUN mkdir -p /tmp/uploads
 
-EXPOSE 3000
+# Expose port
+EXPOSE 3001
 
-CMD ["npm", "start"]
+# Run the server
+CMD ["node", "index.js"]

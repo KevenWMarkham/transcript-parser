@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@jest/globals'
+import { describe, it, expect } from 'vitest'
 import {
   formatFileSize,
   formatDuration,
@@ -97,9 +97,10 @@ describe('fileUtils', () => {
       })
       const result = validateVideoFile(file)
       expect(result.valid).toBe(false)
-      expect(result.error).toBe(
-        'Invalid file type. Please select a video (MP4, MOV, WebM) or audio file (MP3, WAV, M4A recommended).'
-      )
+      // Error message includes debug info for troubleshooting
+      expect(result.error).toContain('Unsupported file format')
+      expect(result.error).toContain('video (MP4, MOV, WebM')
+      expect(result.error).toContain('audio file (MP3, WAV, M4A)')
     })
 
     it('rejects files exceeding max size', () => {

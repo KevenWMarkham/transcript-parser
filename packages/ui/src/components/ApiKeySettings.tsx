@@ -38,20 +38,62 @@ const CODE_PATTERN = /^\d{3}-\d{4}-\d{3}$/ // Format: 000-0000-000
 // Valid access codes with expiration dates and descriptions
 // Option 2: Hardcoded list (for quick testing/permanent codes)
 const VALID_CODES = [
-  {
-    code: '123-4567-890',
-    expiresAt: '2025-12-31',
-    description: 'Beta Tester Access',
-  },
-  {
-    code: '999-8888-777',
-    expiresAt: '2025-06-30',
-    description: 'Promotional Code',
-  },
+  // Lifetime access (never expires)
   {
     code: '555-1234-999',
     expiresAt: null,
     description: 'Lifetime Access',
+  },
+  // 3-month access codes (expire March 22, 2026)
+  {
+    code: '100-2025-001',
+    expiresAt: '2026-03-22',
+    description: 'Beta Access #1',
+  },
+  {
+    code: '100-2025-002',
+    expiresAt: '2026-03-22',
+    description: 'Beta Access #2',
+  },
+  {
+    code: '100-2025-003',
+    expiresAt: '2026-03-22',
+    description: 'Beta Access #3',
+  },
+  {
+    code: '100-2025-004',
+    expiresAt: '2026-03-22',
+    description: 'Beta Access #4',
+  },
+  {
+    code: '100-2025-005',
+    expiresAt: '2026-03-22',
+    description: 'Beta Access #5',
+  },
+  {
+    code: '200-2025-006',
+    expiresAt: '2026-03-22',
+    description: 'Friend Access #1',
+  },
+  {
+    code: '200-2025-007',
+    expiresAt: '2026-03-22',
+    description: 'Friend Access #2',
+  },
+  {
+    code: '200-2025-008',
+    expiresAt: '2026-03-22',
+    description: 'Friend Access #3',
+  },
+  {
+    code: '300-2025-009',
+    expiresAt: '2026-03-22',
+    description: 'Promo Access #1',
+  },
+  {
+    code: '300-2025-010',
+    expiresAt: '2026-03-22',
+    description: 'Promo Access #2',
   },
 ]
 
@@ -785,9 +827,6 @@ export function loadApiConfig(): ApiKeyConfig | null {
   return null
 }
 
-// Hardcoded API key for beta/access code mode (production builds)
-const BETA_API_KEY = 'AIzaSyB8DYs1TQdd6FmzEsFhKHdBRaquSyD2cdY'
-
 // Helper function to get the current API key
 export function getCurrentApiKey(): string | null {
   const config = loadApiConfig()
@@ -795,9 +834,9 @@ export function getCurrentApiKey(): string | null {
     return config.ownKey
   }
   if (config?.mode === 'code' && config.accessCode) {
-    // In code mode, use environment key (dev) or hardcoded beta key (production)
-    return import.meta.env.VITE_GEMINI_API_KEY || BETA_API_KEY
+    // In code mode, use environment key
+    return import.meta.env.VITE_GEMINI_API_KEY || null
   }
-  // Fall back to environment variable or hardcoded beta key
-  return import.meta.env.VITE_GEMINI_API_KEY || BETA_API_KEY
+  // Fall back to environment variable
+  return import.meta.env.VITE_GEMINI_API_KEY || null
 }

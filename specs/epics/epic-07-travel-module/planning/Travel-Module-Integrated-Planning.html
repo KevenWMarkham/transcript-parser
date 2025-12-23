@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epic 07: Travel Module - Integrated Planning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            min-height: 100vh;
+            max-width: 1920px;
+            margin: 0 auto;
+            gap: 0;
+        }
+
+        /* Left Navigation */
+        .nav-sidebar {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 2rem 1.5rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .nav-sidebar h1 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #60a5fa;
+        }
+
+        .nav-sidebar .subtitle {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            font-weight: normal;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .nav-links a:hover {
+            background: #334155;
+            color: #60a5fa;
+        }
+
+        .nav-links a.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            padding: 3rem;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid #f59e0b;
+        }
+
+        .content-header h2 {
+            font-size: 2rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .persona-badge {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            background: #fef3c7;
+            color: #92400e;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .time-section {
+            margin-bottom: 3rem;
+        }
+
+        .time-header {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .scenario {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.375rem;
+        }
+
+        .scenario h4 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .scenario-context {
+            background: white;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            border: 1px solid #fde68a;
+        }
+
+        .without-tp, .with-tp {
+            margin-bottom: 1.5rem;
+        }
+
+        .without-tp h5 {
+            color: #dc2626;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .with-tp h5 {
+            color: #059669;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .without-tp h5::before {
+            content: "❌";
+        }
+
+        .with-tp h5::before {
+            content: "✅";
+        }
+
+        .scenario ul {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .scenario li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .scenario li::before {
+            content: "•";
+            position: absolute;
+            left: -1rem;
+            color: #f59e0b;
+        }
+
+        .user-story-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border: 2px solid #3b82f6;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .user-story-box h5 {
+            color: #1e40af;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .user-story-text {
+            font-style: italic;
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 0.375rem;
+        }
+
+        .acceptance-criteria {
+            background: white;
+            padding: 1rem;
+            border-radius: 0.375rem;
+        }
+
+        .acceptance-criteria h6 {
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .acceptance-criteria ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .acceptance-criteria li {
+            padding: 0.375rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .acceptance-criteria li::before {
+            content: "☐";
+            color: #3b82f6;
+            font-weight: bold;
+        }
+
+        /* Right Sidebar - Expert Feedback */
+        .expert-sidebar {
+            background: #fef3c7;
+            padding: 2rem 1.5rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-left: 3px solid #f59e0b;
+        }
+
+        .expert-sidebar h3 {
+            font-size: 1rem;
+            color: #92400e;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .expert-sidebar h3::before {
+            content: "💡";
+        }
+
+        .expert-quote {
+            background: white;
+            border-left: 3px solid #f59e0b;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.375rem;
+            font-style: italic;
+            color: #78350f;
+        }
+
+        .expert-name {
+            font-weight: 600;
+            color: #92400e;
+            font-style: normal;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .expert-domain {
+            font-size: 0.75rem;
+            color: #a16207;
+            font-style: normal;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-metrics {
+            background: #dbeafe;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .impact-metrics h5 {
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #93c5fd;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+
+        .metric-value {
+            color: #1e40af;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .container {
+                grid-template-columns: 240px 1fr 280px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-sidebar, .expert-sidebar {
+                position: relative;
+                height: auto;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-sidebar {
+                display: none;
+            }
+
+            .expert-sidebar {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Navigation -->
+        <nav class="nav-sidebar">
+            <h1>Epic 07</h1>
+            <p class="subtitle">Travel Module Planning</p>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Personas</div>
+                <ul class="nav-links">
+                    <li><a href="#emma" class="active">Emma - Solo Backpacker</a></li>
+                    <li><a href="#robertsons">The Robertsons - Family</a></li>
+                    <li><a href="#david">David - Business Traveler</a></li>
+                    <li><a href="#sofia">Sofia - Luxury Traveler</a></li>
+                    <li><a href="#chen">Chen - Cultural Immersion</a></li>
+                    <li><a href="#marco">Marco - Tour Guide</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">User Stories</div>
+                <ul class="nav-links">
+                    <li><a href="#sprint-01">Sprint 01 - Data Model</a></li>
+                    <li><a href="#sprint-02">Sprint 02 - Features</a></li>
+                    <li><a href="#sprint-03">Sprint 03 - Integrations</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Expert Reviews</div>
+                <ul class="nav-links">
+                    <li><a href="#expert-travel">Travel Industry</a></li>
+                    <li><a href="#expert-ux">UX Design</a></li>
+                    <li><a href="#expert-ai">AI & NLP</a></li>
+                    <li><a href="#expert-translation">Translation</a></li>
+                    <li><a href="#expert-performance">Performance</a></li>
+                    <li><a href="#expert-security">Privacy & Security</a></li>
+                    <li><a href="#expert-architecture">Architecture</a></li>
+                    <li><a href="#expert-accessibility">Accessibility</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Emma's Day -->
+            <section id="emma">
+                <div class="content-header">
+                    <h2>Emma's Discovery Day in Bangkok</h2>
+                    <div>
+                        <span class="persona-badge">Solo Backpacker</span>
+                        <span class="persona-badge">Budget Travel</span>
+                        <span class="persona-badge">Language Learning</span>
+                    </div>
+                </div>
+
+                <!-- Morning -->
+                <div class="time-section">
+                    <div class="time-header">🌅 Morning (7:00 AM - 12:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>9:00 AM - Walking Food Tour (Old City)</h4>
+                        <div class="scenario-context">
+                            <strong>Context:</strong> Thai guide Som leads 8 travelers through street food markets, teaching phrases and sharing local spots
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Guide teaches Thai phrases: "Aroi mak!" (Very delicious!), "Tao rai?" (How much?)</li>
+                                <li>Emma's phone notes: "Sticky rice mango thing, uh-roy mock, towel rye?"</li>
+                                <li>Incorrect pronunciation will perpetuate for weeks</li>
+                                <li>Som recommends 3 street food areas only locals know</li>
+                                <li>Emma writes down 1 area name, forgets the other 2</li>
+                                <li><strong>Lost Value:</strong> 2 of 3 local food areas forgotten, wrong pronunciation</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (Cloud AI)</h5>
+                            <ul>
+                                <li>AirPods recording while Emma takes photos with phone</li>
+                                <li>Transcript captures all dish names with Som's explanations in Thai + English</li>
+                                <li>Pronunciation of "Aroi mak!" (อร่อยมาก) with audio clip saved</li>
+                                <li>Som's story about why mango sticky rice is her grandmother's recipe</li>
+                                <li>3 street food locations captured: Saphan Khao Market, Soi Nana, Old Market behind Wat Pho</li>
+                                <li>Later: Creates Anki flashcards with Som's voice pronunciation</li>
+                                <li>Blog caption: "Khao niao mamuang - Som explained this is her yai's (grandmother's) recipe..."</li>
+                                <li><strong>Value Gained:</strong> Perfect pronunciation, all 3 markets saved with GPS, authentic story for content</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 02, Story 2)</h5>
+                            <div class="user-story-text">
+                                "As a language learner traveling abroad, I want flashcards automatically generated from real conversations, so that I learn practical vocabulary with authentic context and pronunciation."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Extract vocabulary from conversations with locals</li>
+                                    <li>Include context sentence + audio clip for pronunciation</li>
+                                    <li>Anki export format (.apkg file) with embedded audio</li>
+                                    <li>Flag formality level if detectable (formal/casual)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="impact-metrics">
+                            <h5>⏱️ Daily Impact Summary</h5>
+                            <div class="metric-row">
+                                <span class="metric-label">Time Saved (vs note-taking):</span>
+                                <span class="metric-value">85 min/day</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Recommendations Captured:</span>
+                                <span class="metric-value" style="color: #059669;">25 vs 8 (300%+ improvement)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Language Retention:</span>
+                                <span class="metric-value">75% vs 30% (with audio context)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Money Saved:</span>
+                                <span class="metric-value">฿850/day (~$25 from local tips)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- David's Day -->
+            <section id="david" style="margin-top: 4rem;">
+                <div class="content-header">
+                    <h2>David's Business Trip in Tokyo</h2>
+                    <div>
+                        <span class="persona-badge">Business Traveler</span>
+                        <span class="persona-badge">Frequent Flyer</span>
+                        <span class="persona-badge">Efficiency-Focused</span>
+                    </div>
+                </div>
+
+                <div class="time-section">
+                    <div class="time-header">🌅 Morning (7:00 AM - 12:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>9:00 AM - Uber to Conference Center</h4>
+                        <div class="scenario-context">
+                            <strong>Driver:</strong> Former chef, recommends hidden ramen spot only locals know<br>
+                            <strong>Challenge:</strong> David reviewing conference agenda while driver shares wisdom
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Driver recommends "Tsuta Ramen: First Michelin-star ramen, ¥1,000"</li>
+                                <li>Mentions "Avoid Ichiran ramen, tourist trap, locals never go"</li>
+                                <li>David's looking at phone, half-listening to driver's wisdom</li>
+                                <li><strong>Missed Value:</strong> Michelin ramen spot forgotten, might waste meal at touristy Ichiran</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (Cloud AI)</h5>
+                            <ul>
+                                <li>Background recording through AirPods</li>
+                                <li>Captures entire conversation while David reviews agenda</li>
+                                <li>Transcript: "Tsuta Ramen - first Michelin-star ramen, ¥1,000, Sugamo area, 30-min line at lunch, go at 2:30pm"</li>
+                                <li>"Ichiran is for tourists, overhyped, locals avoid"</li>
+                                <li>Adds to "Tokyo favorites" database (building expertise across 4 trips)</li>
+                                <li><strong>Passive Learning:</strong> Absorbed info while multitasking, no local knowledge lost</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 02, Story 1)</h5>
+                            <div class="user-story-text">
+                                "As a traveler receiving recommendations in conversations, I want AI to automatically extract and organize restaurants, hotels, and activities, so that I don't lose valuable local tips."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Extract name, location, price/cost, hours, special instructions</li>
+                                    <li>Detect urgency language (must-do / should-do / could-do)</li>
+                                    <li>Create map view with filters by type and urgency</li>
+                                    <li>Export to list view, CSV, JSON</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="impact-metrics">
+                            <h5>💼 Business Travel Impact</h5>
+                            <div class="metric-row">
+                                <span class="metric-label">Time Saved (Expense Reports):</span>
+                                <span class="metric-value">3.5 hours/month</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Instagram Engagement:</span>
+                                <span class="metric-value" style="color: #059669;">2,400 likes vs 200 (authentic stories)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Repeat Visit Efficiency:</span>
+                                <span class="metric-value">Remembers 9/10 places vs 2/10</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Annual Value Created:</span>
+                                <span class="metric-value">$15K+ (time + brand deals)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sprint Summaries -->
+            <section id="sprint-01" style="margin-top: 4rem;">
+                <div class="content-header">
+                    <h2>Sprint 01: Travel Data Model & Capture</h2>
+                    <div>
+                        <span class="persona-badge">34 Story Points</span>
+                        <span class="persona-badge">Roadmap Sprint 16</span>
+                    </div>
+                </div>
+
+                <div class="user-story-box">
+                    <h5>🎯 Sprint Goal</h5>
+                    <div class="user-story-text">
+                        Establish core travel data model with GPS integration, multi-language support, and trip organization
+                    </div>
+                </div>
+
+                <div class="scenario">
+                    <h4>High Priority Stories (Must Have - 24 points)</h4>
+                    <ul>
+                        <li><strong>Story 1: GPS Location Capture & Auto-Tagging</strong> (8 pts) - Auto-capture GPS with recordings, reverse geocoding, manual fallback, offline queue</li>
+                        <li><strong>Story 2: Multi-Language Detection & Transcription</strong> (8 pts) - Auto-detect up to 3 languages, phonetic pronunciation, 11 supported languages</li>
+                        <li><strong>Story 3: Trip & Destination Organization</strong> (5 pts) - Three-level hierarchy (Trip → City → Activity), auto-assignment, budget tracking</li>
+                        <li><strong>Story 4: Photo/Video Geo-Tagging & Timestamp Matching</strong> (5 pts) - Link photos by timestamp ±5min, GPS proximity 100m, auto-caption suggestions</li>
+                        <li><strong>Story 5: Recording Templates</strong> (3 pts) - Guided tour, language lesson, restaurant, daily journal templates</li>
+                    </ul>
+                </div>
+
+                <div class="scenario">
+                    <h4>Medium Priority Stories (Should Have - 7 points)</h4>
+                    <ul>
+                        <li><strong>Story 6: Offline Recording & Sync</strong> (5 pts) - Works 100% offline, background sync on WiFi, queue management</li>
+                        <li><strong>Story 7: Privacy & Consent Management</strong> (2 pts) - Visible recording indicator, consent workflow, easy deletion, GDPR compliance</li>
+                    </ul>
+                </div>
+
+                <div class="scenario">
+                    <h4>Low Priority Stories (Could Have - 3 points)</h4>
+                    <ul>
+                        <li><strong>Story 8: Budget Tracking Per Trip</strong> (3 pts) - Auto-detect currency amounts, convert to home currency, categorize expenses</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Sprint 02 Summary -->
+            <section id="sprint-02" style="margin-top: 4rem;">
+                <div class="content-header">
+                    <h2>Sprint 02: Travel-Specific Features</h2>
+                    <div>
+                        <span class="persona-badge">34 Story Points</span>
+                        <span class="persona-badge">Roadmap Sprint 17</span>
+                    </div>
+                </div>
+
+                <div class="user-story-box">
+                    <h5>🎯 Sprint Goal</h5>
+                    <div class="user-story-text">
+                        Build travel-specific AI features for recommendation extraction, language learning, content creation, and trip planning
+                    </div>
+                </div>
+
+                <div class="scenario">
+                    <h4>High Priority Stories (Must Have - 21 points)</h4>
+                    <ul>
+                        <li><strong>Story 1: AI Recommendation Extraction</strong> (13 pts) - Extract restaurants, hotels, activities with urgency detection, 80%+ accuracy, map view with filters</li>
+                        <li><strong>Story 2: Language Learning Flashcard Generation</strong> (5 pts) - Auto-create flashcards with audio clips + context, Anki export, formality detection</li>
+                        <li><strong>Story 3: Travel Blog Post Generator</strong> (3 pts) - Day-by-day narrative, photo integration, Markdown/HTML export</li>
+                    </ul>
+                </div>
+
+                <div class="scenario">
+                    <h4>Medium Priority Stories (Should Have - 10 points)</h4>
+                    <ul>
+                        <li><strong>Story 4: Itinerary Builder</strong> (5 pts) - Auto-suggest visit order by GPS proximity, opening hours validation, iCal export</li>
+                        <li><strong>Story 5: Trip Highlights Summary</strong> (3 pts) - AI-generated top moments, best food, favorite quotes, budget summary</li>
+                        <li><strong>Story 6: Advanced Search & Filtering</strong> (2 pts) - Full-text search, saved searches, bulk operations</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Sprint 03 Summary -->
+            <section id="sprint-03" style="margin-top: 4rem;">
+                <div class="content-header">
+                    <h2>Sprint 03: Travel Integrations</h2>
+                    <div>
+                        <span class="persona-badge">29 Story Points</span>
+                        <span class="persona-badge">Roadmap Sprint 18</span>
+                    </div>
+                </div>
+
+                <div class="user-story-box">
+                    <h5>🎯 Sprint Goal</h5>
+                    <div class="user-story-text">
+                        Integrate with external travel platforms, enable social sharing, and polish module for production release
+                    </div>
+                </div>
+
+                <div class="scenario">
+                    <h4>High Priority Stories (Must Have - 18 points)</h4>
+                    <ul>
+                        <li><strong>Story 1: Google Maps Integration</strong> (8 pts) - Plot recommendations, export to My Maps, multi-stop routing, offline maps</li>
+                        <li><strong>Story 2: Social Media Share Templates</strong> (5 pts) - Instagram Stories/Posts, X/Twitter threads, Facebook posts, TikTok scripts</li>
+                        <li><strong>Story 3: Google Photos Integration</strong> (5 pts) - OAuth, photo matching by timestamp/GPS, auto-captioning, write-back captions</li>
+                    </ul>
+                </div>
+
+                <div class="scenario">
+                    <h4>Medium Priority Stories (Should Have - 8 points)</h4>
+                    <ul>
+                        <li><strong>Story 4: TripIt/Wanderlog Export</strong> (3 pts) - iCal format, TripIt-optimized, Wanderlog CSV</li>
+                        <li><strong>Story 5: Travel Module User Guide</strong> (3 pts) - Interactive tutorials, sample data, multi-language docs</li>
+                        <li><strong>Story 6: Module Polish & Production Readiness</strong> (2 pts) - Performance optimization, security audit, GDPR compliance</li>
+                    </ul>
+                </div>
+
+                <div class="scenario">
+                    <h4>Low Priority Stories (Could Have - 3 points)</h4>
+                    <ul>
+                        <li><strong>Story 7: Offline Maps (OSM)</strong> (2 pts) - Download maps by region, GPS positioning offline, storage management</li>
+                        <li><strong>Story 8: Advanced Analytics Dashboard</strong> (1 pt) - Trip stats, country heatmap, spending trends, business analytics for Marco</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <!-- Right Sidebar - Expert Feedback -->
+        <aside class="expert-sidebar">
+            <h3>Expert Feedback</h3>
+
+            <div class="expert-quote">
+                <div class="expert-name">Maria Gonzalez</div>
+                <div class="expert-domain">Travel Industry Specialist</div>
+                <p>"Recommendation extraction is THE killer feature. Tour guides like Marco need this - 100% email delivery vs 30% manual follow-through = 5-star reviews. Priority: Include 'source attribution' (who recommended it). Travelers trust 'hotel concierge' more than 'random person.' Also, add urgency scoring algorithm: 'must-do' beats 'should-do' in user testing 80% of the time."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Yuki Tanaka</div>
+                <div class="expert-domain">Translation & Localization Expert</div>
+                <p>"Multi-language transcription is excellent - supporting Thai, Japanese, Catalan, Czech covers 70%+ of travel scenarios. CRITICAL: Preserve code-switching context. When someone says 'Pad thai ไม่เผ็ด (mai pet)' mixing Thai-English, keep both for language learning. Also, phonetic romanization MUST match local standards: 'Aroi' not 'Aroy' for Thai. Users trust accuracy."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Alex Rivera</div>
+                <div class="expert-domain">UX Design (Mobile-First)</div>
+                <p>"Travelers are 95% mobile-first. GPS capture, photo matching, social sharing ALL happen on phone. Desktop is for planning/export only. Priority: One-handed operation (recording, bookmarking), low battery mode (GPS drains battery), quick capture (<1 sec to start recording). Emma backpacking in Thailand = phone is EVERYTHING."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Priya Malhotra</div>
+                <div class="expert-domain">AI & NLP Specialist</div>
+                <p>"Recommendation extraction at 80%+ accuracy requires Named Entity Recognition (NER) fine-tuned on travel data. Current models miss: (1) Non-English restaurant names, (2) Colloquial place names ('the ramen place near Shibuya crossing'), (3) Urgency nuances ('Don't miss' vs 'Worth a visit'). Use Gemini 1.5 Pro with travel-specific prompt engineering + few-shot examples. Cost: $0.05/conversation = affordable."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Sarah Kim, CISSP</div>
+                <div class="expert-domain">Privacy & Security Expert</div>
+                <p>"⚠️ PRIVACY RISKS: GPS data + conversations = highly sensitive. Users traveling to authoritarian countries (China, Russia, Iran) = surveillance risk. MUST implement: (1) Disable GPS per-recording option, (2) Delete location data option, (3) E2E encryption for cloud sync, (4) No auto-upload without WiFi consent. Also: GDPR Article 9 (location data = special category) requires explicit consent."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Jordan Lee</div>
+                <div class="expert-domain">Performance & Offline Specialist</div>
+                <p>"Travelers = unreliable connectivity. Poor WiFi in hostels, limited data plans (Emma has 3GB/month), rural areas (no signal). MUST work offline: Record → Transcribe locally (Whisper.cpp on device) → Sync later. Photo matching can be local (EXIF data). Only AI features need cloud. Battery budget: GPS + recording = 5-7% battery/hour. Target: <10% for 3-hour tour."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Carlos Mendoza</div>
+                <div class="expert-domain">Architecture Expert</div>
+                <p>"Modular architecture is correct - Travel Module snap-in via Module SDK. However, GPS + offline + multi-language + photo matching = COMPLEX. Recommend: (1) SQLite local database with FTS5 for search, (2) IndexedDB for web, (3) Background sync with job queues (WorkManager/BackgroundTasks), (4) Chunked uploads (resume failed uploads). Also: API rate limits (Google Maps 10K req/day, Photos API 10K/day) = must cache aggressively."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Jamie Chen, CPACC</div>
+                <div class="expert-domain">Accessibility Specialist</div>
+                <p>"Travel module has unique accessibility needs: (1) Tourists navigating foreign cities = screen reader critical for visually impaired, (2) Deaf travelers = visual alternatives to audio recordings (transcripts are accessibility!), (3) Motor impairments = voice commands for recording (hands-free critical when walking with luggage). Recommendation: Sprint 01 priority, not Sprint 03. Travel is inherently physical = accessibility MORE important, not less."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Maria Gonzalez</div>
+                <div class="expert-domain">Travel Industry - Marco's B2B Use Case</div>
+                <p>"Marco (tour guide) = HUGE business opportunity. Tour guides earn €60-80K/year but lose 20-30% revenue from poor follow-through (forgotten recommendations = 4-star reviews instead of 5). With auto-email recommendations + analytics, Marco increases revenue €15-20K/year. Charge €30/month for B2B tier (tour guides, travel agents) = high willingness to pay. Also: Multi-guide collaboration (share recommendation database) = essential for tour companies."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Yuki Tanaka</div>
+                <div class="expert-domain">Translation - Chen's Academic Use Case</div>
+                <p>"Chen (PhD student) uses travel module for academic research = UNINTENDED USE CASE but extremely valuable. Language learning + oral history preservation + interview transcription = research goldmine. Recommendation: Add 'Research Mode' - (1) Citation-ready transcripts with timestamps, (2) Speaker identification, (3) Consent management for IRB compliance, (4) Export to Zotero/EndNote. This unlocks anthropology, linguistics, sociology researchers = niche but high-value market."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Alex Rivera</div>
+                <div class="expert-domain">UX Design - Content Creation Flow</div>
+                <p>"Sofia (luxury influencer) and David (food blogger) = content creators. Instagram engagement 3x higher with transcript-generated captions (authentic stories beat generic posts). UX priority: Seamless transcript → Instagram flow. Recommend: (1) 'Share to Instagram' button in transcript view, (2) Auto-generate 3 caption options (short/medium/long), (3) Hashtag suggestions based on location/content, (4) Photo carousel auto-generation. Time to post: <2 minutes from transcript = adoption driver."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Priya Malhotra</div>
+                <div class="expert-domain">AI & NLP - Cost Optimization</div>
+                <p>"Travel module AI costs at scale: 1,000 users × 20 conversations/month × $0.05/conversation = $1,000/month = manageable. BUT content generation (blog posts, social captions) adds 3-5x cost. Optimization: (1) Tiered AI - Free tier uses Gemini Flash ($0.01/conversation), Pro tier uses Gemini Pro ($0.05), (2) Cache repeated prompts (same prompt for all flashcard generation), (3) Batch processing (process 10 conversations together = 30% cost reduction). Target: <$0.03/conversation all-in."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Sarah Kim, CISSP</div>
+                <div class="expert-domain">Privacy & Security - Social Sharing</div>
+                <p>"Social media integration = privacy minefield. Sofia sharing to Instagram = public, but what if she accidentally includes: (1) Hotel room number, (2) Credit card mentioned in conversation, (3) Passport number, (4) Home address ('I live at...'). MUST implement PII detection: Scan transcripts before sharing, flag potential PII, require user review. Also: Default to 'Remove location data' for social shares (stalking risk). Instagram influencers = high-profile targets."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Jordan Lee</div>
+                <div class="expert-domain">Performance - Photo Matching Scale</div>
+                <p>"Photo matching at scale = performance challenge. Family trip (Robertsons) = 2,000 photos × 20 recordings = 40,000 potential matches to check. Naive approach (compare every photo to every recording) = O(n²) = slow. Solution: (1) Index recordings by GPS bounding box + time range, (2) Only compare photos within 1km + 30min window, (3) Pre-compute hashes for timestamp bucketing. Target: <2 seconds for 2,000 photos matched against 20 recordings."</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">All Experts</div>
+                <div class="expert-domain">Consensus - Sprint Priority Adjustments</div>
+                <p><strong>MOVE TO SPRINT 01:</strong> (1) Accessibility (screen reader, voice control) - not Sprint 03, (2) Privacy controls (disable GPS, delete location) - legal requirement, (3) Offline transcription (Whisper.cpp) - connectivity is unreliable. <strong>SPRINT 02 PRIORITY:</strong> Recommendation extraction is THE killer feature - if this doesn't work at 80%+ accuracy, entire value proposition fails. Invest in NER fine-tuning + prompt engineering + user testing. <strong>BUSINESS OPPORTUNITY:</strong> Marco's B2B use case = overlooked goldmine. Tour guide market = $10B global, 1% capture = $100M opportunity."</p>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.nav-links a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+
+                    // Update active state
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Update active navigation on scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

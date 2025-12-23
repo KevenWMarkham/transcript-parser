@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # PostgreSQL Database (shared by app and N8N)
   postgres:
@@ -35,8 +33,15 @@ services:
       - NODE_ENV=production
       - PORT=3000
       - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-transcript_parser}
+      - UPLOAD_DIR=/app/data/uploads
+      - TRANSCRIPT_DIR=/app/data/transcripts
+      - EXPORT_DIR=/app/data/exports
     env_file:
       - .env.production
+    volumes:
+      - app-uploads:/app/data/uploads
+      - app-transcripts:/app/data/transcripts
+      - app-exports:/app/data/exports
     depends_on:
       postgres:
         condition: service_healthy
@@ -139,6 +144,12 @@ volumes:
   postgres-data:
     driver: local
   n8n-data:
+    driver: local
+  app-uploads:
+    driver: local
+  app-transcripts:
+    driver: local
+  app-exports:
     driver: local
 
 networks:

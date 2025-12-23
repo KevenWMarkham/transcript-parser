@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epic 03: Real Estate Module - Integrated Planning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            min-height: 100vh;
+            max-width: 1920px;
+            margin: 0 auto;
+            gap: 0;
+        }
+
+        /* Left Navigation */
+        .nav-sidebar {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 2rem 1.5rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .nav-sidebar h1 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #60a5fa;
+        }
+
+        .nav-sidebar .subtitle {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            font-weight: normal;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .nav-links a:hover {
+            background: #334155;
+            color: #60a5fa;
+        }
+
+        .nav-links a.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            padding: 3rem;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid #3b82f6;
+        }
+
+        .content-header h2 {
+            font-size: 2rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .persona-badge {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            background: #dbeafe;
+            color: #1e40af;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .time-section {
+            margin-bottom: 3rem;
+        }
+
+        .time-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .scenario {
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.375rem;
+        }
+
+        .scenario h4 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .scenario-context {
+            background: white;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .without-tp, .with-tp {
+            margin-bottom: 1.5rem;
+        }
+
+        .without-tp h5 {
+            color: #dc2626;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .with-tp h5 {
+            color: #059669;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .without-tp h5::before {
+            content: "❌";
+        }
+
+        .with-tp h5::before {
+            content: "✅";
+        }
+
+        .scenario ul {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .scenario li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .scenario li::before {
+            content: "•";
+            position: absolute;
+            left: -1rem;
+            color: #3b82f6;
+        }
+
+        .user-story-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .user-story-box h5 {
+            color: #92400e;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .user-story-text {
+            font-style: italic;
+            color: #78350f;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 0.375rem;
+        }
+
+        .acceptance-criteria {
+            background: white;
+            padding: 1rem;
+            border-radius: 0.375rem;
+        }
+
+        .acceptance-criteria h6 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .acceptance-criteria ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .acceptance-criteria li {
+            padding: 0.375rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .acceptance-criteria li::before {
+            content: "☐";
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        /* Right Sidebar - Expert Feedback */
+        .expert-sidebar {
+            background: #fef3c7;
+            padding: 2rem 1.5rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-left: 3px solid #f59e0b;
+        }
+
+        .expert-sidebar h3 {
+            font-size: 1rem;
+            color: #92400e;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .expert-sidebar h3::before {
+            content: "💡";
+        }
+
+        .expert-quote {
+            background: white;
+            border-left: 3px solid #f59e0b;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.375rem;
+            font-style: italic;
+            color: #78350f;
+        }
+
+        .expert-name {
+            font-weight: 600;
+            color: #92400e;
+            font-style: normal;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .expert-domain {
+            font-size: 0.75rem;
+            color: #a16207;
+            font-style: normal;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-metrics {
+            background: #dbeafe;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .impact-metrics h5 {
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #93c5fd;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+
+        .metric-value {
+            color: #1e40af;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .container {
+                grid-template-columns: 240px 1fr 280px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-sidebar, .expert-sidebar {
+                position: relative;
+                height: auto;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-sidebar {
+                display: none;
+            }
+
+            .expert-sidebar {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Navigation -->
+        <nav class="nav-sidebar">
+            <h1>Epic 03</h1>
+            <p class="subtitle">Real Estate Module Planning</p>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Personas</div>
+                <ul class="nav-links">
+                    <li><a href="#lisa" class="active">Lisa - Residential Agent</a></li>
+                    <li><a href="#david">David - Commercial Broker</a></li>
+                    <li><a href="#carmen">Carmen - Property Manager</a></li>
+                    <li><a href="#michael">Michael - Investor w/ADHD</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">User Stories</div>
+                <ul class="nav-links">
+                    <li><a href="#sprint-01">Sprint 01 - Core Features</a></li>
+                    <li><a href="#sprint-02">Sprint 02 - Advanced</a></li>
+                    <li><a href="#sprint-03">Sprint 03 - Integrations</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Expert Reviews</div>
+                <ul class="nav-links">
+                    <li><a href="#expert-ai">AI & NLP</a></li>
+                    <li><a href="#expert-xr">XR & Wearables</a></li>
+                    <li><a href="#expert-privacy">Privacy & Security</a></li>
+                    <li><a href="#expert-realestate">Real Estate Tech</a></li>
+                    <li><a href="#expert-ux">UX Design</a></li>
+                    <li><a href="#expert-performance">Performance</a></li>
+                    <li><a href="#expert-architecture">Architecture</a></li>
+                    <li><a href="#expert-accessibility">Accessibility</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Lisa's Day -->
+            <section id="lisa">
+                <div class="content-header">
+                    <h2>Lisa's Showing Day</h2>
+                    <div>
+                        <span class="persona-badge">Residential Agent</span>
+                        <span class="persona-badge">Austin, TX</span>
+                        <span class="persona-badge">25-30 Deals/Year</span>
+                    </div>
+                </div>
+
+                <!-- Morning -->
+                <div class="time-section">
+                    <div class="time-header">🌅 Morning (8:30 AM - 12:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>8:30 AM - First Showing: Johnson Family (60 minutes)</h4>
+                        <div class="scenario-context">
+                            <strong>Context:</strong> First-time buyers, $400K budget, 3BR/2BA ranch in Hyde Park ($385K)
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Tries to remember client comments while showing property</li>
+                                <li>Mrs. Johnson: "Love the natural light in kitchen, but carpet needs to go"</li>
+                                <li>Mr. Johnson: "Perfect backyard for our dog, but garage is too small"</li>
+                                <li>Lisa misses comment about needing home office space</li>
+                                <li>After showing: Frantically writes notes in car, forgets half the conversation</li>
+                                <li>Texts client later: "What did your wife say about the office?"</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (Cloud AI)</h5>
+                            <ul>
+                                <li>Opens app: "New Recording - Johnson Family - 123 Oak St"</li>
+                                <li>Taps "Start" as family arrives, phone recording in pocket</li>
+                                <li>Shows property naturally, focused on building rapport</li>
+                                <li>After showing (in car, 3 min): Reviews AI summary</li>
+                                <li><strong>Loved:</strong> Natural kitchen light, backyard size, quiet street</li>
+                                <li><strong>Concerns:</strong> Carpet condition, garage size, no dedicated office</li>
+                                <li><strong>Next steps:</strong> Find similar homes with hardwood + 2-car garage</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp" style="margin-top: 1.5rem;">
+                            <h5>With Transcript Parser + Local AI (Ollama - Privacy)</h5>
+                            <ul>
+                                <li><strong>Privacy benefit:</strong> Johnsons mentioned exact budget ($400K) and that Mr. Johnson just got promoted (income increase)</li>
+                                <li>Transcript processed locally on Lisa's iPhone - no cloud API call</li>
+                                <li><strong>Privacy:</strong> Client financial info never sent to Google/OpenAI</li>
+                                <li><strong>Compliance:</strong> Texas Real Estate Commission privacy rules followed</li>
+                                <li><strong>Trust:</strong> Lisa can tell clients "data stays on my phone, never goes to cloud"</li>
+                                <li><strong>Cost:</strong> $0 processing (vs. $0.05/showing cloud) = $300/year savings</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp" style="margin-top: 1.5rem;">
+                            <h5>With Transcript Parser + Meta Ray-Ban Glasses</h5>
+                            <ul>
+                                <li><strong>Hands-free recording:</strong> Wears Meta Ray-Ban Smart Glasses ($299-$379)</li>
+                                <li>Starts recording with tap on temple (discrete, no phone visible)</li>
+                                <li><strong>Benefit:</strong> Can gesture, point, open doors naturally - no device juggling</li>
+                                <li><strong>Spatial audio:</strong> Remembers which room comments were made in</li>
+                                <li><strong>Professional:</strong> No phone visible = more focused on clients</li>
+                                <li>After showing: Full transcript + spatial context, reviews while driving to next showing</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 01, Story 2)</h5>
+                            <div class="user-story-text">
+                                "As a real estate agent showing multiple properties, I want AI to automatically generate a summary of client reactions and preferences, so that I can quickly review what they loved and disliked without re-listening to the entire showing."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Summary generated within 30 seconds for 60-min showing</li>
+                                    <li>Includes: Loved features, Concerns/objections, Must-haves, Deal-breakers</li>
+                                    <li>Sentiment analysis (enthusiasm level 1-10)</li>
+                                    <li>Export to PDF, DOCX, or email template</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <h4>10:00 AM - Second Showing: Garcia Couple (60 min)</h4>
+                        <div class="scenario-context">
+                            <strong>Context:</strong> Move-up buyers, $550K budget, 4BR/3BA in Mueller ($525K)
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Still thinking about Johnson notes, worried she forgot something</li>
+                                <li>Garcias initially critical: "Online photos made it look bigger"</li>
+                                <li>Lisa writes quick note: "didn't like size, kitchen issue?"</li>
+                                <li>Can't remember if they were interested or not</li>
+                                <li>Sends generic follow-up: "Thanks for viewing the property!"</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser</h5>
+                            <ul>
+                                <li>Records full conversation despite initial negative reaction</li>
+                                <li>Mrs. Garcia: "Kitchen island too small, we entertain a lot"</li>
+                                <li>Mr. Garcia: "30-min commute is our max, this location works"</li>
+                                <li>Mrs. Garcia: "Love master suite, need 4BR PLUS an office"</li>
+                                <li>AI summary shows they're <strong>interested</strong> but have specific objections</li>
+                                <li><strong>Actionable insights:</strong> Find 4BR + office, granite counters, larger island, Mueller area</li>
+                                <li>Sends personalized follow-up 20 min later with 3 matching properties</li>
+                                <li>Garcias impressed by attentiveness, agree to Sunday showing</li>
+                            </ul>
+                        </div>
+
+                        <div class="impact-metrics">
+                            <h5>⏱️ Morning Time Savings</h5>
+                            <div class="metric-row">
+                                <span class="metric-label">Note-taking & reconstruction:</span>
+                                <span class="metric-value">30 min saved (3 min vs 33 min)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Follow-up quality:</span>
+                                <span class="metric-value" style="color: #059669;">Generic → Personalized</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Client engagement:</span>
+                                <span class="metric-value" style="color: #059669;">2x response rate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Afternoon -->
+                <div class="time-section">
+                    <div class="time-header">🌞 Afternoon (1:00 PM - 5:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>1:00 PM - Third Showing: Miller Single Mom (60 min)</h4>
+                        <div class="scenario-context">
+                            <strong>Context:</strong> Emotional situation (divorce), $300K budget, 2BR/2BA condo in East Austin ($285K)
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Ms. Miller is emotional, recently divorced</li>
+                                <li>Mentions "just want somewhere safe for my daughter"</li>
+                                <li>Lisa feels awkward taking notes during emotional conversation</li>
+                                <li>Doesn't write anything down, tries to remember</li>
+                                <li>Forgets specific concerns about parking and security</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (Discrete Mode)</h5>
+                            <ul>
+                                <li>Recording started discretely before arrival</li>
+                                <li>Ms. Miller: "Need daughter to feel safe, school rating important, covered parking (work late)"</li>
+                                <li>Lisa focuses on listening, empathizing, asking thoughtful questions</li>
+                                <li>No phone/notepad out - full human connection</li>
+                                <li>AI identifies <strong>emotional tone:</strong> "Client anxious about safety and daughter's wellbeing"</li>
+                                <li><strong>Key priorities:</strong> Safety, school district, covered parking, single-story (daughter has asthma)</li>
+                                <li>Follow-up: "Found 3 properties in top-rated school districts with covered parking and ground-floor units"</li>
+                                <li>Ms. Miller: "Thank you for listening. Yes, let's schedule!" - builds trust</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 02, Story 2)</h5>
+                            <div class="user-story-text">
+                                "As a real estate agent managing multiple clients, I want AI to automatically extract and track client preferences from conversations, so that I can find properties matching their stated and unstated needs."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Extract must-haves, nice-to-haves, deal-breakers, budget, lifestyle needs</li>
+                                    <li>Preference dashboard per client (categorized by priority)</li>
+                                    <li>Sentiment tracking (what they actually liked during showings)</li>
+                                    <li>CRM integration (export to Zillow, Realtor.com, Salesforce)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <h4>3:00 PM - Fourth Showing: Patel Investors (60 min)</h4>
+                        <div class="scenario-context">
+                            <strong>Context:</strong> Experienced investors, $450K budget, rental property in East Rundberg ($410K)
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Patels ask detailed questions: cap rate, tax assessments, AC unit age</li>
+                                <li>Lisa makes mental note of questions, forgets to follow up on 2 of 3</li>
+                                <li>Patels move on to another agent who was more responsive</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser</h5>
+                            <ul>
+                                <li>Records showing + Q&A session, transcript captures all 8 questions</li>
+                                <li>AI generates to-do list: Research cap rate, get tax history, confirm AC age, find rental comps, check HOA rules</li>
+                                <li>Within 2 hours: researches all items, sends detailed email + spreadsheet with cap rate analysis</li>
+                                <li>Patels: "You're the most thorough agent we've worked with. Let's write an offer."</li>
+                                <li><strong>Outcome:</strong> Deal closed, $12K commission</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evening -->
+                <div class="time-section">
+                    <div class="time-header">🌆 Evening (6:30 PM - 8:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>6:30 PM - Family Time & Follow-Up</h4>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Exhausted, distracted during dinner with daughter</li>
+                                <li>Spends 2-3 hours after dinner writing notes, sending generic follow-ups</li>
+                                <li>Stressed about missing details, worried about losing clients</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser</h5>
+                            <ul>
+                                <li>Relaxed dinner, fully present with daughter</li>
+                                <li>Already sent all personalized follow-up emails (during lunch)</li>
+                                <li>Quick 15-min review of summaries before bed</li>
+                                <li>Confident she captured everything, ready for tomorrow</li>
+                            </ul>
+                        </div>
+
+                        <div class="impact-metrics">
+                            <h5>📊 Daily Impact Summary - Lisa</h5>
+                            <div class="metric-row">
+                                <span class="metric-label">Time Saved Per Day:</span>
+                                <span class="metric-value">3.5 hours (note-taking + follow-up)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Weekly Time Saved:</span>
+                                <span class="metric-value">17.5 hours (70% admin reduction)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Additional Deals/Year:</span>
+                                <span class="metric-value" style="color: #059669;">+7 (25 → 32 transactions)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Additional Revenue/Year:</span>
+                                <span class="metric-value" style="color: #059669;">$144K (7 deals × $450K avg × 2.5% commission × 2)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Work-Life Balance:</span>
+                                <span class="metric-value" style="color: #059669;">More time with daughter, reduced stress</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- David's Day -->
+            <section id="david" style="margin-top: 4rem;">
+                <div class="content-header">
+                    <h2>David's Deal Day</h2>
+                    <div>
+                        <span class="persona-badge">Commercial Broker</span>
+                        <span class="persona-badge">Chicago, IL</span>
+                        <span class="persona-badge">$15M-$25M Deals</span>
+                    </div>
+                </div>
+
+                <div class="time-section">
+                    <div class="time-header">🌅 Morning (9:00 AM - 12:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>9:00 AM - Client Requirement Meeting (90 minutes)</h4>
+                        <div class="scenario-context">
+                            <strong>Client:</strong> REIT looking for industrial property, 200K+ sq ft, $18M budget<br>
+                            <strong>Challenge:</strong> Highly confidential deal terms, NDA in place
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Brings assistant to meeting for notes ($200 cost)</li>
+                                <li>Client lists 20-30 specific requirements</li>
+                                <li>Misses nuances when trying to participate and take notes simultaneously</li>
+                                <li>Assistant's notes incomplete, some requirements unclear</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser + Local AI (Ollama - NDA Compliance)</h5>
+                            <ul>
+                                <li><strong>Privacy-first:</strong> Records locally, processes with Ollama (LLaMA 3 70B on workstation GPU)</li>
+                                <li><strong>No cloud:</strong> Sensitive pricing ($18M), tenant requirements, expansion plans never sent to cloud</li>
+                                <li>Client mentions: "18-foot clear height minimum, 30+ loading docks, rail access, Class A tenant only"</li>
+                                <li>After meeting: Reviews transcript, AI generates requirement checklist</li>
+                                <li><strong>NDA compliance:</strong> All data stays on David's workstation (REIT client explicitly forbids cloud storage)</li>
+                                <li><strong>Cost savings:</strong> $0 AI processing vs $200 note-taker = $10K/year saved</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 02, Story 8)</h5>
+                            <div class="user-story-text">
+                                "As a commercial broker handling confidential client information, I want to use local AI models (Ollama) instead of cloud APIs, so that my client data, deal terms, and NDA-protected conversations stay on my device with 100% privacy."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Local AI mode supports: summaries, investment memos, requirement extraction</li>
+                                    <li>Models: LLaMA 3 8B (consumer), LLaMA 3 70B (GPU), Mistral 7B</li>
+                                    <li>NDA compliance: Zero data sent to cloud, ITAR/HIPAA compatible</li>
+                                    <li>Performance: < 60 sec summaries (8B CPU), < 20 sec (70B GPU)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <h4>10:45 AM - Property Tour (90 minutes)</h4>
+                        <div class="scenario-context">
+                            <strong>Property:</strong> 200,000 sq ft warehouse, South Loop, $18M asking<br>
+                            <strong>With:</strong> Client VP and facilities manager
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Walks massive warehouse, client makes detailed observations</li>
+                                <li>Facilities manager: "Clear height looks 16 feet, we need 18 minimum"</li>
+                                <li>VP: "Loading dock configuration won't work for our operations"</li>
+                                <li>David tries to remember, takes quick notes on phone</li>
+                                <li>Misses details in large echoing space, hard to hear</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser + Apple Vision Pro (Research-Grade)</h5>
+                            <ul>
+                                <li><strong>Wears Apple Vision Pro</strong> ($3,499 - university/enterprise use)</li>
+                                <li><strong>Spatial audio:</strong> 6-mic array separates client voices from warehouse echo</li>
+                                <li><strong>LiDAR scanning:</strong> Measures clear height (17.5 feet - doesn't meet 18' requirement)</li>
+                                <li><strong>3D capture:</strong> Records loading dock configuration in spatial video</li>
+                                <li><strong>Spatial bookmarks:</strong> Taps in air to mark structural concerns, tenant improvement needs</li>
+                                <li>After tour: Has precise measurements, clear transcript, 3D playback for analysis</li>
+                                <li><strong>ROI:</strong> $3,499 device replaces $200/meeting note-taker (breaks even after 18 meetings)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="time-section">
+                    <div class="time-header">🌞 Afternoon (2:00 PM - 6:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>2:00 PM - Investment Memo Creation (Previously 4-6 hours)</h4>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser (6 hours)</h5>
+                            <ul>
+                                <li>Reviews assistant's notes from meeting (incomplete)</li>
+                                <li>Tries to remember property tour details from 3 days ago</li>
+                                <li>Searches emails for pricing discussions</li>
+                                <li>Manually creates 15-page investment memo</li>
+                                <li>Unsure if all client requirements captured accurately</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser + Local AI (1.5 hours)</h5>
+                            <ul>
+                                <li>Searches all client transcripts for "requirements" (instant results)</li>
+                                <li>AI generates investment memo draft from property tour transcript</li>
+                                <li><strong>Memo includes:</strong> Executive summary, property details, financial analysis (NOI, cap rate), client requirements match/gap, recommendation</li>
+                                <li>Extracts exact client quotes for memo ("must have 18-foot clear height")</li>
+                                <li>Edits and refines (30 min), exports professional PDF</li>
+                                <li><strong>Quality:</strong> More accurate (all requirements captured), client-ready</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 02, Story 4)</h5>
+                            <div class="user-story-text">
+                                "As a commercial broker analyzing properties, I want AI to generate professional investment memos from property tour transcripts, so that I can quickly create comprehensive deal packages for clients/partners."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Memo structure: Executive summary, property details, financial analysis, risks/opportunities</li>
+                                    <li>Financial extraction: Price, NOI, cap rate, cash-on-cash return</li>
+                                    <li>Quote extraction with timestamp references</li>
+                                    <li>Export: PDF (investor-ready), DOCX (editable), PowerPoint outline</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="impact-metrics">
+                            <h5>📊 Daily Impact Summary - David</h5>
+                            <div class="metric-row">
+                                <span class="metric-label">Time Saved Per Deal:</span>
+                                <span class="metric-value">6.25 hours (memo + note-taking)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Deals Per Year:</span>
+                                <span class="metric-value" style="color: #059669;">+2 deals (8 → 10 transactions)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Additional Revenue/Year:</span>
+                                <span class="metric-value" style="color: #059669;">$300K (2 deals × $15M avg × 1% commission)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Note-Taker Savings:</span>
+                                <span class="metric-value">$10K/year ($200 × 50 meetings)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Privacy Maintained:</span>
+                                <span class="metric-value" style="color: #059669;">100% NDA compliance (local AI)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Carmen's Day -->
+            <section id="carmen" style="margin-top: 4rem;">
+                <div class="content-header">
+                    <h2>Carmen's Property Day</h2>
+                    <div>
+                        <span class="persona-badge">Property Manager</span>
+                        <span class="persona-badge">Miami, FL</span>
+                        <span class="persona-badge">240 Units</span>
+                        <span class="persona-badge">Bilingual</span>
+                    </div>
+                </div>
+
+                <div class="time-section">
+                    <div class="time-header">🌅 Morning (8:00 AM - 12:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>8:00 AM - Tenant Complaint Calls (3 calls, 60 min total)</h4>
+                        <div class="scenario-context">
+                            <strong>Context:</strong> AC breakdown, water leak, noise complaint<br>
+                            <strong>Challenge:</strong> Legal liability, Fair Housing compliance, bilingual communication
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Takes quick handwritten notes during emotional tenant calls</li>
+                                <li>Tenant (Spanish): "El aire acondicionado no funciona desde ayer"</li>
+                                <li>Carmen translates to English for maintenance notes (time-consuming)</li>
+                                <li>Later: Can't remember exact tenant description of problem</li>
+                                <li>"He said/she said" disputes - no proof of what was discussed</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser + Local AI (Ollama - Tenant Privacy)</h5>
+                            <ul>
+                                <li><strong>Privacy-first:</strong> Tenant personal info stays local (immigration status, income, disabilities)</li>
+                                <li>Records call, processes with local AI (no cloud upload)</li>
+                                <li>Tenant mentions: "No tengo papeles" (sensitive immigration status)</li>
+                                <li><strong>Local translation:</strong> English ↔ Spanish translation done locally (Ollama with aya-23-8b model)</li>
+                                <li>Generates Spanish work order for maintenance team (auto-translated)</li>
+                                <li><strong>Fair Housing compliance:</strong> Exact record of neutral language used</li>
+                                <li><strong>Community trust:</strong> Tenants know conversations stay private (no cloud data mining)</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 02, Story 5)</h5>
+                            <div class="user-story-text">
+                                "As a property manager handling tenant interactions, I want to export transcripts with legal timestamps and Fair Housing compliance markers, so that I have defensible records for complaints and disputes."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Legal export: Certified timestamp, speaker ID, verbatim transcript, audio checksum</li>
+                                    <li>Fair Housing markers: Flag protected class mentions, AI warning for potential violations</li>
+                                    <li>Privacy controls: Redact names, addresses, phone numbers</li>
+                                    <li>Export: PDF (legal standard), TXT (plain text), JSON (structured)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <h4>10:00 AM - Property Inspections (2 buildings, 12 units)</h4>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Carries clipboard, writes messy notes while walking units</li>
+                                <li>Unit 205: Water stain on ceiling, broken cabinet hinge, AC filter dirty</li>
+                                <li>Later: Can't read handwriting, forgets which unit had which issue</li>
+                                <li>Spends 2-3 hours typing inspection reports from notes</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser + Meta Ray-Ban Glasses (Hands-Free)</h5>
+                            <ul>
+                                <li><strong>Hands-free:</strong> Wears Meta Ray-Ban glasses, no clipboard needed</li>
+                                <li>Walks units, verbally notes issues: "Unit 205, water stain ceiling, broken hinge, dirty filter"</li>
+                                <li>Glasses camera captures photos of defects (linked to timestamp)</li>
+                                <li>After inspections: AI generates Spanish work orders for maintenance team</li>
+                                <li>Photo + audio + transcript = complete documentation</li>
+                                <li><strong>Time saved:</strong> 2 hours (no manual report typing)</li>
+                            </ul>
+                        </div>
+
+                        <div class="impact-metrics">
+                            <h5>📊 Daily Impact Summary - Carmen</h5>
+                            <div class="metric-row">
+                                <span class="metric-label">Time Saved Per Day:</span>
+                                <span class="metric-value">7.25 hours (documentation + translation)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Weekly Time Saved:</span>
+                                <span class="metric-value">36 hours (translation: 10 hrs, reports: 10 hrs, note-taking: 16 hrs)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Annual Value (time × $26/hr):</span>
+                                <span class="metric-value" style="color: #059669;">$94K in time savings</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Tenant Privacy Protected:</span>
+                                <span class="metric-value" style="color: #059669;">100% (local AI, no cloud)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Fair Housing Compliance:</span>
+                                <span class="metric-value" style="color: #059669;">Complete records for all interactions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Michael's Day -->
+            <section id="michael" style="margin-top: 4rem;">
+                <div class="content-header">
+                    <h2>Michael's Flip Day</h2>
+                    <div>
+                        <span class="persona-badge">Real Estate Investor</span>
+                        <span class="persona-badge">Denver, CO</span>
+                        <span class="persona-badge">5-8 Flips/Year</span>
+                        <span class="persona-badge">ADHD</span>
+                    </div>
+                </div>
+
+                <div class="time-section">
+                    <div class="time-header">🌅 Morning (9:00 AM - 12:00 PM)</div>
+
+                    <div class="scenario">
+                        <h4>9:00 AM - Property Walkthrough (Potential Purchase - 60 min)</h4>
+                        <div class="scenario-context">
+                            <strong>Property:</strong> Distressed 3BR/2BA, $280K asking, needs full rehab<br>
+                            <strong>ADHD Challenge:</strong> Working memory deficits - forgets details 5 min after seeing them
+                        </div>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Walks property, tries to remember every defect and cost estimate</li>
+                                <li>Kitchen: Full gut needed, foundation crack, roof looks 5 years old</li>
+                                <li><strong>Working memory failure:</strong> Forgets half the issues by the time he's in the basement</li>
+                                <li>Tries to take notes on phone - loses train of thought, misses details</li>
+                                <li>Later: Creates scope of work, realizes he forgot electrical panel condition</li>
+                                <li><strong>Costly mistake:</strong> Underestimates rehab by $15K, margin destroyed</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser + Meta Ray-Ban Glasses (ADHD-Friendly)</h5>
+                            <ul>
+                                <li><strong>Hands-free recording:</strong> Wears Meta Ray-Ban glasses, eliminates multitasking burden</li>
+                                <li><strong>No note-taking:</strong> Verbally notes issues while walking: "Kitchen needs full gut, foundation crack here, roof looks 5 years old"</li>
+                                <li>Glasses camera captures photos of defects (linked to verbal notes)</li>
+                                <li><strong>Working memory aid:</strong> Doesn't need to remember - transcript captures everything</li>
+                                <li>After walkthrough: Reviews 2-min AI summary instead of trying to remember 60 minutes of observations</li>
+                                <li>Creates accurate scope of work from transcript + tagged photos</li>
+                                <li><strong>No forgotten details:</strong> All defects captured, accurate budget estimate</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp" style="margin-top: 1.5rem;">
+                            <h5>With Transcript Parser + Local AI (Ollama - Disability Privacy)</h5>
+                            <ul>
+                                <li><strong>Privacy benefit:</strong> Michael doesn't want contractors/lenders knowing about ADHD diagnosis</li>
+                                <li>All transcripts processed locally (no cloud logs of "ADHD-friendly summaries")</li>
+                                <li><strong>ADA protection:</strong> ADHD is protected disability - local processing prevents forced disclosure</li>
+                                <li>Generates short, visual summaries (ADHD brain can't process long text)</li>
+                                <li><strong>Professional reputation:</strong> Seen as competent and organized (despite executive function challenges)</li>
+                                <li><strong>Cost:</strong> $0 for unlimited AI processing (vs. $0.05/call cloud) = $300/year savings</li>
+                            </ul>
+                        </div>
+
+                        <div class="user-story-box">
+                            <h5>📋 Related User Story (Sprint 02, Story 9)</h5>
+                            <div class="user-story-text">
+                                "As a real estate investor conducting property tours, I want to use XR smart glasses to capture conversations and visual details hands-free, so that I can focus entirely on property observation without managing devices."
+                            </div>
+                            <div class="acceptance-criteria">
+                                <h6>Acceptance Criteria:</h6>
+                                <ul>
+                                    <li>Meta Ray-Ban integration: Audio recording, photo capture, voice commands</li>
+                                    <li>Apple Vision Pro: Spatial audio, 3D capture, LiDAR measurements, real-time transcription</li>
+                                    <li>ADHD benefits: Hands-free (no multitasking), voice commands, visual summaries</li>
+                                    <li>Privacy: Auto-trim, face blur, consent workflow, local storage option</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <h4>11:00 AM - Contractor Bids (3 contractors, 45 min each)</h4>
+
+                        <div class="without-tp">
+                            <h5>Without Transcript Parser</h5>
+                            <ul>
+                                <li>Contractor A: "I'll do tile, drywall, paint for $12K, 3 weeks"</li>
+                                <li>Contractor B: "$14K, includes materials, 4 weeks"</li>
+                                <li>Contractor C: "$11K, but materials extra, 2 weeks"</li>
+                                <li><strong>ADHD challenge:</strong> Can't remember which quote included what</li>
+                                <li>Later: Confuses bids, thinks Contractor A quoted $11K (was C)</li>
+                                <li><strong>Dispute:</strong> Contractor angry, relationship damaged</li>
+                            </ul>
+                        </div>
+
+                        <div class="with-tp">
+                            <h5>With Transcript Parser (Perfect Memory)</h5>
+                            <ul>
+                                <li>Records all 3 contractor walkthroughs separately</li>
+                                <li>AI generates comparison table: Contractor, total bid, scope, timeline, materials, payment terms</li>
+                                <li><strong>Discrepancy detection:</strong> AI flags that Contractor A's bid excludes materials (others include)</li>
+                                <li>Searches transcripts: "Did any contractor mention plumbing?" (instant answer)</li>
+                                <li><strong>ADHD benefit:</strong> Visual side-by-side comparison (no need to remember details)</li>
+                                <li>Makes informed decision, no confusion, professional communication</li>
+                            </ul>
+                        </div>
+
+                        <div class="impact-metrics">
+                            <h5>📊 Daily Impact Summary - Michael</h5>
+                            <div class="metric-row">
+                                <span class="metric-label">Time Saved Per Day:</span>
+                                <span class="metric-value">6.25 hours (no note reconstruction, instant recall)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Costly Mistakes Avoided:</span>
+                                <span class="metric-value" style="color: #059669;">$15K/flip (accurate estimates, no forgotten defects)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Additional Flips/Year:</span>
+                                <span class="metric-value" style="color: #059669;">+3 flips (5 → 8 transactions)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Additional Profit/Year:</span>
+                                <span class="metric-value" style="color: #059669;">$195K (3 flips × $65K profit/flip)</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Cognitive Burden Reduced:</span>
+                                <span class="metric-value" style="color: #059669;">External memory compensates for ADHD</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Privacy Maintained:</span>
+                                <span class="metric-value" style="color: #059669;">ADHD diagnosis stays private (local AI)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sprint Summaries -->
+            <section id="sprint-02" style="margin-top: 4rem;">
+                <div class="content-header">
+                    <h2>Sprint 02: Advanced Features Summary</h2>
+                    <div>
+                        <span class="persona-badge">55 Story Points</span>
+                        <span class="persona-badge">11 User Stories</span>
+                    </div>
+                </div>
+
+                <div class="user-story-box">
+                    <h5>🎯 Sprint Goal</h5>
+                    <div class="user-story-text">
+                        Deliver advanced property intelligence, privacy-preserving AI (Ollama), and hands-free recording (XR glasses) for enhanced real estate workflows
+                    </div>
+                </div>
+
+                <div class="scenario">
+                    <h4>High Priority Stories (Must Have - 24 points)</h4>
+                    <ul>
+                        <li><strong>Story 1: Property Comparison Report</strong> (8 pts) - Side-by-side analysis of showings, sentiment scoring, recommendations</li>
+                        <li><strong>Story 2: Client Preference Tracking</strong> (5 pts) - Auto-extract must-haves, deal-breakers, sentiment evolution</li>
+                        <li><strong>Story 3: Follow-Up Email Templates</strong> (3 pts) - Personalized emails based on conversation, objection handling</li>
+                        <li><strong>Story 4: Investment Memo Generator</strong> (5 pts) - Professional memos for commercial deals, financial analysis</li>
+                        <li><strong>Story 5: Legal Export & Fair Housing</strong> (3 pts) - Compliance markers, certified timestamps, defensible records</li>
+                    </ul>
+                </div>
+
+                <div class="scenario">
+                    <h4>Medium Priority Stories (Should Have - 6 points)</h4>
+                    <ul>
+                        <li><strong>Story 6: Market Intelligence Extraction</strong> (3 pts) - Neighborhood trends, development projects, organized by area</li>
+                        <li><strong>Story 7: Contractor Bid Comparison</strong> (3 pts) - Side-by-side quotes, discrepancy detection, scope analysis</li>
+                    </ul>
+                </div>
+
+                <div class="scenario">
+                    <h4>Low Priority Stories (Could Have - 25 points)</h4>
+                    <ul>
+                        <li><strong>Story 8: Local AI (Ollama Integration)</strong> (8 pts) - Privacy-preserving AI, NDA compliance, zero cloud costs</li>
+                        <li><strong>Story 9: XR Glasses Integration</strong> (13 pts) - Meta Ray-Ban, Vision Pro, hands-free recording, spatial audio</li>
+                        <li><strong>Story 10: Deal Pipeline Analytics</strong> (2 pts) - Engagement scoring, follow-up effectiveness, at-risk deals</li>
+                        <li><strong>Story 11: Team Collaboration</strong> (2 pts) - Share anonymized transcripts, training library, coaching notes</li>
+                    </ul>
+                </div>
+
+                <div class="user-story-box">
+                    <h5>🔒 Privacy & Cost Benefits - Story 8: Ollama Integration</h5>
+                    <div class="acceptance-criteria">
+                        <h6>Privacy Benefits:</h6>
+                        <ul>
+                            <li><strong>David (Commercial):</strong> NDA compliance - deal terms stay on device, ITAR for defense contractors</li>
+                            <li><strong>Michael (ADHD):</strong> Disability privacy - no cloud logs of accommodations, ADA protected</li>
+                            <li><strong>Carmen (Property Manager):</strong> Tenant privacy - immigration status, income, disabilities stay local</li>
+                            <li><strong>Lisa (Residential):</strong> Client confidentiality - financial details, divorce situations stay private</li>
+                        </ul>
+                        <h6 style="margin-top: 1rem;">Cost Benefits:</h6>
+                        <ul>
+                            <li><strong>Solo agents:</strong> Lisa saves $300/year (30 showings/month × $0.10/cloud)</li>
+                            <li><strong>Investors:</strong> Michael saves $300/year (50 contractor calls/month)</li>
+                            <li><strong>Property managers:</strong> Carmen saves $600/year (100 tenant calls/month)</li>
+                            <li><strong>Commercial brokers:</strong> David saves $10K/year (replaces $200 note-taker)</li>
+                        </ul>
+                        <h6 style="margin-top: 1rem;">Supported Models:</h6>
+                        <ul>
+                            <li><strong>LLaMA 3 8B:</strong> Consumer laptops, 85% GPT-4 quality, 45 sec summaries</li>
+                            <li><strong>LLaMA 3 70B:</strong> GPU workstations, 95% GPT-4 quality, 15 sec summaries</li>
+                            <li><strong>Mistral 7B:</strong> Alternative, 80% quality, similar performance</li>
+                            <li><strong>Phi-3 Mini:</strong> Mobile/iPad, 70% quality, 60-90 sec summaries</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="user-story-box">
+                    <h5>👓 XR Glasses Benefits - Story 9: XR Integration</h5>
+                    <div class="acceptance-criteria">
+                        <h6>Meta Ray-Ban Smart Glasses ($299-$379):</h6>
+                        <ul>
+                            <li><strong>Hands-free recording:</strong> Tap temple to start (reduces cognitive load for ADHD)</li>
+                            <li><strong>Discrete capture:</strong> Looks like regular sunglasses (culturally appropriate)</li>
+                            <li><strong>Voice commands:</strong> "Hey Meta, bookmark" - mark timestamps without touching devices</li>
+                            <li><strong>Visual capture:</strong> 12MP camera captures defects, slides, diagrams (OCR extraction)</li>
+                            <li><strong>Battery:</strong> 4 hours continuous (full day of showings with charging case)</li>
+                            <li><strong>ROI for Lisa:</strong> $379 + saves 7 hrs/week (worth $350+/week)</li>
+                        </ul>
+                        <h6 style="margin-top: 1rem;">Apple Vision Pro ($3,499):</h6>
+                        <ul>
+                            <li><strong>Spatial audio:</strong> 6-mic array separates speakers in large warehouses</li>
+                            <li><strong>3D video capture:</strong> Immersive property tour recording for re-experience</li>
+                            <li><strong>LiDAR scanning:</strong> Accurate room measurements (ceiling heights, square footage)</li>
+                            <li><strong>Real-time transcription:</strong> AR captions during showing (helps with technical terms)</li>
+                            <li><strong>Spatial bookmarks:</strong> Tap in air to mark defects, features</li>
+                            <li><strong>ROI for David:</strong> $3,499 replaces $200/meeting note-taker (breaks even after 18 meetings)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Right Sidebar - Expert Feedback -->
+        <aside class="expert-sidebar">
+            <h3>Expert Feedback</h3>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Rajesh Kumar</div>
+                <div class="expert-domain">AI & NLP Expert</div>
+                <p><strong>Ollama Integration (Story 8) is ESSENTIAL for real estate.</strong> Commercial brokers like David have NDAs that explicitly forbid cloud AI - this is a legal requirement, not a nice-to-have. Recommend LLaMA 3 70B for commercial (95% GPT-4 quality) and 8B for residential (85% quality, acceptable). Privacy-first architecture differentiates from competitors. Also: fine-tune models on real estate terminology (cap rate, NOI, comps) for better extraction accuracy.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Elena Rodriguez</div>
+                <div class="expert-domain">XR & Wearables Expert</div>
+                <p><strong>Meta Ray-Ban glasses are PERFECT for real estate agents.</strong> Hands-free recording eliminates cognitive load (critical for ADHD users like Michael). Discrete design maintains professionalism during showings. OCR from photos (inspection reports, permits) adds huge value. Battery life (4 hours) covers full day of showings. ROI: $379 device saves 7+ hrs/week for Lisa. Apple Vision Pro is overkill for residential, but game-changing for commercial (David's warehouse tours benefit from LiDAR measurements and spatial audio).</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Marcus Chen</div>
+                <div class="expert-domain">Privacy & Security Expert</div>
+                <p><strong>⚠️ CRITICAL: Fair Housing compliance (Story 5) must be Sprint 01, not Sprint 02.</strong> Property managers like Carmen face legal liability without proper documentation. Transcript export with timestamps is defensible in court. Also: Ollama (Story 8) solves MAJOR privacy issues - tenant data (immigration status, disabilities, income) cannot be sent to cloud AI services. This is ADA/Fair Housing compliance by design. Cloud-only architecture is a legal risk for property management use case.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Jennifer Martinez, CRE</div>
+                <div class="expert-domain">Real Estate Tech Expert</div>
+                <p><strong>Investment memo generator (Story 4) is HIGH value for commercial brokers.</strong> David spends 4-6 hours per memo manually - AI can reduce this to 1.5 hours (75% time savings). Financial term extraction (NOI, cap rate, cash-on-cash) must be accurate (95%+ required). Commercial deals are $15M-$25M - mistakes are costly. Also: Client preference tracking (Story 2) is TABLE STAKES for residential agents - Lisa's competitors already use Zillow CRM, we need AI-powered extraction to differentiate.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Sarah Kim</div>
+                <div class="expert-domain">UX Design Expert</div>
+                <p><strong>Mobile-first design is NON-NEGOTIABLE.</strong> Lisa does 90% of work on iPhone during showings. One-tap recording start, 2-minute summary review between properties, generate email template from car. Desktop is secondary. Also: ADHD-optimized UI for Michael - short summaries (not long transcripts), visual comparison tables (not text walls), color-coding, generous white space. Executive function challenges mean manual organization will fail - auto-tagging by property address is essential.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">David Park</div>
+                <div class="expert-domain">Performance Engineer</div>
+                <p><strong>Ollama performance optimization critical.</strong> LLaMA 3 8B on consumer laptops: target < 60 sec for property summaries (currently 45 sec achievable). GPU detection must be automatic - 70B model on RTX 4090 = 15 sec (acceptable). Mobile version (Phi-3 Mini on iPad Pro) = 60-90 sec (borderline acceptable, test with users). Warning: local AI on phone drains battery 20-30% faster - show battery warning in UI. Recommend: cloud AI default for mobile, local AI for desktop/laptop.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Tom Zhang</div>
+                <div class="expert-domain">Software Architecture Expert</div>
+                <p><strong>Architecture recommendation: Hybrid cloud + local AI.</strong> Free tier users = cloud AI (Gemini Flash - cheap), Pro tier users = local AI option (Ollama - privacy). Enterprise tier = on-premises AI server for entire brokerage (20 agents share one GPU workstation = $2,400/year savings). Data flow: Transcription (cloud OK, audio only), AI processing (local option), Storage (local + encrypted cloud backup). CRM integration (Story 2): use webhooks for Zillow/Realtor.com, not polling (reduces server costs 60%).</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Sarah Thompson, CPACC</div>
+                <div class="expert-domain">Accessibility Expert</div>
+                <p><strong>ADHD accommodations (Michael) are EXCEPTIONAL.</strong> Hands-free XR glasses eliminate multitasking burden (ADHD brain cannot dual-task). Short AI summaries (not long transcripts) match ADHD processing style. Visual comparison tables reduce cognitive load. Auto-tagging compensates for executive function deficits. Local AI preserves disability privacy (ADA-protected medical info). However: screen reader support still needed for blind/low vision users (3-5% of population). Also: bilingual support for Carmen is accessibility feature (language access).</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Rajesh Kumar</div>
+                <div class="expert-domain">AI & NLP Expert - Model Selection</div>
+                <p><strong>Model recommendations by use case:</strong> (1) Residential agents (Lisa): LLaMA 3 8B sufficient (85% quality, fast on consumer hardware). (2) Commercial brokers (David): LLaMA 3 70B required (95% quality, complex financial analysis). (3) Property managers (Carmen): Mistral 7B + aya-23-8b for translation (bilingual performance better). (4) Investors (Michael): Phi-3 Mini for mobile walkthroughs (ADHD-friendly short summaries). Quality benchmark: test on 100 real transcripts, ensure 90%+ accuracy for financial terms, 95%+ for Fair Housing compliance language.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Marcus Chen</div>
+                <div class="expert-domain">Privacy & Security Expert - Compliance</div>
+                <p><strong>Regulatory compliance checklist:</strong> (1) Fair Housing Act - Story 5 provides audit trail for discrimination claims. (2) FERPA/ITAR - Ollama (Story 8) keeps defense contractor tenant data on-premises (David's use case). (3) ADA Section 504 - local processing prevents forced disclosure of disabilities (Michael's ADHD). (4) State recording laws - implement consent workflow (one-party vs two-party consent by location). (5) GDPR (if international clients) - right to be forgotten, data portability. <strong>Action item:</strong> Legal review before launch, especially Fair Housing compliance.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Dr. Elena Rodriguez</div>
+                <div class="expert-domain">XR & Wearables Expert - Technical Implementation</div>
+                <p><strong>XR glasses technical guidance:</strong> (1) Meta Ray-Ban: Use Meta View API for cloud import (easiest), Wi-Fi Direct for local transfer (faster). OCR with Tesseract (free, 90% accuracy on slides) or Cloud Vision API (95% accuracy, $1.50/1000 images). (2) Apple Vision Pro: visionOS native app required, spatial audio diarization (separate speakers in large rooms), LiDAR accuracy ±2 inches (acceptable for commercial measurements). (3) Battery management: 4-hour recording max for Ray-Ban (remind users to charge between showings), 2-hour for Vision Pro (external battery pack needed).</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Jennifer Martinez, CRE</div>
+                <div class="expert-domain">Real Estate Tech Expert - Market Fit</div>
+                <p><strong>Product-market fit analysis:</strong> (1) Lisa (residential agent) - HIGH fit, saves 3.5 hrs/day, generates $144K additional revenue/year (7 more deals). (2) David (commercial broker) - HIGH fit, replaces $10K/year note-taker, enables 2 more deals/year ($300K revenue). (3) Carmen (property manager) - MEDIUM-HIGH fit, saves 7.25 hrs/day ($94K value/year), liability protection. (4) Michael (investor) - HIGH fit, prevents $15K mistakes, enables 3 more flips/year ($195K profit). <strong>Market sizing:</strong> 2M real estate agents in US, 15% early adopters = 300K potential users. Premium pricing justified by ROI.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Sarah Kim</div>
+                <div class="expert-domain">UX Design Expert - Feature Prioritization</div>
+                <p><strong>UX prioritization for Sprint 02:</strong> (1) Property comparison (Story 1) - MUST HAVE, Lisa shows 5-8 properties per client, needs side-by-side analysis. (2) Client preference tracking (Story 2) - MUST HAVE, competitors have this. (3) Follow-up templates (Story 3) - MUST HAVE, speeds Lisa's workflow 10x. (4) Investment memo (Story 4) - SHOULD HAVE for commercial only. (5) Ollama (Story 8) - COULD HAVE, but STRONG differentiator for privacy-conscious users. (6) XR glasses (Story 9) - COULD HAVE, early adopters only (15-20%). <strong>Mobile UI:</strong> Thumb-friendly navigation, swipe gestures, offline mode.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">David Park</div>
+                <div class="expert-domain">Performance Engineer - Benchmarks</div>
+                <p><strong>Performance requirements by feature:</strong> (1) Property comparison report (Story 1): < 60 sec for 5 showings (acceptable, Lisa reviews in car). (2) Preference extraction (Story 2): < 30 sec per transcript. (3) Follow-up email (Story 3): < 10 sec (Lisa sends from phone immediately). (4) Investment memo (Story 4): < 90 sec for 90-min property tour (David acceptable for 4.5 hour savings). (5) Local AI (Ollama): 8B model 45 sec, 70B model 15 sec. (6) XR photo OCR: < 5 sec per image. <strong>Infrastructure:</strong> Auto-scaling for cloud AI (peak = Saturday showings), rate limiting (prevent abuse).</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">Tom Zhang</div>
+                <div class="expert-domain">Software Architecture Expert - Scalability</div>
+                <p><strong>Scalability architecture:</strong> (1) Transcription: Use Whisper API (cloud) or local Whisper (privacy mode), batch processing for cost savings (40% discount). (2) AI processing: Queue-based (BullMQ), workers scale horizontally, priority queue (Pro tier > Free tier). (3) Storage: PostgreSQL (metadata), S3/R2 (audio files), SQLCipher (local encrypted DB). (4) CRM integration: Webhook-based (Zillow, Realtor.com push updates), not polling. (5) Caching: Redis for AI results (deduplicate identical transcripts). <strong>Cost optimization:</strong> Compress audio (Opus codec, 80% size reduction), CDN for static assets.</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">All Experts</div>
+                <div class="expert-domain">Consensus Recommendation</div>
+                <p><strong>Sprint 02 consensus: STRONG endorsement for Ollama (Story 8) and XR glasses (Story 9).</strong> Ollama solves: (1) NDA compliance (legal requirement for commercial), (2) Tenant privacy (Fair Housing compliance), (3) Disability privacy (ADA protection), (4) Cost reduction (60-100% savings). XR glasses solve: (1) Cognitive load (ADHD hands-free), (2) Professional discretion (no phone juggling), (3) Spatial context (room-specific notes). Both are differentiators - competitors don't offer this. <strong>Recommendation:</strong> Ollama MUST be Sprint 02 (8 pts justified), XR can be Sprint 03 if resources limited (Meta Ray-Ban first, Vision Pro later).</p>
+            </div>
+
+            <div class="expert-quote">
+                <div class="expert-name">All Experts</div>
+                <div class="expert-domain">Critical Path Items</div>
+                <p><strong>Move to Sprint 01:</strong> (1) Fair Housing compliance (Carmen's legal liability), (2) Client preference extraction (Lisa's competitors have this - table stakes), (3) Mobile-first UI (90% of usage is mobile). <strong>Prioritize in Sprint 02:</strong> (1) Ollama integration (legal requirement for commercial), (2) Property comparison (high-value feature for Lisa), (3) Investment memo (differentiator for David). <strong>Quality gates:</strong> Test local AI on 100 real transcripts, 90%+ accuracy required, user testing with 5 agents per persona (85%+ satisfaction).</p>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.nav-links a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+
+                    // Update active state
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Update active navigation on scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -53,7 +53,7 @@ export class GeminiInvalidAudioError extends GeminiError {
 }
 
 // Hardcoded API key for beta/access code mode (production builds)
-const BETA_API_KEY = 'AIzaSyB8DYs1TQdd6FmzEsFhKHdBRaquSyD2cdY'
+const BETA_API_KEY = 'AIzaSyDpqoSyupsF9Zkqww5qi622rRSKhhjlRPg'
 
 export class GeminiClient {
   private ai: GoogleGenAI
@@ -95,8 +95,8 @@ export class GeminiClient {
     }
 
     this.ai = new GoogleGenAI({ apiKey })
-    // Use gemini-2.5-flash for audio/video transcription
-    this.model = options?.model || 'gemini-2.5-flash'
+    // Use gemini-2.0-flash for audio/video transcription (2.5 requires waitlist)
+    this.model = options?.model || 'gemini-2.0-flash'
   }
 
   /**
@@ -171,6 +171,10 @@ Return ONLY a JSON array with this exact structure (no markdown, no code blocks,
       `.trim()
 
       // Send request to Gemini with inline data using new SDK
+      // Ensure we have a valid MIME type for the audio
+      const mimeType = audioBlob.type || 'audio/webm'
+      console.log(`Sending to Gemini with mimeType: ${mimeType}`)
+
       const response = await this.ai.models.generateContent({
         model: this.model,
         contents: [
@@ -181,7 +185,7 @@ Return ONLY a JSON array with this exact structure (no markdown, no code blocks,
               {
                 inlineData: {
                   data: audioBase64,
-                  mimeType: audioBlob.type,
+                  mimeType: mimeType,
                 },
               },
             ],
@@ -189,7 +193,11 @@ Return ONLY a JSON array with this exact structure (no markdown, no code blocks,
         ],
       })
 
+      console.log('Gemini response received')
+
       const text = response.text
+      console.log('Gemini raw response length:', text?.length || 0)
+      console.log('Gemini response preview:', text?.substring(0, 500))
 
       if (!text) {
         throw new GeminiError(
@@ -219,13 +227,20 @@ Return ONLY a JSON array with this exact structure (no markdown, no code blocks,
       }
 
       // Parse response
+      console.log('Parsing Gemini response...')
       const entries = this.parseResponse(text)
+      console.log(`Parsed ${entries.length} entries from Gemini response`)
 
       if (entries.length === 0) {
         throw new GeminiError(
           'No transcript entries found in response',
           'NO_ENTRIES'
         )
+      }
+
+      // Log first entry for debugging
+      if (entries.length > 0) {
+        console.log('First entry:', JSON.stringify(entries[0]))
       }
 
       // Extract unique speakers

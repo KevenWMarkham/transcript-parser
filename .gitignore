@@ -75,3 +75,13 @@ playwright-report/
 # E2E test screenshots
 tests/e2e/*.png
 tests/e2e/*.webm
+
+# Docker data volumes (keep structure, ignore content)
+data/*
+!data/.gitkeep
+!data/*/.gitkeep
+backups/
+
+# FFmpeg temp files
+public/ffmpeg-core*.js
+public/ffmpeg-core*.wasm

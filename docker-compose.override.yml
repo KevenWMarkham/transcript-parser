@@ -1,0 +1,85 @@
+# Development overrides for docker-compose
+# This file is automatically merged with docker-compose.yml when running `docker-compose up`
+# For production, use: docker-compose -f docker-compose.yml up
+
+services:
+  # Development app with hot reloading
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder  # Use builder stage for dev
+    container_name: transcript-parser-dev
+    ports:
+      - "5173:5173"  # Vite dev server
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - VITE_DEV_SERVER_HOST=0.0.0.0
+      - UPLOAD_DIR=/app/data/uploads
+      - TRANSCRIPT_DIR=/app/data/transcripts
+      - EXPORT_DIR=/app/data/exports
+    volumes:
+      # Source code with hot reloading (bind mounts)
+      - ./src:/app/src:delegated
+      - ./packages:/app/packages:delegated
+      - ./public:/app/public:delegated
+      # Persistent data volumes (consistent with VPS)
+      - app-uploads:/app/data/uploads
+      - app-transcripts:/app/data/transcripts
+      - app-exports:/app/data/exports
+      # Local data directory for easy access
+      - ./data:/app/data-local
+      # Exclude node_modules from bind mount
+      - /app/node_modules
+    command: ["pnpm", "dev", "--host", "0.0.0.0"]
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5173"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Development audio server with source mounting
+  audio-server:
+    volumes:
+      - ./server:/app/server:delegated
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CORS_ORIGIN=*
+
+  # Use local PostgreSQL data for development
+  postgres:
+    ports:
+      - "5432:5432"  # Expose for local tools
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data  # Local bind for easy backup
+
+  # N8N for local workflow testing
+  n8n:
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=false  # Disable auth for local dev
+    volumes:
+      - ./data/n8n:/home/node/.n8n  # Local bind for easy backup
+
+# Use bind mounts for development data access
+volumes:
+  app-uploads:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/data/uploads
+  app-transcripts:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/data/transcripts
+  app-exports:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/data/exports

@@ -47,6 +47,11 @@ const mockSuccessResponse = {
       },
     },
   ],
+  usageMetadata: {
+    promptTokenCount: 100,
+    candidatesTokenCount: 50,
+    totalTokenCount: 150,
+  },
 }
 
 /**
@@ -75,6 +80,11 @@ ${JSON.stringify([
       },
     },
   ],
+  usageMetadata: {
+    promptTokenCount: 100,
+    candidatesTokenCount: 50,
+    totalTokenCount: 150,
+  },
 }
 
 /**
@@ -149,6 +159,11 @@ export const emptyResponseHandler = http.post(
           },
         },
       ],
+      usageMetadata: {
+        promptTokenCount: 100,
+        candidatesTokenCount: 0,
+        totalTokenCount: 100,
+      },
     })
   }
 )
