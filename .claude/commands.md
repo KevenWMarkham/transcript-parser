@@ -296,6 +296,109 @@ Example: "Build feature X" → brainstorming first, then implementation skills
 
 ---
 
+## Parallel Agents
+
+Claude can spawn specialized agents for parallel execution. Use Task tool with `subagent_type`.
+
+### Built-in Agents
+
+| Agent                       | Use Case                                     | Model       |
+| --------------------------- | -------------------------------------------- | ----------- |
+| `general-purpose`           | Complex multi-step tasks, research           | sonnet/opus |
+| `Explore`                   | Codebase exploration, file search            | haiku       |
+| `Plan`                      | Architecture design, implementation planning | sonnet/opus |
+| `claude-code-guide`         | Questions about Claude Code features         | sonnet      |
+| `testing-agent`             | Run tests after file updates                 | sonnet      |
+| `superpowers:code-reviewer` | Code review after implementation             | opus        |
+
+### Project-Specific Agents
+
+Use these for SmartHaven parallel orchestration:
+
+| Agent                   | Purpose                             | When to Spawn             |
+| ----------------------- | ----------------------------------- | ------------------------- |
+| **Architecture Agent**  | Review design patterns, scalability | New features, refactoring |
+| **Security Agent**      | Audit auth, OWASP, data protection  | Auth changes, API work    |
+| **Testing Agent**       | Run unit/E2E tests, coverage        | After code changes        |
+| **Deployment Agent**    | Build, deploy, verify               | Sprint completion         |
+| **Documentation Agent** | Update docs, session summaries      | After sessions            |
+| **Expert Panel Agent**  | Collect expert feedback             | Every session             |
+
+### Parallel Execution Patterns
+
+**Pattern 1: Multi-Package Updates**
+
+```
+Launch in parallel:
+├── Agent 1: Update packages/ui
+├── Agent 2: Update packages/ai-services
+└── Agent 3: Update packages/export
+```
+
+**Pattern 2: Test + Deploy**
+
+```
+Launch in parallel:
+├── Agent 1: Run unit tests
+├── Agent 2: Run E2E tests
+└── Agent 3: Build production bundle
+Then: Deploy Agent (after all pass)
+```
+
+**Pattern 3: Expert Review**
+
+```
+Launch in parallel:
+├── Architecture Expert Agent
+├── Security Expert Agent
+├── Testing Expert Agent
+└── Performance Expert Agent
+Collect: All feedback into SESSION_SUMMARY.md
+```
+
+**Pattern 4: Multi-Epic Planning**
+
+```
+Launch in parallel:
+├── Agent 1: Plan Epic 02 Sprint 01
+├── Agent 2: Plan Epic 03 Sprint 01
+└── Agent 3: Research dependencies
+```
+
+### Agent Spawning Rules
+
+1. **Independent tasks only** - No shared state between parallel agents
+2. **Use haiku for exploration** - Fast, cost-effective searches
+3. **Use opus for architecture** - Complex reasoning needed
+4. **Collect results** - Use TaskOutput to gather agent responses
+5. **Max parallel agents** - Keep to 3-5 for manageability
+
+### Example: Spawn Testing Agent
+
+```
+Task tool:
+  subagent_type: "testing-agent"
+  prompt: "Run unit tests for packages/ui and report coverage"
+  model: "sonnet"
+  run_in_background: true
+```
+
+### Example: Parallel Expert Review
+
+```
+Task tool (send all in one message):
+  1. subagent_type: "general-purpose"
+     prompt: "Act as Architecture Expert. Review [code] for patterns..."
+
+  2. subagent_type: "general-purpose"
+     prompt: "Act as Security Expert. Audit [code] for vulnerabilities..."
+
+  3. subagent_type: "general-purpose"
+     prompt: "Act as Testing Expert. Review test coverage for [code]..."
+```
+
+---
+
 ## Remember
 
 1. **NO CODE** when orchestrating
