@@ -406,6 +406,67 @@ services:
 
 ---
 
+## Versioning
+
+### Semantic Versioning
+
+All applications follow Semantic Versioning (SemVer):
+
+```
+MAJOR.MINOR.PATCH[-label]
+```
+
+| Component | When to Increment                  | Example                   |
+| --------- | ---------------------------------- | ------------------------- |
+| **MAJOR** | Breaking changes                   | `2.0.0`                   |
+| **MINOR** | New features (backward compatible) | `1.1.0`                   |
+| **PATCH** | Bug fixes                          | `1.0.1`                   |
+| **label** | Pre-release or environment         | `1.0.0-beta`, `1.0.0-vps` |
+
+### Version File Location
+
+```
+src/version.ts         # Single source of truth
+package.json           # Keep in sync with version.ts
+```
+
+### Version Display Requirements
+
+- **On-Screen**: Version badge visible in bottom-right corner
+- **Console**: Version banner logged on app start
+- **Deployments**: Version included in deployment archives
+- **API**: Version exposed via `/api/v1/health` endpoint
+
+### Version Update Process
+
+1. Update `APP_VERSION` in `src/version.ts`
+2. Update `version` in `package.json`
+3. Update `BUILD_INFO.date` to current date
+4. Commit with message: `chore(release): bump version to X.Y.Z`
+5. Tag release: `git tag vX.Y.Z`
+
+### Build Information
+
+```typescript
+BUILD_INFO = {
+  date: '2024-12-23', // Build date
+  environment: 'production', // production | development | staging
+  branch: 'master', // Git branch
+  commit: 'abc1234', // Git commit short SHA
+}
+```
+
+### Release Tags
+
+```bash
+# Format: vMAJOR.MINOR.PATCH
+git tag v1.0.0
+git tag v1.1.0-beta.1
+git tag v2.0.0-rc.1
+```
+
+---
+
 ## Summary Checklist
 
 - [ ] Epic folders: `epic-XX-kebab-case/`
@@ -419,6 +480,8 @@ services:
 - [ ] Constants: `SCREAMING_SNAKE_CASE`
 - [ ] Tables: `snake_case`
 - [ ] API endpoints: `/api/v1/kebab-case`
+- [ ] Version format: `MAJOR.MINOR.PATCH[-label]`
+- [ ] Version badge visible on screen
 
 ---
 

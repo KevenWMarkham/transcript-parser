@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
   Header,
   UploadVideo,
@@ -14,11 +14,13 @@ import {
   ApiKeySettings,
   BalanceAlert,
   Button,
+  VersionBadge,
   useTranscription,
   loadApiConfig,
   shouldShowBalanceAlert,
   type ApiKeyConfig,
 } from '@transcript-parser/ui'
+import { getVersionInfo, logVersionBanner } from '@/version'
 import { apiClient } from '@transcript-parser/ai-services'
 import { usageTracker } from '@transcript-parser/ai-services'
 import {
@@ -29,7 +31,32 @@ import {
 import { largeTranscriptDemo } from '@/data/largeTranscriptDemo'
 import type { TranscriptData } from '@transcript-parser/types'
 
+// Device detection hook
+function useDeviceDetection() {
+  return useMemo(() => {
+    if (typeof window === 'undefined') {
+      return { isMobile: false, isIOS: false, isAndroid: false }
+    }
+    const ua = navigator.userAgent || navigator.vendor || ''
+    const isIOS =
+      /iPad|iPhone|iPod/.test(ua) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    const isAndroid = /Android/i.test(ua)
+    const isMobile =
+      isIOS || isAndroid || /webOS|BlackBerry|Opera Mini|IEMobile/i.test(ua)
+    return { isMobile, isIOS, isAndroid }
+  }, [])
+}
+
 function App() {
+  const device = useDeviceDetection()
+  const versionInfo = getVersionInfo()
+
+  // Log version banner on mount
+  useEffect(() => {
+    logVersionBanner()
+  }, [])
+
   // Auth state
   const [isAuthenticated, setIsAuthenticated] = useState(
     apiClient.isAuthenticated()
@@ -123,23 +150,44 @@ function App() {
 
   const handleVideoUpload = async (file: File) => {
     setUploadError(null)
+    console.log('[App] handleVideoUpload called with:', file.name)
 
     // Validate file
     const validation = validateVideoFile(file)
     if (!validation.valid) {
+      console.log('[App] Validation failed:', validation.error)
       setUploadError(validation.error!)
       return
     }
 
-    try {
-      // Extract metadata
-      const metadata = await extractVideoMetadata(file)
-      setVideoFile(file)
-      setVideoMetadata(metadata)
+    console.log('[App] Validation passed, extracting metadata...')
 
-      // Automatically start transcription
+    // Extract metadata - with fallback if it fails
+    let metadata: VideoMetadata
+    try {
+      metadata = await extractVideoMetadata(file)
+      console.log('[App] Metadata extracted:', metadata)
+    } catch (error) {
+      console.log('[App] Metadata extraction failed, using defaults:', error)
+      // Use default metadata if extraction fails
+      metadata = {
+        duration: 0,
+        width: 0,
+        height: 0,
+        format: file.type || 'video/mp4',
+        size: file.size,
+      }
+    }
+
+    setVideoFile(file)
+    setVideoMetadata(metadata)
+
+    // Start transcription
+    try {
+      console.log('[App] Starting transcription...')
       await startTranscription(file, metadata)
     } catch (error) {
+      console.log('[App] Transcription error:', error)
       setUploadError((error as Error).message)
     }
   }
@@ -196,7 +244,7 @@ function App() {
   if (showAuth) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center p-4"
+        className="min-h-screen flex items-center justify-center p-4 safe-area-inset-top safe-area-inset-bottom"
         style={{
           background:
             'linear-gradient(135deg, #f8fafc 0%, rgba(239, 246, 255, 0.5) 50%, rgba(250, 245, 255, 0.5) 100%)',
@@ -224,7 +272,7 @@ function App() {
   if (showLibrary) {
     return (
       <div
-        className="min-h-screen p-4 sm:p-6 lg:p-8"
+        className="min-h-screen p-3 sm:p-6 lg:p-8 safe-area-inset-top safe-area-inset-bottom"
         style={{
           background:
             'linear-gradient(135deg, #f8fafc 0%, rgba(239, 246, 255, 0.5) 50%, rgba(250, 245, 255, 0.5) 100%)',
@@ -247,7 +295,7 @@ function App() {
 
   return (
     <div
-      className="min-h-screen p-4 sm:p-6 lg:p-8"
+      className="min-h-screen p-3 sm:p-6 lg:p-8 safe-area-inset-top safe-area-inset-bottom"
       style={{
         background:
           'linear-gradient(135deg, #f8fafc 0%, rgba(239, 246, 255, 0.5) 50%, rgba(250, 245, 255, 0.5) 100%)',
@@ -256,64 +304,138 @@ function App() {
       <div className="max-w-7xl mx-auto">
         <Header />
 
-        {/* Auth and Demo buttons */}
-        <div className="mb-6 flex justify-between items-center">
-          <div>
-            {/* Demo button - Sprint 4 Feature */}
-            <Button
-              variant="outline"
-              onClick={loadDemoTranscript}
-              className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 hover:from-purple-600 hover:to-pink-600"
-            >
-              🎬 Load Sprint 4 Demo (60 Entries)
-            </Button>
-            {demoTranscript && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleReset}
-                className="ml-2"
-              >
-                Clear Demo
-              </Button>
-            )}
-          </div>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setShowApiSettings(true)}
-              className={
-                apiConfig
-                  ? 'border-emerald-500 text-emerald-600 hover:bg-emerald-50'
-                  : 'border-red-500 text-red-600 hover:bg-red-50'
-              }
-            >
-              {apiConfig ? '🔑 API Configured' : '⚠️ Configure API'}
-            </Button>
-            {!isAuthenticated ? (
-              <Button onClick={() => setShowAuth(true)}>
-                Login / Register
-              </Button>
-            ) : (
-              <>
-                <Button variant="outline" onClick={() => setShowLibrary(true)}>
-                  My Transcripts
-                </Button>
+        {/* Action buttons - Responsive layout */}
+        <div className="mb-4 sm:mb-6">
+          {/* Mobile: Stacked layout */}
+          {device.isMobile ? (
+            <div className="space-y-3">
+              {/* Top row: Demo + API Config */}
+              <div className="flex gap-2">
                 <Button
                   variant="outline"
-                  onClick={() => setShowCostSummary(true)}
+                  onClick={loadDemoTranscript}
+                  className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 hover:from-purple-600 hover:to-pink-600 text-sm h-10"
                 >
-                  Summary
+                  🎬 Demo
                 </Button>
-                <Button variant="outline" onClick={handleLogout}>
-                  Logout
+                {demoTranscript && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleReset}
+                    className="h-10"
+                  >
+                    Clear
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  onClick={() => setShowApiSettings(true)}
+                  className={`h-10 px-3 ${
+                    apiConfig
+                      ? 'border-emerald-500 text-emerald-600'
+                      : 'border-red-500 text-red-600'
+                  }`}
+                >
+                  {apiConfig ? '🔑' : '⚠️'} API
                 </Button>
-              </>
-            )}
-          </div>
+              </div>
+
+              {/* Bottom row: Auth buttons */}
+              <div className="flex gap-2">
+                {!isAuthenticated ? (
+                  <Button
+                    onClick={() => setShowAuth(true)}
+                    className="flex-1 h-10"
+                  >
+                    Login / Register
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowLibrary(true)}
+                      className="flex-1 h-10 text-sm"
+                    >
+                      Transcripts
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowCostSummary(true)}
+                      className="h-10 px-3"
+                    >
+                      $
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={handleLogout}
+                      className="h-10 px-3"
+                    >
+                      Exit
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          ) : (
+            /* Desktop: Horizontal layout */
+            <div className="flex flex-wrap justify-between items-center gap-3">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  onClick={loadDemoTranscript}
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 hover:from-purple-600 hover:to-pink-600"
+                >
+                  🎬 Load Sprint 4 Demo (60 Entries)
+                </Button>
+                {demoTranscript && (
+                  <Button variant="ghost" size="sm" onClick={handleReset}>
+                    Clear Demo
+                  </Button>
+                )}
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowApiSettings(true)}
+                  className={
+                    apiConfig
+                      ? 'border-emerald-500 text-emerald-600 hover:bg-emerald-50'
+                      : 'border-red-500 text-red-600 hover:bg-red-50'
+                  }
+                >
+                  {apiConfig ? '🔑 API Configured' : '⚠️ Configure API'}
+                </Button>
+                {!isAuthenticated ? (
+                  <Button onClick={() => setShowAuth(true)}>
+                    Login / Register
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowLibrary(true)}
+                    >
+                      My Transcripts
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowCostSummary(true)}
+                    >
+                      Summary
+                    </Button>
+                    <Button variant="outline" onClick={handleLogout}>
+                      Logout
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
+        {/* Main content grid - Single column on mobile */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Left Column - Upload & Processing */}
           <div className="space-y-4 sm:space-y-6 lg:col-span-1">
             {!videoFile ? (
@@ -401,6 +523,13 @@ function App() {
               onDismiss={() => setBalanceAlertDismissed(true)}
             />
           )}
+
+        {/* Version Badge - Fixed bottom right */}
+        <VersionBadge
+          versionInfo={versionInfo}
+          position="bottom-right"
+          showDetails={true}
+        />
       </div>
     </div>
   )
