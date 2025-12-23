@@ -227,6 +227,75 @@ specs/epics/epic-XX-name/sprints/sprint-XX/deployment/
 
 ---
 
+## Available Skills
+
+Claude has access to specialized skills. Invoke with `/skill-name` or use the Skill tool.
+
+### Superpowers Skills (Development Workflow)
+
+| Skill                                         | When to Use                                                        |
+| --------------------------------------------- | ------------------------------------------------------------------ |
+| `/superpowers:brainstorming`                  | **BEFORE any creative work** - features, components, modifications |
+| `/superpowers:write-plan`                     | Create detailed implementation plans with bite-sized tasks         |
+| `/superpowers:execute-plan`                   | Execute plans in batches with review checkpoints                   |
+| `/superpowers:test-driven-development`        | Before writing implementation code                                 |
+| `/superpowers:systematic-debugging`           | When encountering bugs, test failures, unexpected behavior         |
+| `/superpowers:verification-before-completion` | Before claiming work is complete or creating PRs                   |
+| `/superpowers:requesting-code-review`         | After completing tasks or major features                           |
+| `/superpowers:receiving-code-review`          | When receiving feedback, before implementing suggestions           |
+| `/superpowers:finishing-a-development-branch` | When implementation complete, deciding merge/PR/cleanup            |
+| `/superpowers:using-git-worktrees`            | Starting feature work needing isolation                            |
+| `/superpowers:dispatching-parallel-agents`    | When facing 2+ independent tasks                                   |
+| `/superpowers:writing-skills`                 | Creating or editing skills                                         |
+
+### Document Skills
+
+| Skill                   | When to Use                                      |
+| ----------------------- | ------------------------------------------------ |
+| `/document-skills:xlsx` | Create, edit, analyze spreadsheets (.xlsx, .csv) |
+| `/document-skills:docx` | Create, edit Word documents with tracked changes |
+| `/document-skills:pptx` | Create, edit PowerPoint presentations            |
+| `/document-skills:pdf`  | Extract text, fill forms, merge/split PDFs       |
+
+### Creative Skills
+
+| Skill                               | When to Use                                      |
+| ----------------------------------- | ------------------------------------------------ |
+| `/example-skills:canvas-design`     | Create visual art, posters, designs (.png, .pdf) |
+| `/example-skills:algorithmic-art`   | Generative art using p5.js                       |
+| `/example-skills:artifacts-builder` | Complex multi-component HTML artifacts           |
+| `/example-skills:slack-gif-creator` | Animated GIFs for Slack                          |
+| `/example-skills:theme-factory`     | Style artifacts with themes                      |
+| `/example-skills:brand-guidelines`  | Apply Anthropic brand colors/typography          |
+
+### Builder Skills
+
+| Skill                            | When to Use                            |
+| -------------------------------- | -------------------------------------- |
+| `/example-skills:skill-creator`  | Create new skills for Claude           |
+| `/example-skills:mcp-builder`    | Build MCP servers for LLM integrations |
+| `/example-skills:webapp-testing` | Test web apps with Playwright          |
+| `/example-skills:internal-comms` | Write internal communications          |
+
+### Skill Usage Rules
+
+1. **Check for applicable skills BEFORE any response**
+2. **Invoke skill if even 1% chance it applies**
+3. **Brainstorming skill required before creative/feature work**
+4. **TDD skill before implementation**
+5. **Verification skill before claiming completion**
+
+### Skill Priority Order
+
+When multiple skills apply:
+
+1. **Process skills first** (brainstorming, debugging)
+2. **Implementation skills second** (frontend, mcp-builder)
+
+Example: "Build feature X" → brainstorming first, then implementation skills
+
+---
+
 ## Remember
 
 1. **NO CODE** when orchestrating
