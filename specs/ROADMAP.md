@@ -2,7 +2,7 @@
 
 **Last Updated**: December 24, 2024
 **Project Vision**: Multi-module, persona-driven AI platform with agent orchestration
-**Current Status**: Epic 2 Sprint 01 - COMPLETE | Epic 2 Sprint 02 - NEXT
+**Current Status**: Epic 2 Sprint 01 - Backend Complete, UI Redesign in Progress
 
 ---
 
@@ -146,15 +146,23 @@ Establish scalable monorepo infrastructure for modular development.
 **Location**: `specs/epics/epic-02-user-profiles/`
 **Goal**: Establish user identity before building interaction methods
 
-**Sprint 01: Authentication, Profiles, MFA & Onboarding** ✅ COMPLETE (Dec 24, 2024)
+**Sprint 01: Authentication, Profiles, MFA & Onboarding** ⚠️ IN PROGRESS
+
+Backend Complete:
 
 - [x] Database schema (36 tables with Drizzle ORM)
 - [x] CRUD services & API routes (16 endpoints)
 - [x] MFA & Guest Access (13 endpoints)
-- [x] Onboarding Flow UI (8 components)
-- [x] Testing & Validation (503+ tests)
+- [x] Backend Testing (399 tests passing)
 
-**Sign-off**: [SIGN_OFF.md](./epics/epic-02-user-profiles/sprints/sprint-01/SIGN_OFF.md)
+UI Redesign (Design-First Approach):
+
+- [ ] Figma designs approved
+- [ ] UI implementation (pixel-perfect from designs)
+- [ ] UI testing & validation
+- [ ] Final demo
+
+**Status**: [SIGN_OFF.md](./epics/epic-02-user-profiles/sprints/sprint-01/SIGN_OFF.md) | [ORCHESTRATION_RESTART.md](./epics/epic-02-user-profiles/sprints/sprint-01/ORCHESTRATION_RESTART.md)
 
 **Sprint 02: Subscription Management** 🔜 NEXT
 
@@ -322,10 +330,10 @@ Meeting transcription, action items, integrations
 Phase 1 ✅ COMPLETE        Phase 2 (Current)          Phase 3
 ┌──────────────────┐      ┌──────────────────┐      ┌──────────────────┐
 │ Epic 1: Monorepo │ ──►  │ Epic 2: Profiles │ ──►  │ Epic 5: Guest    │
-│ ✅ COMPLETE      │      │ Sprint 1 ✅      │      │ Epic 6: Property │
-│                  │      │ Sprint 2 🔜      │      │   Manager        │
-│                  │      │ Epic 3: AI       │      │                  │
-│                  │      │ Epic 4: Agent    │      │                  │
+│ ✅ COMPLETE      │      │ Sprint 1:        │      │ Epic 6: Property │
+│                  │      │  Backend ✅      │      │   Manager        │
+│                  │      │  UI 🔄 Design    │      │                  │
+│                  │      │ Sprint 2 ⏳      │      │                  │
 └──────────────────┘      └──────────────────┘      └──────────────────┘
 ```
 
